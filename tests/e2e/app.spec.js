@@ -125,3 +125,23 @@ for (const [topic, ex, act] of [
     await expect(page.locator('#ex .demo-quiz .why')).toBeVisible();
   });
 }
+
+test('Wahrheitstabelle Wechselschaltung: vorhersagen, prüfen, dann Schalter ausprobieren', async ({ page }) => {
+  await openEx(page, 'logik', 'logik-wechsel');
+  await expect(page.locator('#ex [data-check]')).toBeDisabled();
+  await expect(page.locator('#ex [data-sw]')).toHaveCount(0);
+  // richtig: oben/oben an, oben/unten aus, unten/oben aus, unten/unten an
+  for (const [k, on] of [[0, true], [1, false], [2, false], [3, true]]) {
+    await page.click(`#ex [data-row="${k}"]`);
+    if (!on) await page.click(`#ex [data-row="${k}"]`);
+  }
+  await page.click('#ex [data-check]');
+  await expect(page.locator('#ex .why.ok')).toContainText('4 von 4 richtig');
+  await expect(page.locator('#ex .halo')).toHaveCount(1);
+  await expect(page.locator('#ex tr.now')).toHaveCount(1);
+  await page.click('#ex [data-sw=S1]');
+  await expect(page.locator('#ex .halo')).toHaveCount(0);
+  await page.click('#ex [data-sw=S2]');
+  await expect(page.locator('#ex .halo')).toHaveCount(1);
+  expect((await readState(page)).ex['logik-wechsel'].best).toBe(1);
+});

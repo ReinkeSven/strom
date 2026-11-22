@@ -2,6 +2,14 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.3.0] - 2026-11-22
+
+### Hinzugefügt
+- Neues Thema „Schalter: UND, ODER, Wechsel“ mit Merksätzen
+- Wahrheitstabellen für UND-, ODER- und Wechselschaltung: erst vorhersagen, dann Schalter antippen und ausprobieren
+- Quiz „Schaltungen erkennen“ (u. a. fehlerhaft verdrahtete Wechselschaltung) und Alltagsbeispiele (Zweihandschaltung, Klingel, Treppenhaus, Autotüren, Waschmaschine)
+- Wechselschalter als Bauteil im Schaltungslöser und Zeichner
+
 ## [0.2.0] - 2026-11-22
 
 ### Hinzugefügt

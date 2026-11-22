@@ -1,6 +1,6 @@
 // Service Worker: hält die App offline verfügbar.
 // Der Spielstand liegt im localStorage, nicht hier. Bei jeder Änderung an App-Dateien VERSION erhöhen.
-const VERSION = '0.2.0';
+const VERSION = '0.3.0';
 const CACHE = `strom-labor-${VERSION}`;
 const CORE = [
   './',

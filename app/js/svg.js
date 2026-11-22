@@ -50,6 +50,18 @@ export function circuitSvg(c, { sim = false, st = {}, mode = null, labels = true
     const [type, a, b, o = {}] = el;
     deg[a] = (deg[a] || 0) + 1;
     deg[b] = (deg[b] || 0) + 1;
+    if (type === 'toggle') {
+      deg[o.c2] = (deg[o.c2] || 0) + 1;
+      const eff = effective(el, st);
+      const [xa, ya] = c.n[a], [xb, yb] = c.n[b], [xc, yc] = c.n[o.c2];
+      const [tx, ty] = eff.lower ? [xc, yc] : [xb, yb];
+      body += `<path class="cw" d="M${xa} ${ya}L${tx} ${ty}"/><circle class="dot" cx="${xa}" cy="${ya}" r="3"/>`
+        + `<circle class="contact" cx="${xb}" cy="${yb}" r="3"/><circle class="contact" cx="${xc}" cy="${yc}" r="3"/>`;
+      const cx = (xa + xb) / 2, cy = ya;
+      if (labels && o.label) top += `<text class="lbl" x="${r1(cx)}" y="${r1(Math.min(ya, yb, yc) - 9)}" text-anchor="middle">${o.label}</text>`;
+      if (mode === 'test') top += `<circle class="tapzone" cx="${r1(cx)}" cy="${r1(cy)}" r="22" data-sw="${o.label}"/>`;
+      return;
+    }
     const [x1, y1] = c.n[a], [x2, y2] = c.n[b];
     const len = Math.hypot(x2 - x1, y2 - y1);
     const ux = (x2 - x1) / len, uy = (y2 - y1) / len;
@@ -74,6 +86,7 @@ export function circuitSvg(c, { sim = false, st = {}, mode = null, labels = true
     } else if (labels && o.label && type !== 'slot') {
       top += `<text class="lbl" x="${r1(lx)}" y="${r1(ly)}" text-anchor="${anchor}">${o.label}</text>`;
     }
+    if (type === 'switch' && o.label && mode === 'test') top += `<circle class="tapzone" cx="${r1(mx)}" cy="${r1(my)}" r="18" data-sw="${o.label}"/>`;
     if (type === 'slot') {
       if (mode === 'build') {
         top += `<g class="slot${eff.kind === 'switch' ? ' filled' : ''}" data-slot="${o.label}"><circle cx="${r1(mx)}" cy="${r1(my)}" r="16"/>`

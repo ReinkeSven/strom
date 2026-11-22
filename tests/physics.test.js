@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { CIRCUITS } from '../app/js/circuits.js';
 import {
   solve, lampPowers, checkBuild, isOn, P_LAMP, U_BAT, R_LAMP, wireCurrent, lampCurrent,
-  makeTasks, checkAnswer, parseNum, fmt,
+  makeTasks, checkAnswer, parseNum, fmt, truthTable,
 } from '../app/js/model.js';
 
 const near = (a, b, tol = 0.01) => Math.abs(a - b) <= tol * Math.max(1, Math.abs(b));
@@ -93,4 +93,12 @@ test('Rechenaufgaben: Musterlösung wird als richtig erkannt, grob falsche Werte
       assert.ok(t.text && t.unit && t.solution);
     }
   }
+});
+
+test('Wahrheitstabellen: UND, ODER, Wechselschaltung', () => {
+  const col = id => truthTable(id).map(r => (r.on ? 1 : 0)).join('');
+  assert.equal(col('und'), '0001');
+  assert.equal(col('oder'), '0111');
+  assert.equal(col('wechsel'), '1001');
+  assert.equal(col('wechsel_falsch'), '1000');
 });

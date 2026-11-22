@@ -121,6 +121,10 @@ export function effective([type, , , o = {}], st = {}) {
     const closed = st.switches?.[o.label] ?? o.closed ?? false;
     return { kind: 'switch', g: closed ? COND.wire : 0, closed };
   }
+  if (type === 'toggle') {   // Stellung: false = oberer Kontakt (b), true = unterer Kontakt (c2)
+    const lower = st.switches?.[o.label] ?? o.lower ?? false;
+    return { kind: 'toggle', g: lower ? 0 : COND.wire, lower };
+  }
   if (type === 'res') return { kind: 'res', g: 1 / (o.r || 100) };
   if (type === 'bat') return { kind: 'bat', g: 1 / R_INT };
   return { kind: type, g: COND[type] };
@@ -153,6 +157,10 @@ function linsolve(A, b) {
  */
 export function solve(c, st = {}) {
   const els = c.e.map(e => ({ e, ...effective(e, st) }));
+  // Wechselschalter: zweiter Kontakt als zusätzliches Bauteil hinten anhängen, damit die Indizes von c.e gleich bleiben
+  for (const x of [...els]) {
+    if (x.e[0] === 'toggle') els.push({ e: ['switch', x.e[1], x.e[3].c2], kind: 'switch', g: x.lower ? COND.wire : 0 });
+  }
   const bat = c.e.find(e => e[0] === 'bat');
   const ground = bat ? bat[1] : c.e[0][1];
   const ids = Object.keys(c.n).filter(k => k !== ground);
@@ -212,6 +220,21 @@ export function checkBuild(circuitId, placed) {
   if (!isOn(all.L1) || !isOn(all.L2)) return { ok: false, reason: 'dark' };
   if (!states.some(p => isOn(p.L1) && !isOn(p.L2))) return { ok: false, reason: 'together' };
   return { ok: true };
+}
+
+/**
+ * Wahrheitstabelle: für jede Kombination der Schalter (false/true) ob die Lampe L leuchtet.
+ * Bei Schaltern heißt true „geschlossen“, bei Wechselschaltern „unten“.
+ */
+export function truthTable(circuitId, labels = ['S1', 'S2']) {
+  const c = CIRCUITS[circuitId];
+  const rows = [];
+  for (let m = 0; m < 2 ** labels.length; m++) {
+    const s = labels.map((_, i) => !!(m & (1 << (labels.length - 1 - i))));
+    const switches = Object.fromEntries(labels.map((l, i) => [l, s[i]]));
+    rows.push({ s, on: isOn(lampPowers(c, { switches }).L) });
+  }
+  return rows;
 }
 
 /* ---------- Kennlinien ---------- */

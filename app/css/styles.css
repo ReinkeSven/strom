@@ -98,6 +98,7 @@ h3.sub { margin: 4px 0 0; color: var(--navy); font-size: 18px; }
 .circuit .cw.lit { fill: #fff3b0; }
 .circuit .halo { fill: var(--volt); }
 .circuit .dot { fill: var(--ink); }
+.circuit .contact { fill: #fff; stroke: var(--ink); stroke-width: 2; }
 .circuit text { font: 700 12px Figtree, sans-serif; fill: var(--ink); }
 .circuit .sym { text-anchor: middle; font-size: 13px; }
 .circuit .pole { text-anchor: middle; font-size: 14px; fill: var(--navy); }
@@ -152,3 +153,14 @@ h3.sub { margin: 4px 0 0; color: var(--navy); font-size: 18px; }
 .demo-svg .ax.l { text-anchor: start; }
 .demo-svg .pt.wire { fill: #2a6fdb; }
 .demo-svg .pt.lamp { fill: #e08a2e; }
+
+/* ---------- Wahrheitstabelle ---------- */
+.truth { width: 100%; border-collapse: collapse; text-align: center; font-variant-numeric: tabular-nums; }
+.truth th { font-size: 13px; color: var(--muted); padding: 4px; }
+.truth td { padding: 4px; border-top: 1px solid #ece7da; }
+.truth tr.now td { background: #fff7d6; }
+.truth .cell { min-width: 64px; border: 2px solid #d8d3c6; background: #fff; border-radius: 999px; padding: 5px 12px; font-weight: 800; cursor: pointer; }
+.truth .cell.on { border-color: var(--volt); background: #fff3b0; }
+.truth .cell.right { border-color: var(--ok); }
+.truth .cell.wrong { border-color: var(--err); background: #fbeae8; }
+.truth .sol { font-size: 12px; color: var(--err); display: block; }

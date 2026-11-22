@@ -7,6 +7,7 @@
 //   memory { pairs: [[Schaltzeichen, Name]] }
 //   calc   { gen, count }                                                 Aufgaben aus model.GENERATORS
 //   build  {}                                                             Bauauftrag mit Schaltern
+//   truth  { circuit, states: [Name für false, Name für true], prompt, why } Wahrheitstabelle vorhersagen, dann ausprobieren
 
 const yesNo = ['Ja', 'Nein'];
 
@@ -213,6 +214,50 @@ export const EX = {
           why: 'In der Reihenschaltung addieren sich die Widerstände.' },
         { q: 'Dieselben Widerstände parallel. Der Gesamtwiderstand ist …', opts: ['50 Ω', 'kleiner als 20 Ω', 'zwischen 20 Ω und 30 Ω'], a: 1,
           why: 'Jeder zusätzliche Zweig ist ein weiterer Weg für den Strom, der Gesamtwiderstand sinkt. Genau: 1/R = 1/20 Ω + 1/30 Ω, also R = 12 Ω.' },
+      ],
+    },
+  ],
+
+  logik: [
+    {
+      id: 'logik-und', type: 'truth', title: 'UND-Schaltung: Schalter in Reihe', circuit: 'und', states: ['offen', 'zu'],
+      prompt: 'Zwei Schalter liegen in Reihe. Wann leuchtet die Lampe?',
+      why: 'Der Strom muss durch beide Schalter. Nur wenn S1 UND S2 geschlossen sind, ist der Stromkreis geschlossen.',
+    },
+    {
+      id: 'logik-oder', type: 'truth', title: 'ODER-Schaltung: Schalter parallel', circuit: 'oder', states: ['offen', 'zu'],
+      prompt: 'Zwei Schalter liegen parallel. Wann leuchtet die Lampe?',
+      why: 'Jeder Schalter öffnet einen eigenen Weg. Es reicht, wenn S1 ODER S2 geschlossen ist. Sind beide zu, leuchtet die Lampe auch.',
+    },
+    {
+      id: 'logik-wechsel', type: 'truth', title: 'Wechselschaltung: Licht im Treppenhaus', circuit: 'wechsel', states: ['oben', 'unten'],
+      prompt: 'Zwei Wechselschalter sind über zwei Leitungen verbunden. Jeder Schalter verbindet seinen Mittelkontakt entweder mit der oberen oder mit der unteren Leitung. Wann leuchtet die Lampe?',
+      why: 'Die Lampe leuchtet, wenn beide Schalter dieselbe Leitung wählen. Jedes Umlegen eines Schalters, egal welches, schaltet die Lampe um. So kannst du das Licht unten einschalten und oben wieder ausschalten.',
+    },
+    {
+      id: 'logik-erkennen', type: 'quiz', title: 'Schaltungen erkennen',
+      questions: [
+        { q: 'Welche Schaltung ist eine ODER-Schaltung?', opts: [{ fig: 'und' }, { fig: 'oder' }], a: 1,
+          why: 'Bei der ODER-Schaltung liegen die Schalter parallel, jeder öffnet einen eigenen Weg. Die linke Schaltung ist eine UND-Schaltung.' },
+        { q: 'Welche Wechselschaltung funktioniert im Treppenhaus?', opts: [{ fig: 'wechsel_falsch' }, { fig: 'wechsel' }], a: 1,
+          why: 'Eine Wechselschaltung braucht zwei Verbindungsleitungen zwischen den Schaltern. Mit nur einer Leitung leuchtet die Lampe nur, wenn beide Schalter oben stehen. Steht ein Schalter unten, kann der andere nichts mehr ausrichten.' },
+        { q: 'In einer Wechselschaltung leuchtet die Lampe. Du legst einen der beiden Schalter um. Was passiert?', opts: ['Die Lampe geht aus', 'Die Lampe bleibt an', 'Das hängt davon ab, welchen Schalter du umlegst'], a: 0,
+          why: 'Jedes Umlegen, egal an welchem Schalter, wechselt den Zustand der Lampe.' },
+      ],
+    },
+    {
+      id: 'logik-alltag', type: 'quiz', title: 'UND, ODER oder Wechsel im Alltag?',
+      questions: [
+        { q: 'Eine Papierschneidemaschine schneidet nur, wenn man mit beiden Händen gleichzeitig je einen Taster drückt.', opts: ['UND', 'ODER', 'Wechsel'], a: 0,
+          why: 'Zweihandschaltung: Beide Taster liegen in Reihe. So sind beide Hände sicher weg vom Messer.' },
+        { q: 'Eine Klingel soll an der Haustür und an der Gartentür läuten.', opts: ['UND', 'ODER', 'Wechsel'], a: 1,
+          why: 'Die beiden Klingeltaster liegen parallel. Jeder allein schließt den Stromkreis.' },
+        { q: 'Das Licht im Flur soll an beiden Enden ein- und ausgeschaltet werden können.', opts: ['UND', 'ODER', 'Wechsel'], a: 2,
+          why: 'Mit einer ODER-Schaltung könnte man das Licht nicht mehr vom anderen Ende ausschalten, wenn der erste Schalter noch zu ist.' },
+        { q: 'Die Innenbeleuchtung im Auto geht an, wenn die Fahrertür oder die Beifahrertür offen ist.', opts: ['UND', 'ODER', 'Wechsel'], a: 1,
+          why: 'Die Türkontakte liegen parallel. Jede offene Tür schließt ihren Kontakt und damit den Stromkreis.' },
+        { q: 'Eine Waschmaschine startet nur, wenn die Tür geschlossen ist und die Starttaste gedrückt wird.', opts: ['UND', 'ODER', 'Wechsel'], a: 0,
+          why: 'Türkontakt und Starttaste liegen in Reihe. Bei offener Tür läuft die Maschine nicht an.' },
       ],
     },
   ],

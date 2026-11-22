@@ -94,6 +94,18 @@ export const TOPICS = [
     exercises: EX.schaltungen,
   },
   {
+    id: 'logik',
+    title: 'Schalter: UND, ODER, Wechsel',
+    short: 'Schalter in Reihe und parallel, Treppenhaus',
+    merk: [
+      'Zwei Schalter in Reihe bilden eine UND-Schaltung: Die Lampe leuchtet nur, wenn Schalter 1 und Schalter 2 geschlossen sind.',
+      'Zwei Schalter parallel bilden eine ODER-Schaltung: Die Lampe leuchtet, wenn Schalter 1 oder Schalter 2 oder beide geschlossen sind.',
+      'Mit einer Wechselschaltung lässt sich eine Lampe von zwei Stellen aus ein- und ausschalten, zum Beispiel im Treppenhaus. Jedes Umlegen eines Schalters ändert den Zustand der Lampe.',
+      'Eine Wahrheitstabelle zeigt für jede Schalterstellung, ob die Lampe leuchtet.',
+    ],
+    exercises: EX.logik,
+  },
+  {
     id: 'energie',
     title: 'Energie und Leistung',
     short: 'P = U · I, Kilowattstunden',

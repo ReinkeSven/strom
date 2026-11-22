@@ -1,7 +1,7 @@
 // Übungsansichten: jede Übung verwaltet ihren eigenen DOM-Bereich, damit Experimente beim Antworten weiterlaufen.
 import { CIRCUITS, symbolCircuit } from './circuits.js';
 import { circuitSvg } from './svg.js';
-import { shuffle, makeTasks, checkAnswer, checkBuild, fmt } from './model.js';
+import { shuffle, makeTasks, checkAnswer, checkBuild, truthTable, fmt } from './model.js';
 import { mountDemo } from './demos.js';
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -9,7 +9,7 @@ const fig = (id, sim) => circuitSvg(CIRCUITS[id], { sim });
 
 /** Hängt die Übung ex in el ein. onFinish(score, total) wird je Durchgang einmal aufgerufen. Liefert eine Aufräumfunktion. */
 export function mountExercise(el, ex, onFinish) {
-  const mounts = { quiz: mountQuiz, sort: mountSort, memory: mountMemory, calc: mountCalc, build: mountBuild, demo: mountDemoEx };
+  const mounts = { truth: mountTruth, quiz: mountQuiz, sort: mountSort, memory: mountMemory, calc: mountCalc, build: mountBuild, demo: mountDemoEx };
   return mounts[ex.type](el, ex, onFinish) || (() => {});
 }
 
@@ -174,6 +174,50 @@ function mountCalc(el, ex, onFinish) {
   reset();
   render();
   return () => { off(); el.removeEventListener('submit', submit); };
+}
+
+/* ---------- Wahrheitstabelle: erst vorhersagen, dann ausprobieren ---------- */
+function mountTruth(el, ex, onFinish) {
+  const labels = ex.labels || ['S1', 'S2'];
+  const rows = truthTable(ex.circuit, labels);
+  let guess, checked, switches;
+  const reset = () => { guess = rows.map(() => null); checked = false; switches = Object.fromEntries(labels.map(l => [l, false])); };
+  const word = on => (on ? 'an' : 'aus');
+  const render = () => {
+    const cur = labels.map(l => switches[l]);
+    const body = rows.map((r, k) => {
+      const g = guess[k];
+      const state = !checked ? (g === null ? '' : g ? ' on' : '') : g === r.on ? ' right' : ' wrong';
+      const now = checked && r.s.every((v, i) => v === cur[i]) ? ' class="now"' : '';
+      return `<tr${now}>${r.s.map(v => `<td>${ex.states[+v]}</td>`).join('')}
+        <td><button class="cell${state}" data-row="${k}" ${checked ? 'disabled' : ''}>${g === null ? '?' : word(g)}</button>
+        ${checked && g !== r.on ? `<span class="sol">richtig: ${word(r.on)}</span>` : ''}</td></tr>`;
+    }).join('');
+    const score = rows.filter((r, k) => guess[k] === r.on).length;
+    el.innerHTML = `<section class="card stack">
+      <p>${esc(ex.prompt)}</p>
+      <div class="figwrap">${circuitSvg(CIRCUITS[ex.circuit], { sim: checked, st: { switches }, mode: checked ? 'test' : null })}</div>
+      <p class="small">${checked ? 'Tippe auf die Schalter und probiere alle Stellungen aus. Die passende Zeile ist markiert.' : 'Sage zuerst vorher: Tippe in jeder Zeile auf „?“, bis „an“ oder „aus“ dasteht.'}</p>
+      <table class="truth"><tr>${labels.map(l => `<th>${l}</th>`).join('')}<th>Lampe</th></tr>${body}</table>
+      ${checked ? `<div class="why ${score === rows.length ? 'ok' : 'err'}"><b>${score} von ${rows.length} richtig.</b> ${esc(ex.why)}</div>
+        <div class="btns"><button class="btn" data-act-ex="again">Nochmal</button></div>`
+        : `<button class="btn primary" data-check="1" ${guess.includes(null) ? 'disabled' : ''}>Prüfen</button>`}
+    </section>`;
+  };
+  const off = delegate(el, {
+    row: k => { k = Number(k); guess[k] = guess[k] === null ? true : !guess[k]; render(); },
+    check: () => {
+      if (guess.includes(null)) return;
+      checked = true;
+      onFinish(rows.filter((r, k) => guess[k] === r.on).length, rows.length);
+      render();
+    },
+    sw: l => { switches[l] = !switches[l]; render(); },
+    'act-ex': () => { reset(); render(); },
+  });
+  reset();
+  render();
+  return off;
 }
 
 /* ---------- Bauauftrag ---------- */
