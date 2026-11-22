@@ -2,6 +2,16 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.2.0] - 2026-11-22
+
+### Hinzugefügt
+- 21 Übungen und Experimente zu allen neun Themen statt der „Bald hier“-Listen
+- Experimente: Luftballons und Wand, Bandgenerator, Elektroskop, Elektronen im Metall (Animation), U-I-Kennlinien
+- Quiz nach dem Muster Vorhersagen, Beobachten, Erklären: Schaltpläne leuchten erst nach der Antwort, mit berechneter Helligkeit und Messwerten
+- Sortieren (Leiter/Isolator, typische Spannungen), Schaltzeichen-Memory, Rechentraining (Ohmsches Gesetz, Leistung, Stromkosten), Bauauftrag mit Schaltern
+- Schaltungslöser (Knotenpotentialverfahren) und Schaltplan-Zeichner nach DIN
+- Fortschritt je Übung (bester Wert, Versuche), Anzeige in der Themenliste
+
 ## [0.1.0] - 2026-11-22
 
 ### Hinzugefügt

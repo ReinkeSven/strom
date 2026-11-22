@@ -29,7 +29,6 @@ button { font: inherit; color: inherit; }
 .card h3 { margin: 0 0 8px; font-size: 15px; text-transform: uppercase; letter-spacing: .06em; color: var(--navy); }
 .card ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
 .merk { border-left: 6px solid var(--volt); }
-.soon { color: var(--muted); }
 .stack { display: flex; flex-direction: column; gap: 10px; }
 
 .back { align-self: flex-start; background: none; border: 0; color: var(--navy); font-weight: 600; padding: 4px 0; cursor: pointer; }
@@ -46,3 +45,110 @@ textarea { width: 100%; min-height: 80px; border-radius: 10px; border: 1px solid
 #tabs button { flex: 1; background: none; border: 0; padding: 8px 0 10px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; }
 #tabs button svg { width: 24px; height: 24px; }
 #tabs button.on { color: var(--navy); }
+
+/* ---------- Themenliste und Übungen ---------- */
+.topic .exn { margin-left: auto; font-size: 13px; font-weight: 800; color: var(--muted); }
+.exlist { list-style: none; padding: 0 !important; gap: 8px; }
+.exbtn { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; text-align: left; border: 2px solid #e2ddd0; background: #fff; border-radius: 12px; padding: 12px 14px; font-weight: 600; cursor: pointer; }
+.exbtn::before { content: '▶'; color: var(--navy); font-size: 12px; }
+.exbtn span:first-child { flex: 1; }
+.exbtn.done::before { content: '✓'; color: var(--ok); font-size: 16px; }
+.exbtn .score { color: var(--muted); font-size: 13px; }
+h3.sub { margin: 4px 0 0; color: var(--navy); font-size: 18px; }
+
+.quiz .step { margin: 0; font-size: 13px; color: var(--muted); font-weight: 600; }
+.quiz .q { font-weight: 800; font-size: 17px; margin: 6px 0 10px; }
+.quiz .item { font-family: 'Dela Gothic One', Figtree, sans-serif; font-size: 22px; text-align: center; color: var(--navy); margin: 8px 0 14px; }
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opts.figs { flex-direction: row; }
+.opts.figs .opt { flex: 1; padding: 4px; }
+.opts.bins { flex-direction: row; flex-wrap: wrap; }
+.opts.bins .opt { flex: 1 1 40%; text-align: center; }
+.opt { text-align: left; border: 2px solid #e2ddd0; background: #fff; border-radius: 12px; padding: 12px 14px; font-weight: 600; cursor: pointer; }
+.opt.right { border-color: var(--ok); background: #e7f5ec; }
+.opt.wrong { border-color: var(--err); background: #fbeae8; }
+.opt.faded { opacity: .55; }
+.opt:disabled { cursor: default; color: inherit; }
+.why { margin: 12px 0; padding: 10px 12px; border-radius: 10px; background: #f4f1e8; }
+.why.ok { background: #e7f5ec; }
+.why.err { background: #fbeae8; }
+.figwrap { background: #fff; border-radius: 12px; padding: 4px; margin-bottom: 10px; }
+.figwrap .small { text-align: center; }
+.result .big { font-size: 22px; font-weight: 800; margin: 0 0 12px; }
+.calc { display: flex; gap: 8px; align-items: center; }
+.calc input { flex: 1; min-width: 0; font: inherit; font-size: 20px; padding: 8px 10px; border-radius: 10px; border: 2px solid #d8d3c6; }
+.calc .unit { font-weight: 800; min-width: 28px; }
+.seg { display: inline-flex; border: 2px solid var(--navy); border-radius: 999px; overflow: hidden; align-self: flex-start; }
+.seg button { border: 0; background: transparent; padding: 8px 16px; font-weight: 800; color: var(--navy); cursor: pointer; }
+.seg button.on { background: var(--navy); color: #fff; }
+
+/* ---------- Memory ---------- */
+.memgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+.mem { aspect-ratio: 1; border: 0; border-radius: 10px; background: var(--navy); cursor: pointer; padding: 2px; display: grid; place-items: center; font-size: 12px; font-weight: 800; }
+.mem.up { background: #fff; outline: 2px solid var(--navy); }
+.mem.got { outline-color: var(--ok); background: #e7f5ec; }
+.mem svg { width: 100%; height: auto; }
+.mem span { color: var(--navy); line-height: 1.15; word-break: break-word; hyphens: auto; }
+
+/* ---------- Schaltpläne ---------- */
+.circuit { width: 100%; height: auto; display: block; }
+.circuit .cw { stroke: var(--ink); stroke-width: 2; fill: none; stroke-linecap: round; }
+.circuit .cw.thick { stroke-width: 5; stroke-linecap: butt; }
+.circuit .cw.dark { fill: #fff; }
+.circuit .cw.lit { fill: #fff3b0; }
+.circuit .halo { fill: var(--volt); }
+.circuit .dot { fill: var(--ink); }
+.circuit text { font: 700 12px Figtree, sans-serif; fill: var(--ink); }
+.circuit .sym { text-anchor: middle; font-size: 13px; }
+.circuit .pole { text-anchor: middle; font-size: 14px; fill: var(--navy); }
+.circuit .lbl { fill: var(--navy); }
+.circuit .slot circle { fill: #fff; stroke: var(--navy); stroke-width: 2; stroke-dasharray: 4 3; cursor: pointer; }
+.circuit .slot.filled circle { fill: rgba(255, 204, 51, .25); stroke-dasharray: none; }
+.circuit .slot text { text-anchor: middle; font-size: 18px; fill: var(--navy); pointer-events: none; }
+.circuit .tapzone { fill: rgba(255, 204, 51, .2); stroke: var(--volt); stroke-width: 2; cursor: pointer; }
+.figopt .circuit text { font-size: 14px; }
+
+/* ---------- Experimente ---------- */
+.demo { display: flex; flex-direction: column; gap: 10px; }
+.demo-svg, .demo-canvas { width: 100%; height: auto; display: block; background: #fff; border-radius: 12px; }
+.demo .status { margin: 0; min-height: 2.9em; font-weight: 600; }
+.demo .ctrl { display: flex; flex-wrap: wrap; gap: 8px; }
+.demo .ctrl .btn { padding: 8px 14px; font-size: 14px; }
+.demo .note { font-size: 13px; }
+.demo .slider { display: flex; gap: 10px; align-items: center; font-weight: 600; }
+.demo .slider input { flex: 1; }
+.demo .meter { margin: 0; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--navy); }
+.demo-svg text { font: 800 14px Figtree, sans-serif; text-anchor: middle; }
+.demo-svg .neg { fill: #2a6fdb; }
+.demo-svg .pos { fill: #d9534f; }
+.demo-svg .sm { font-size: 13px; }
+.demo-svg .tag { fill: var(--navy); font-size: 12px; }
+.demo-svg .string { stroke: #888; stroke-width: 1.2; fill: none; }
+.demo-svg .balloon { fill: #ffd7a8; stroke: #e08a2e; stroke-width: 2; }
+.demo-svg .ceil { stroke: var(--ink); stroke-width: 3; }
+.demo-svg .wall { fill: #e4ddd0; }
+.demo-svg .cloth { fill: #c9b8e8; stroke: #8b72c0; stroke-width: 2; }
+.demo-svg .cw { stroke: var(--ink); stroke-width: 2.5; fill: none; stroke-linecap: round; }
+.demo-svg .body { fill: #cfd5e6; stroke: var(--navy); stroke-width: 1.5; }
+.demo-svg .band { stroke: #444; stroke-width: 2; }
+.demo-svg .crank { fill: #fff; stroke: var(--ink); stroke-width: 2; }
+.demo-svg .dome { fill: #e8ecf5; stroke: #8b93ab; stroke-width: 2.5; }
+.demo-svg .head { fill: #f6d7bd; stroke: var(--ink); stroke-width: 2; }
+.demo-svg .hair { stroke: #6b4423; stroke-width: 2.5; stroke-linecap: round; }
+.demo-svg .stool { fill: #a3a3a3; }
+.demo-svg .gball { fill: #e8ecf5; stroke: #8b93ab; stroke-width: 2; }
+.demo-svg .spark { stroke: #f2b100; stroke-width: 3; fill: none; stroke-linejoin: round; }
+.demo-svg .tube { fill: rgba(230, 240, 255, .8); stroke: #8b93ab; stroke-width: 1.5; }
+.demo-svg .glimlight { fill: #ff8c1a; opacity: .9; }
+.demo-svg .glass { fill: rgba(220, 230, 250, .35); stroke: #8b93ab; stroke-width: 2; }
+.demo-svg .metal { fill: #b8bfd1; stroke: var(--ink); stroke-width: 1.5; }
+.demo-svg .metalrod { stroke: #6f7891; stroke-width: 4; }
+.demo-svg .pointer { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+.demo-svg .dot { fill: var(--ink); }
+.demo-svg .rod { fill: #f5e6a8; stroke: #b59a2c; stroke-width: 1.5; }
+.demo-svg .axis { stroke: var(--ink); stroke-width: 1.5; fill: none; }
+.demo-svg .tick { stroke: var(--ink); stroke-width: 1; }
+.demo-svg .ax { font: 600 11px Figtree, sans-serif; fill: var(--muted); }
+.demo-svg .ax.l { text-anchor: start; }
+.demo-svg .pt.wire { fill: #2a6fdb; }
+.demo-svg .pt.lamp { fill: #e08a2e; }

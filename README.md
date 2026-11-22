@@ -8,7 +8,7 @@ Lern-App zur Elektrizitätslehre für die 8. Klasse Gymnasium, als installierbar
 
 ## Stand
 
-Grundgerüst: Themenliste mit Merksätzen, Fortschritt „gelesen“, Backup. Experimente, Simulationen und Übungen folgen.
+Neun Themen mit Merksätzen und 21 Übungen: interaktive Experimente, Quiz nach dem Muster Vorhersagen, Beobachten, Erklären mit berechneten Schaltplänen, Sortieren, Memory, Rechentraining und ein Bauauftrag.
 
 ## Themen
 
@@ -23,6 +23,10 @@ Grundgerüst: Themenliste mit Merksätzen, Fortschritt „gelesen“, Backup. Ex
 9. Sicherheit
 
 Die Merksätze in [`app/js/content.js`](app/js/content.js) sind ein Entwurf und mit Schulbuch bzw. Heft abzugleichen.
+
+## Physikalisches Modell der Schaltungen
+
+Ideale Batterie (6 V, sehr kleiner Innenwiderstand), Lampen mit konstantem Widerstand (30 Ω), Amperemeter fast 0 Ω, Voltmeter sehr hochohmig. Berechnet mit dem Knotenpotentialverfahren in [`app/js/model.js`](app/js/model.js). Die Glühlampen-Kennlinie im Experiment ist dagegen nichtlinear.
 
 ## Daten und Datenschutz
 
@@ -46,8 +50,13 @@ app/               ausgelieferte Web-App (wird so auf GitHub Pages veröffentlic
   index.html
   css/styles.css
   js/content.js    Themen und Merksätze (reine Daten)
-  js/model.js      Lernstand, reine Funktionen ohne DOM
-  js/app.js        Oberfläche
+  js/exercises-data.js  Übungen und Experimente je Thema (reine Daten)
+  js/circuits.js   Schaltpläne als Netzliste mit Koordinaten (reine Daten)
+  js/model.js      Lernstand, Schaltungslöser, Rechenaufgaben; reine Funktionen ohne DOM
+  js/svg.js        Schaltplan-Zeichner (reine Funktionen)
+  js/exercises.js  Übungsansichten
+  js/demos.js      interaktive Experimente
+  js/app.js        Oberfläche und Navigation
   sw.js            Service Worker (Offline-Cache)
   manifest.webmanifest
   icons/

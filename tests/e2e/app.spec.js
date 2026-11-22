@@ -2,6 +2,12 @@
 import { test, expect, readState } from './helpers.js';
 import { TOPICS } from '../../app/js/content.js';
 
+const openEx = async (page, topic, ex) => {
+  await page.goto('/');
+  await page.click(`[data-topic=${topic}]`);
+  await page.click(`[data-ex=${ex}]`);
+};
+
 test('Startseite listet alle Themen', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.hero h1')).toHaveText('Strom-Labor');
@@ -41,3 +47,81 @@ test('Backup: Code exportieren und auf frischem Gerät importieren', async ({ pa
   await other.click('[data-tab=home]');
   await expect(other.locator('.topic.done')).toHaveCount(1);
 });
+
+test('Quiz mit Schaltplan: Vorhersage, danach leuchtet die Schaltung, Ergebnis wird gespeichert', async ({ page }) => {
+  await openEx(page, 'schaltungen', 'schalt-hell');
+  const ex = TOPICS.find(t => t.id === 'schaltungen').exercises.find(e => e.id === 'schalt-hell');
+  for (const [k, q] of ex.questions.entries()) {
+    await expect(page.locator('#ex .figwrap .halo')).toHaveCount(0);
+    await page.click(`#ex [data-opt="${q.a}"]`);
+    await expect(page.locator('#ex .why.ok')).toBeVisible();
+    // erste Frage: zwei Lampen in Reihe leuchten nach der Antwort
+    if (k === 0) await expect(page.locator('#ex .figwrap .halo')).toHaveCount(2);
+    await page.click('#ex [data-next]');
+  }
+  await expect(page.locator('#ex .result .big')).toHaveText(`${ex.questions.length} von ${ex.questions.length} richtig`);
+  const S = await readState(page);
+  expect(S.ex['schalt-hell'].best).toBe(1);
+  await page.click('[data-act=back-topic]');
+  await expect(page.locator('[data-ex=schalt-hell].done')).toHaveCount(1);
+});
+
+test('Sortieren: falsche Wahl zeigt die richtige Lösung', async ({ page }) => {
+  await openEx(page, 'modell', 'modell-sortieren');
+  const item = await page.locator('#ex .item').textContent();
+  const ex = TOPICS.find(t => t.id === 'modell').exercises.find(e => e.id === 'modell-sortieren');
+  const wrong = 1 - ex.items.find(i => i.t === item).bin;
+  await page.click(`#ex [data-bin="${wrong}"]`);
+  await expect(page.locator('#ex .why.err')).toContainText('Nein');
+});
+
+test('Memory: Karten aufdecken', async ({ page }) => {
+  await openEx(page, 'stromkreis', 'kreis-memory');
+  await expect(page.locator('#ex .mem')).toHaveCount(14);
+  await page.click('#ex [data-card="0"]');
+  await page.click('#ex [data-card="1"]');
+  await expect(page.locator('#ex .small')).toContainText('Versuche: 1');
+});
+
+test('Rechentraining: Eingabe mit Komma wird geprüft', async ({ page }) => {
+  await openEx(page, 'widerstand', 'widerstand-rechnen');
+  await page.fill('#ans', '0,0001');
+  await page.click('#ex button[type=submit]');
+  await expect(page.locator('#ex .why')).toBeVisible();
+  await page.click('#ex [data-next]');
+  await expect(page.locator('#ex .step')).toHaveText('Aufgabe 2 von 8');
+});
+
+test('Bauauftrag: Schalter im Zweig von L2 löst die Aufgabe', async ({ page }) => {
+  await openEx(page, 'schaltungen', 'schalt-bau');
+  await page.click('#ex [data-check]');
+  await expect(page.locator('#ex .why.err')).toBeVisible();
+  await page.click('#ex [data-slot=S3]');
+  await page.click('#ex [data-mode=test]');
+  await expect(page.locator('#ex .halo')).toHaveCount(2);
+  await page.click('#ex [data-sw=S3]');
+  await expect(page.locator('#ex .halo')).toHaveCount(1);
+  await page.click('#ex [data-check]');
+  await expect(page.locator('#ex .why.ok')).toContainText('Geschafft');
+  expect((await readState(page)).ex['schalt-bau'].best).toBe(1);
+});
+
+for (const [topic, ex, act] of [
+  ['ladung', 'ladung-ballons', 'rubA'], ['ladung', 'ladung-bandgen', 'crank'], ['ladung', 'ladung-elektroskop', 'nah'],
+  ['modell', 'modell-elektronen', null], ['widerstand', 'widerstand-kennlinie', 'add'],
+]) {
+  test(`Experiment ${ex} läuft und hat Fragen`, async ({ page }) => {
+    await openEx(page, topic, ex);
+    await expect(page.locator('#ex .demo')).toBeVisible();
+    if (act) {
+      await page.click(`#ex [data-d=${act}]`);
+      if (act !== 'add') await expect(page.locator('#ex .demo .status')).not.toBeEmpty();
+    } else {
+      await page.locator('#ex [data-u]').fill('3');
+      await page.waitForTimeout(1500);
+      await expect(page.locator('#ex .demo .status')).toContainText('Elektronen pro Sekunde');
+    }
+    await page.click('#ex .demo-quiz [data-opt="0"]');
+    await expect(page.locator('#ex .demo-quiz .why')).toBeVisible();
+  });
+}

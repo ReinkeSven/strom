@@ -1,7 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { TOPICS } from '../app/js/content.js';
-import { freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress } from '../app/js/model.js';
+import { CIRCUITS } from '../app/js/circuits.js';
+import { DEMO_IDS } from '../app/js/demos.js';
+import { GENERATORS, freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, recordExercise, exerciseProgress } from '../app/js/model.js';
 
 const T0 = new Date('2026-11-22T10:00:00').getTime();
 
@@ -13,6 +15,39 @@ test('Themen: eindeutige IDs, jedes Thema hat Titel und Merksätze', () => {
     assert.ok(t.merk.length > 0, `${t.id}: keine Merksätze`);
     for (const m of t.merk) assert.match(m, /[.!?]$/, `${t.id}: Merksatz ohne Satzende`);
   }
+});
+
+test('Übungen: eindeutige IDs, gültige Antworten, Schaltungen und Experimente existieren', () => {
+  const ids = TOPICS.flatMap(t => t.exercises.map(e => e.id));
+  assert.equal(new Set(ids).size, ids.length);
+  for (const t of TOPICS) {
+    assert.ok(t.exercises.length > 0, `${t.id}: keine Übungen`);
+    for (const e of t.exercises) {
+      assert.ok(e.title, e.id);
+      if (e.questions) {
+        for (const q of e.questions) {
+          assert.ok(Number.isInteger(q.a) && q.a >= 0 && q.a < q.opts.length, `${e.id}: ${q.q}`);
+          assert.ok(q.why, `${e.id}: Erklärung fehlt`);
+          if (q.fig) assert.ok(CIRCUITS[q.fig], q.fig);
+          for (const o of q.opts) if (typeof o !== 'string') assert.ok(CIRCUITS[o.fig], o.fig);
+        }
+      }
+      if (e.type === 'demo') assert.ok(DEMO_IDS.includes(e.demo), e.demo);
+      if (e.type === 'sort') for (const it of e.items) assert.ok(it.bin >= 0 && it.bin < e.bins.length, it.t);
+      if (e.type === 'calc') assert.ok(GENERATORS[e.gen], e.gen);
+      if (e.type === 'memory') assert.equal(new Set(e.pairs.map(p => p[1])).size, e.pairs.length);
+    }
+  }
+});
+
+test('Übungsergebnis: bester Wert bleibt, Versuche zählen mit', () => {
+  let S = freshState(T0);
+  S = recordExercise(S, 'schalt-hell', 4, 6, T0);
+  S = recordExercise(S, 'schalt-hell', 2, 6, T0 + 1);
+  assert.equal(S.ex['schalt-hell'].tries, 2);
+  assert.ok(Math.abs(S.ex['schalt-hell'].best - 4 / 6) < 1e-9);
+  assert.equal(exerciseProgress(S, TOPICS.find(t => t.id === 'schaltungen')).done, 1);
+  assert.deepEqual(migrate({ topics: {} }).ex, {});
 });
 
 test('freshState enthält alle Themen ungelesen', () => {

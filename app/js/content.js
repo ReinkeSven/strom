@@ -1,10 +1,12 @@
 // Lerninhalte: Themen und Merksätze. Reine Daten, kein DOM.
 // Merksätze sind ein Entwurf und mit Schulbuch bzw. Heft abzugleichen.
 
+import { EX } from './exercises-data.js';
+
 /**
- * @typedef {{ id: string, title: string, short: string, merk: string[], ideas: string[] }} Topic
- * merk:  Merksätze, wie sie ins Heft gehören
- * ideas: geplante Experimente und Übungen (noch nicht umgesetzt)
+ * @typedef {{ id: string, title: string, short: string, merk: string[], exercises: object[] }} Topic
+ * merk:      Merksätze, wie sie ins Heft gehören
+ * exercises: Übungen und Experimente (siehe exercises-data.js)
  */
 
 /** @type {Topic[]} */
@@ -20,12 +22,7 @@ export const TOPICS = [
       'Ein Körper mit Elektronenüberschuss ist negativ geladen, ein Körper mit Elektronenmangel positiv.',
       'Die Einheit der Ladung Q ist 1\u00a0Coulomb (1\u00a0C).',
     ],
-    ideas: [
-      'Zwei geriebene Luftballons stoßen sich ab, Ballon und Wolltuch ziehen sich an',
-      'Geladener Ballon an der Wand (Influenz)',
-      'Bandgenerator: Haare stehen ab, Funken, Glimmlampe zeigt die Ladungsart',
-      'Elektroskop',
-    ],
+    exercises: EX.ladung,
   },
   {
     id: 'modell',
@@ -37,10 +34,7 @@ export const TOPICS = [
       'Leiter enthalten frei bewegliche Ladungsträger, Isolatoren nicht.',
       'Elektrischer Strom ist die gerichtete Bewegung von Ladungsträgern.',
     ],
-    ideas: [
-      'Animation: Elektronen bewegen sich ungeordnet, mit angelegter Spannung zusätzlich gerichtet',
-      'Sortierspiel Leiter oder Isolator',
-    ],
+    exercises: EX.modell,
   },
   {
     id: 'stromkreis',
@@ -51,10 +45,7 @@ export const TOPICS = [
       'Die technische Stromrichtung verläuft außerhalb der Quelle von Plus nach Minus. Die Elektronen bewegen sich von Minus nach Plus.',
       'Im Verbraucher wird kein Strom verbraucht. Umgewandelt wird Energie.',
     ],
-    ideas: [
-      'Schaltzeichen-Memory',
-      'Leuchtet die Lampe? Schaltungen beurteilen',
-    ],
+    exercises: EX.stromkreis,
   },
   {
     id: 'stromstaerke',
@@ -66,10 +57,7 @@ export const TOPICS = [
       'Die Stromstärke wird mit einem Amperemeter gemessen. Es wird in Reihe zum Bauteil geschaltet.',
       'Im unverzweigten Stromkreis ist die Stromstärke an jeder Stelle gleich groß.',
     ],
-    ideas: [
-      'Vorhersage: Ist die Stromstärke vor und hinter der Lampe gleich?',
-      'Amperemeter richtig einbauen',
-    ],
+    exercises: EX.stromstaerke,
   },
   {
     id: 'spannung',
@@ -81,10 +69,7 @@ export const TOPICS = [
       'Die Spannung wird mit einem Voltmeter gemessen. Es wird parallel zum Bauteil geschaltet.',
       'Spannung liegt immer zwischen zwei Punkten an. An einer Batterie liegt sie auch dann an, wenn kein Strom fließt.',
     ],
-    ideas: [
-      'Voltmeter richtig einbauen',
-      'Typische Spannungen zuordnen: Batterie, Akku, Steckdose, Blitz',
-    ],
+    exercises: EX.spannung,
   },
   {
     id: 'widerstand',
@@ -96,10 +81,7 @@ export const TOPICS = [
       'Ohmsches Gesetz: Bei konstanter Temperatur ist die Stromstärke durch einen metallischen Leiter proportional zur Spannung.',
       'Ein Draht hat einen größeren Widerstand, wenn er länger oder dünner ist. Außerdem hängt der Widerstand vom Material ab.',
     ],
-    ideas: [
-      'U-I-Kennlinie aus Messwerten zeichnen: Widerstand und Glühlampe im Vergleich',
-      'Rechentraining mit Einheiten',
-    ],
+    exercises: EX.widerstand,
   },
   {
     id: 'schaltungen',
@@ -109,10 +91,7 @@ export const TOPICS = [
       'Reihenschaltung: Die Stromstärke ist überall gleich. Die Teilspannungen addieren sich zur Gesamtspannung. Die Widerstände addieren sich.',
       'Parallelschaltung: An allen Zweigen liegt dieselbe Spannung. Die Teilströme addieren sich zum Gesamtstrom. Der Gesamtwiderstand ist kleiner als jeder Einzelwiderstand.',
     ],
-    ideas: [
-      'Welche Lampe leuchtet heller? (Vorhersagen, dann simulieren)',
-      'Bauauftrag: zwei Lampen, eine einzeln schaltbar',
-    ],
+    exercises: EX.schaltungen,
   },
   {
     id: 'energie',
@@ -123,9 +102,7 @@ export const TOPICS = [
       'Die Einheit der Leistung ist 1\u00a0Watt (1\u00a0W). Es gilt 1\u00a0W = 1 V · A.',
       'Die umgewandelte Energie ist E = P · t. Im Haushalt wird sie in Kilowattstunden (kWh) angegeben.',
     ],
-    ideas: [
-      'Was kostet eine Stunde Föhnen?',
-    ],
+    exercises: EX.energie,
   },
   {
     id: 'sicherheit',
@@ -137,9 +114,7 @@ export const TOPICS = [
       'Der Schutzleiter leitet Strom bei einem Defekt am Gehäuse ab, sodass die Sicherung auslöst.',
       'Die Netzspannung von 230\u00a0V ist lebensgefährlich. Nie an Steckdosen oder Leitungen experimentieren.',
     ],
-    ideas: [
-      'Gefahrensituationen im Haushalt erkennen',
-    ],
+    exercises: EX.sicherheit,
   },
 ];
 
