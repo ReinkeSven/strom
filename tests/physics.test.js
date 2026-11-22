@@ -102,3 +102,11 @@ test('Wahrheitstabellen: UND, ODER, Wechselschaltung', () => {
   assert.equal(col('wechsel'), '1001');
   assert.equal(col('wechsel_falsch'), '1000');
 });
+
+test('Wassermodell-Schaltung: Spannung einstellbar, Widerstand halbiert den Strom überall', () => {
+  const I = (id, st) => { const c = CIRCUITS[id]; return Math.abs(solve(c, st).I[c.e.findIndex(e => e[0] === 'amp')]); };
+  assert.ok(near(I('wasser_e', { U: 6 }), 0.2));
+  assert.ok(near(I('wasser_e', { U: 2 }), 0.2 / 3));
+  assert.ok(near(I('wasser_e_eng', { U: 6 }), 0.1));
+  assert.ok(I('wasser_e', { U: 6, switches: { S: false } }) < 1e-6);
+});

@@ -58,6 +58,16 @@ export const CIRCUITS = {
     n: PAR,
     e: [['bat', 'd', 'a'], ['amp', 'a', 'b', { label: 'A' }], ['wire', 'b', 'b2'], ['lamp', 'b', 'c', { label: 'L1' }], ['lamp', 'b2', 'c2', { label: 'L2' }], ['wire', 'c2', 'c'], ['wire', 'c', 'd']],
   },
+  // Wassermodell: dieselbe Schaltung mit und ohne zusätzlichen Widerstand
+  wasser_e: {
+    n: { ...RECT, m: [M, T] },
+    e: [['bat', 'd', 'a'], ['switch', 'a', 'm', { label: 'S', closed: true }], ['amp', 'm', 'b', { label: 'I' }], ['lamp', 'b', 'c', { label: 'L' }], ['wire', 'c', 'd']],
+  },
+  wasser_e_eng: {
+    n: { ...RECT, m: [M, T], k: [M, B] },
+    e: [['bat', 'd', 'a'], ['switch', 'a', 'm', { label: 'S', closed: true }], ['amp', 'm', 'b', { label: 'I' }], ['lamp', 'b', 'c', { label: 'L' }],
+      ['res', 'c', 'k', { label: 'R', r: 30 }], ['wire', 'k', 'd']],
+  },
   // Schalterlogik: UND (Reihe), ODER (parallel), Wechselschaltung
   und: {
     n: { ...RECT, m: [M, T] },

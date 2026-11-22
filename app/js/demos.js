@@ -1,6 +1,8 @@
 // Interaktive Experimente. Jede Funktion hängt sich in el ein und liefert eine Aufräumfunktion.
 // Die Darstellung ist schematisch: Ein Ladungszeichen steht für sehr viele Elektronen.
-import { lampCurrent, wireCurrent, fmtFixed, fmt } from './model.js';
+import { lampCurrent, wireCurrent, fmtFixed, fmt, solve } from './model.js';
+import { CIRCUITS } from './circuits.js';
+import { circuitSvg } from './svg.js';
 
 const r1 = x => Math.round(x * 10) / 10;
 const rad = d => d * Math.PI / 180;
@@ -301,7 +303,92 @@ function kennlinie(el) {
   return () => { off(); input.removeEventListener('input', onInput); };
 }
 
-const DEMOS = { balloons, bandgen, electroscope, electrons, kennlinie };
+/* ---------- Wassermodell ---------- */
+function water(el) {
+  const S = { level: 3, narrow: false, open: true };
+  el.innerHTML = `<p class="small">Links der Wasserkreislauf, rechts der passende Stromkreis. Beide reagieren auf dieselben Regler.</p>
+    <div class="pair"><div class="wscene"></div><div class="escene"></div></div>
+    <p class="meter" aria-live="polite"></p>
+    <label class="slider">Pumpe / Spannung <input type="range" min="0" max="3" step="1" value="3" data-u></label>
+    <div class="ctrl"><button class="btn" data-d="narrow">Engstelle / Widerstand einbauen</button><button class="btn" data-d="valve">Ventil / Schalter schließen</button></div>
+    <table class="map"><tr><th>Wasserkreislauf</th><th>Stromkreis</th></tr>
+      <tr><td>Pumpe</td><td>Batterie</td></tr><tr><td>Rohr</td><td>Leitung</td></tr><tr><td>Wasserrad</td><td>Lampe</td></tr>
+      <tr><td>Ventil</td><td>Schalter</td></tr><tr><td>Engstelle</td><td>Widerstand</td></tr>
+      <tr><td>Druckunterschied</td><td>Spannung</td></tr><tr><td>Wasser pro Sekunde</td><td>Stromstärke</td></tr></table>
+    <p class="small note"><b>Grenzen des Modells:</b> Öffnet man ein Rohr, läuft Wasser heraus. Aus einem offenen Stromkreis laufen keine Elektronen heraus, der Strom hört einfach auf. Außerdem ist das Rohr hier mit Wasser gefüllt wie der Draht mit Elektronen, aber Wasser wird durch die Schwerkraft beeinflusst, elektrischer Strom nicht.</p>`;
+  const wEl = el.querySelector('.wscene'), eEl = el.querySelector('.escene');
+  const X0 = 30, X1 = 190, Y0 = 30, Y1 = 140;
+  const segs = [[X0, Y1, X0, Y0], [X0, Y0, X1, Y0], [X1, Y0, X1, Y1], [X1, Y1, X0, Y1]];
+  const lens = segs.map(([a, b, c, d]) => Math.hypot(c - a, d - b));
+  const PER = lens.reduce((x, y) => x + y, 0);
+  const at = s => {
+    let d = ((s % 1) + 1) % 1 * PER;
+    for (let k = 0; k < 4; k++) {
+      if (d <= lens[k]) { const [a, b, c, e] = segs[k]; const f = d / lens[k]; return [a + (c - a) * f, b + (e - b) * f]; }
+      d -= lens[k];
+    }
+    return [X0, Y1];
+  };
+  const N = 22;
+  const parts = Array.from({ length: N }, (_, k) => k / N);
+  let I = 0, U = 6, wheel = 0, pump = 0, raf = 0, last = performance.now();
+  const buildWater = () => {
+    const nx0 = 85, nx1 = 135;
+    const pipe = `M${X0} ${Y1}V${Y0}H${X1}V${Y1}H${S.narrow ? nx1 : X0}${S.narrow ? `M${nx0} ${Y1}H${X0}` : ''}`;
+    wEl.innerHTML = `<svg viewBox="0 0 220 170" class="demo-svg">
+      <path class="pipe-o" d="${pipe}"/><path class="pipe-i" d="${pipe}"/>
+      ${S.narrow ? `<path class="pipe-o thin" d="M${nx1} ${Y1}H${nx0}"/><path class="pipe-i thin" d="M${nx1} ${Y1}H${nx0}"/>` : ''}
+      <g class="drops">${parts.map(() => '<circle r="2.6"/>').join('')}</g>
+      <g transform="translate(${X0} 85)"><circle class="pump" r="17"/><g class="imp"><path class="cw" d="M-9 0H9M0 -9V9M-6 -6L6 6M-6 6L6 -6"/></g></g>
+      <text class="tag" x="${X0}" y="${85 + 32}">Pumpe</text>
+      <g transform="translate(${X1} 85)"><circle class="wheel" r="19"/><g class="wh">${[0, 45, 90, 135].map(a => `<path class="paddle" d="M0 0L${r1(19 * Math.cos(rad(a)))} ${r1(19 * Math.sin(rad(a)))}M0 0L${r1(-19 * Math.cos(rad(a)))} ${r1(-19 * Math.sin(rad(a)))}"/>`).join('')}</g></g>
+      <text class="tag" x="${X1 - 2}" y="${85 + 34}">Wasserrad</text>
+      <g transform="translate(110 ${Y0})"><path class="valve" d="M-9 -8L9 8V-8L-9 8Z"/>${S.open ? '' : '<path class="cw" d="M0 0V-16M-6 -16H6"/>'}</g>
+      <text class="tag" x="110" y="${Y0 - 14}">Ventil ${S.open ? 'offen' : 'zu'}</text>
+      ${S.narrow ? `<text class="tag" x="110" y="${Y1 + 18}">Engstelle</text>` : ''}
+      <text class="tag" x="${X0 + 8}" y="${Y0 + 22}" text-anchor="start">Druck: ${'▮'.repeat(S.level)}${'▯'.repeat(3 - S.level)}</text>
+    </svg>`;
+  };
+  const update = () => {
+    U = 2 * S.level;
+    const c = CIRCUITS[S.narrow ? 'wasser_e_eng' : 'wasser_e'];
+    const st = { U, switches: { S: S.open } };
+    const res = solve(c, st);
+    I = Math.abs(res.I[c.e.findIndex(e => e[0] === 'amp')]);
+    eEl.innerHTML = circuitSvg(c, { sim: true, st });
+    el.querySelector('.meter').innerHTML = `Spannung ${fmt(U)} V &nbsp; Stromstärke ${fmtFixed(I, 2)} A`;
+    el.querySelector('[data-d=narrow]').textContent = S.narrow ? 'Engstelle / Widerstand entfernen' : 'Engstelle / Widerstand einbauen';
+    el.querySelector('[data-d=valve]').textContent = S.open ? 'Ventil / Schalter schließen' : 'Ventil / Schalter öffnen';
+    buildWater();
+  };
+  const frame = now => {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    const speed = I / 0.2 * 0.18;           // Umläufe pro Sekunde, proportional zur Stromstärke
+    for (let k = 0; k < N; k++) parts[k] += speed * dt;
+    wheel += I / 0.2 * 200 * dt;
+    pump += U / 6 * 300 * dt;
+    const drops = wEl.querySelectorAll('.drops circle');
+    drops.forEach((d, k) => { const [x, y] = at(parts[k]); d.setAttribute('cx', r1(x)); d.setAttribute('cy', r1(y)); });
+    const wh = wEl.querySelector('.wh'), imp = wEl.querySelector('.imp');
+    if (wh) wh.setAttribute('transform', `rotate(${r1(wheel % 360)})`);
+    if (imp) imp.setAttribute('transform', `rotate(${r1(pump % 360)})`);
+    raf = requestAnimationFrame(frame);
+  };
+  const input = el.querySelector('[data-u]');
+  const onInput = () => { S.level = Number(input.value); update(); };
+  input.addEventListener('input', onInput);
+  const off = onAct(el, d => {
+    if (d === 'narrow') S.narrow = !S.narrow;
+    if (d === 'valve') S.open = !S.open;
+    update();
+  });
+  update();
+  raf = requestAnimationFrame(frame);
+  return () => { cancelAnimationFrame(raf); off(); input.removeEventListener('input', onInput); };
+}
+
+const DEMOS = { water, balloons, bandgen, electroscope, electrons, kennlinie };
 
 export function mountDemo(el, id) {
   return DEMOS[id](el);

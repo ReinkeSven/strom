@@ -68,6 +68,7 @@ export const TOPICS = [
       'Die Einheit der Spannung ist 1\u00a0Volt (1\u00a0V).',
       'Die Spannung wird mit einem Voltmeter gemessen. Es wird parallel zum Bauteil geschaltet.',
       'Spannung liegt immer zwischen zwei Punkten an. An einer Batterie liegt sie auch dann an, wenn kein Strom fließt.',
+      'Wassermodell: Die Spannung entspricht dem Druckunterschied, den eine Pumpe erzeugt, die Stromstärke der Wassermenge, die pro Sekunde durch das Rohr fließt. Wie jedes Modell hat es Grenzen.',
     ],
     exercises: EX.spannung,
   },

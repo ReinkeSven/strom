@@ -132,6 +132,35 @@ export const EX = {
 
   spannung: [
     {
+      id: 'wasser-modell', type: 'demo', demo: 'water', title: 'Wassermodell: Spannung, Stromstärke, Widerstand',
+      questions: [
+        { q: 'Was entspricht im Wassermodell der Spannung?', opts: ['Der Druckunterschied, den die Pumpe erzeugt', 'Die Wassermenge pro Sekunde', 'Das Rohr'], a: 0,
+          why: 'Die Pumpe erzeugt einen Druckunterschied und treibt so das Wasser an. Genauso treibt die Spannung der Batterie die Elektronen an.' },
+        { q: 'Du baust eine Engstelle ein. Wo wird der Wasserstrom kleiner?', opts: ['Überall im Kreislauf', 'Nur hinter der Engstelle', 'Nur in der Engstelle'], a: 0,
+          why: 'Im geschlossenen Kreislauf fließt an jeder Stelle gleich viel Wasser pro Sekunde. Bremst die Engstelle, wird der Wasserstrom überall kleiner. Genauso sinkt mit einem zusätzlichen Widerstand die Stromstärke im ganzen Stromkreis.' },
+        { q: 'Verbraucht das Wasserrad Wasser?', opts: ['Nein, es nimmt dem Wasser Energie ab', 'Ja, hinter dem Rad fließt weniger Wasser'], a: 0,
+          why: 'Das Wasser fließt vollständig weiter, nur seine Energie treibt das Rad an. Genauso wandelt die Lampe Energie um, verbraucht aber keinen Strom.' },
+        { q: 'Die Pumpe läuft, aber das Ventil ist zu. Was entspricht dem im Stromkreis?', opts: ['Spannung liegt an, aber es fließt kein Strom', 'Es gibt keine Spannung', 'Der Strom wird größer'], a: 0,
+          why: 'Die Pumpe hält den Druckunterschied aufrecht, auch wenn nichts fließt. Ebenso liegt an der Batterie Spannung an, auch wenn der Schalter offen ist.' },
+        { q: 'Wo passt das Wassermodell nicht?', opts: ['Aus einem offenen Rohr läuft Wasser heraus, aus einem offenen Stromkreis keine Elektronen', 'Es passt überall genau'], a: 0,
+          why: 'Jedes Modell hat Grenzen. Das Wassermodell hilft beim Verstehen von Spannung, Stromstärke und Widerstand, ist aber kein genaues Abbild.' },
+      ],
+    },
+    {
+      id: 'wasser-zuordnen', type: 'sort', title: 'Wassermodell zuordnen',
+      prompt: 'Was entspricht im Stromkreis diesem Teil des Wasserkreislaufs?',
+      bins: ['Batterie', 'Leitung', 'Lampe', 'Schalter', 'Widerstand', 'Spannung', 'Stromstärke'],
+      items: [
+        { t: 'Pumpe', bin: 0, why: 'Sie treibt das Wasser an wie die Batterie die Elektronen.' },
+        { t: 'Rohr', bin: 1, why: 'Darin fließt das Wasser wie die Elektronen in der Leitung.' },
+        { t: 'Wasserrad', bin: 2, why: 'Es wandelt Energie um, das Wasser fließt vollständig weiter.' },
+        { t: 'Ventil', bin: 3, why: 'Geschlossen unterbricht es den Kreislauf.' },
+        { t: 'Engstelle im Rohr', bin: 4, why: 'Sie hemmt den Wasserstrom wie ein Widerstand den elektrischen Strom.' },
+        { t: 'Druckunterschied', bin: 5, why: 'Er ist der Antrieb für den Wasserstrom.' },
+        { t: 'Wasser pro Sekunde', bin: 6, why: 'Wie die Stromstärke: Ladung pro Sekunde.' },
+      ],
+    },
+    {
       id: 'spannung-messen', type: 'quiz', title: 'Voltmeter richtig einbauen',
       questions: [
         { q: 'In welcher Schaltung misst das Voltmeter die Spannung an der Lampe richtig?', opts: [{ fig: 'volt_reihe' }, { fig: 'volt_parallel' }], a: 1,

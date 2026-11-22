@@ -108,14 +108,15 @@ test('Bauauftrag: Schalter im Zweig von L2 löst die Aufgabe', async ({ page }) 
 
 for (const [topic, ex, act] of [
   ['ladung', 'ladung-ballons', 'rubA'], ['ladung', 'ladung-bandgen', 'crank'], ['ladung', 'ladung-elektroskop', 'nah'],
-  ['modell', 'modell-elektronen', null], ['widerstand', 'widerstand-kennlinie', 'add'],
+  ['modell', 'modell-elektronen', null], ['spannung', 'wasser-modell', 'narrow'], ['widerstand', 'widerstand-kennlinie', 'add'],
 ]) {
   test(`Experiment ${ex} läuft und hat Fragen`, async ({ page }) => {
     await openEx(page, topic, ex);
     await expect(page.locator('#ex .demo')).toBeVisible();
     if (act) {
       await page.click(`#ex [data-d=${act}]`);
-      if (act !== 'add') await expect(page.locator('#ex .demo .status')).not.toBeEmpty();
+      if (act === 'narrow') await expect(page.locator('#ex .demo .meter')).toContainText('0,10 A');
+      else if (act !== 'add') await expect(page.locator('#ex .demo .status')).not.toBeEmpty();
     } else {
       await page.locator('#ex [data-u]').fill('3');
       await page.waitForTimeout(1500);

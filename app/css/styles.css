@@ -164,3 +164,20 @@ h3.sub { margin: 4px 0 0; color: var(--navy); font-size: 18px; }
 .truth .cell.right { border-color: var(--ok); }
 .truth .cell.wrong { border-color: var(--err); background: #fbeae8; }
 .truth .sol { font-size: 12px; color: var(--err); display: block; }
+
+/* ---------- Wassermodell ---------- */
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.pair .circuit { background: #fff; border-radius: 12px; height: 100%; }
+.demo-svg .pipe-o { fill: none; stroke: #5b8db8; stroke-width: 15; stroke-linejoin: round; }
+.demo-svg .pipe-i { fill: none; stroke: #cfe8ff; stroke-width: 11; stroke-linejoin: round; }
+.demo-svg .pipe-o.thin { stroke-width: 8; }
+.demo-svg .pipe-i.thin { stroke-width: 4; }
+.demo-svg .drops circle { fill: #1f6fd1; }
+.demo-svg .pump { fill: #fff; stroke: #5b8db8; stroke-width: 3; }
+.demo-svg .wheel { fill: #fff; stroke: #5b8db8; stroke-width: 3; }
+.demo-svg .paddle { stroke: #8a5a2b; stroke-width: 3; }
+.demo-svg .valve { fill: #fff; stroke: var(--ink); stroke-width: 2; }
+.map { width: 100%; border-collapse: collapse; font-size: 14px; }
+.map th { text-align: left; color: var(--muted); font-size: 12px; padding: 4px 6px; }
+.map td { padding: 4px 6px; border-top: 1px solid #ece7da; }
+.map td:first-child { color: #2e6ca4; font-weight: 600; }

@@ -108,7 +108,7 @@ const COND = { wire: 1e4, amp: 1e3, volt: 1e-7, lamp: 1 / R_LAMP, motor: 1 / R_L
 const LEAK = 1e-10;                           // hält offene Knoten mathematisch definiert
 
 /**
- * Wirksames Bauteil unter dem Zustand st = { switches: {Label: geschlossen}, placed: {Label: Schalter gesetzt} }.
+ * Wirksames Bauteil unter dem Zustand st = { switches: {Label: geschlossen}, placed: {Label: Schalter gesetzt}, U: Batteriespannung }.
  * Liefert { kind, g, closed } mit kind = Zeichentyp und g = Leitwert in S (0 = offen).
  */
 export function effective([type, , , o = {}], st = {}) {
@@ -156,6 +156,7 @@ function linsolve(A, b) {
  * @returns {{ V: Object<string, number>, I: number[], P: number[] }}
  */
 export function solve(c, st = {}) {
+  const U = st.U ?? U_BAT;
   const els = c.e.map(e => ({ e, ...effective(e, st) }));
   // Wechselschalter: zweiter Kontakt als zusätzliches Bauteil hinten anhängen, damit die Indizes von c.e gleich bleiben
   for (const x of [...els]) {
@@ -179,14 +180,14 @@ export function solve(c, st = {}) {
     if (!g) continue;
     stamp(a, b, g);
     if (type === 'bat') {   // Ersatzstromquelle: treibt U/R_INT vom Minus- zum Pluspol
-      if (idx[b] !== undefined) rhs[idx[b]] += U_BAT * g;
-      if (idx[a] !== undefined) rhs[idx[a]] -= U_BAT * g;
+      if (idx[b] !== undefined) rhs[idx[b]] += U * g;
+      if (idx[a] !== undefined) rhs[idx[a]] -= U * g;
     }
   }
   const x = linsolve(A, rhs);
   const V = { [ground]: 0 };
   ids.forEach((k, i) => { V[k] = x[i]; });
-  const I = els.map(({ e: [type, a, b], g }) => (type === 'bat' ? g * (U_BAT - (V[b] - V[a])) : g * (V[a] - V[b])));
+  const I = els.map(({ e: [type, a, b], g }) => (type === 'bat' ? g * (U - (V[b] - V[a])) : g * (V[a] - V[b])));
   const P = els.map(({ e: [type], g }, i) => (type === 'lamp' && g ? I[i] ** 2 / g : 0));
   return { V, I, P };
 }

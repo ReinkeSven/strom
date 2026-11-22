@@ -2,6 +2,13 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.4.0] - 2026-11-22
+
+### Hinzugefügt
+- Wassermodell als Experiment: Wasserkreislauf und Stromkreis nebeneinander mit gemeinsamen Reglern für Pumpe/Spannung, Engstelle/Widerstand und Ventil/Schalter, Zuordnungstabelle und Grenzen des Modells
+- Fragen zum Wassermodell und Zuordnungsübung (Thema Spannung), Merksatz zum Wassermodell
+- Schaltungslöser mit einstellbarer Batteriespannung
+
 ## [0.3.0] - 2026-11-22
 
 ### Hinzugefügt
