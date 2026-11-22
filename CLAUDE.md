@@ -1,0 +1,11 @@
+# Hinweise für Claude
+
+- Lerninhalte (Themen, Merksätze) gehören in `app/js/content.js` (reine Daten).
+- Lernlogik gehört in `app/js/model.js` (reine Funktionen, kein DOM, Zeit und Zufall injizierbar) und wird in `tests/` getestet.
+- `app/` wird unverändert ausgeliefert: kein Build-Schritt, keine Laufzeit-Abhängigkeiten.
+- Vor jedem Commit `npm run check` und `npm run test:e2e`.
+- Bei Änderungen in `app/` die `VERSION` in `app/sw.js` erhöhen und `CHANGELOG.md` pflegen.
+- Speicherformat (`strom-labor-v1` im localStorage) abwärtskompatibel halten; neue Felder in `migrate()` ergänzen.
+- UI-Texte auf Deutsch, Zielgruppe 8. Klasse Gymnasium (ca. 13–14 Jahre).
+- Physik fachlich korrekt halten; Modelle (Wasser-, Elektronenmodell) nur mit Hinweis auf ihre Grenzen.
+- Didaktischer Leitgedanke: typische Fehlvorstellungen gezielt aufgreifen (Strom wird verbraucht, Batterie als Konstantstromquelle, sequenzielles und lokales Denken), bevorzugt mit Vorhersagen-Beobachten-Erklären.
