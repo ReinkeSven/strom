@@ -2,6 +2,11 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.4.1] - 2026-11-22
+
+### Geändert
+- Überschrift der Startseite: „Papas Physik Punishment“
+
 ## [0.4.0] - 2026-11-22
 
 ### Hinzugefügt

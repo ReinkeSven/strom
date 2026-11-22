@@ -43,7 +43,7 @@ function homeView() {
       <span class="exn">${ep.done}/${ep.total}</span>
     </button></li>`;
   }).join('');
-  return `<div class="hero"><h1>Strom-Labor</h1><p>${p.done} von ${p.total} Themen erledigt</p></div>
+  return `<div class="hero"><h1>Papas Physik Punishment</h1><p>${p.done} von ${p.total} Themen erledigt</p></div>
     <ol class="topics">${items}</ol>`;
 }
 

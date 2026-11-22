@@ -10,7 +10,7 @@ const openEx = async (page, topic, ex) => {
 
 test('Startseite listet alle Themen', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.hero h1')).toHaveText('Strom-Labor');
+  await expect(page.locator('.hero h1')).toHaveText('Papas Physik Punishment');
   await expect(page.locator('.topic')).toHaveCount(TOPICS.length);
   await expect(page.locator('#tabs button')).toHaveCount(2);
 });
