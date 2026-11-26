@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { TOPICS } from '../app/js/content.js';
 import { CIRCUITS } from '../app/js/circuits.js';
 import { DEMO_IDS } from '../app/js/demos.js';
-import { GENERATORS, optionOrder, freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, recordExercise, exerciseProgress } from '../app/js/model.js';
+import { GENERATORS, optionOrder, missionParts, completePart, nextMission, stars, missionProgress, setFocus, firstSentence, freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, recordExercise, exerciseProgress } from '../app/js/model.js';
 
 const T0 = new Date('2026-11-22T10:00:00').getTime();
 
@@ -106,4 +106,43 @@ test('Antwortreihenfolge: Permutation, kurze geordnete Antworten bleiben stehen'
   }
   assert.ok(seen.size > 1);
   assert.deepEqual(optionOrder({ opts: ['heller', 'gleich hell', 'dunkler'] }, rand), [0, 1, 2]);
+});
+
+test('Missionen: jeder Merksatz und jede Frage genau einmal, Merksatz direkt nach dem Erlebten', () => {
+  for (const t of TOPICS) {
+    const parts = missionParts(t);
+    const steps = parts.flat();
+    const merk = steps.filter(s => s.kind === 'merk').map(s => s.i).sort();
+    assert.deepEqual(merk, t.merk.map((_, i) => i), t.id);
+    const nQ = t.exercises.reduce((n, e) => n + (e.questions || []).length, 0);
+    assert.equal(steps.filter(s => s.kind === 'question').length, nQ, t.id);
+    for (const p of parts) {
+      assert.ok(p.length >= 3 && p.length <= 10, `${t.id}: Teil mit ${p.length} Schritten`);
+      assert.notEqual(p[0].kind, 'merk', `${t.id}: Teil beginnt mit Merksatz`);
+      assert.notEqual(p[p.length - 1].kind, 'demo', `${t.id}: Experiment am Teilende`);
+    }
+  }
+});
+
+test('Missionsfortschritt, nächste Mission, Sterne und Schalter', () => {
+  let S = freshState(T0);
+  assert.equal(S.settings.focus, false);
+  S = setFocus(S, true);
+  assert.equal(S.settings.focus, true);
+  assert.deepEqual(nextMission(S), { topicId: TOPICS[0].id, part: 0 });
+  S = completePart(S, TOPICS[0].id, 0);
+  S = completePart(S, TOPICS[0].id, 0);
+  assert.deepEqual(S.missions[TOPICS[0].id], [0]);
+  assert.deepEqual(nextMission(S), { topicId: TOPICS[0].id, part: 1 });
+  assert.equal(stars(S), 1);
+  assert.deepEqual(missionProgress(S, TOPICS[0]), { done: 1, total: missionParts(TOPICS[0]).length });
+  const old = migrate({ topics: {}, ex: {} });
+  assert.deepEqual(old.missions, {});
+  assert.equal(old.settings.focus, false);
+});
+
+test('Kurzfassung einer Erklärung: erster Satz', () => {
+  assert.equal(firstSentence('Erster Satz. Zweiter Satz.'), 'Erster Satz.');
+  assert.equal(firstSentence('Nur ein Satz.'), 'Nur ein Satz.');
+  assert.equal(firstSentence('Es gilt 2 V + 4 V = 6 V. Fertig.'), 'Es gilt 2 V + 4 V = 6 V.');
 });

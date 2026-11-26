@@ -8,13 +8,14 @@
 //   calc   { gen, count }                                                 Aufgaben aus model.GENERATORS
 //   build  {}                                                             Bauauftrag mit Schaltern
 //   truth  { circuit, states: [Name für false, Name für true], prompt, why } Wahrheitstabelle vorhersagen, dann ausprobieren
+// after: Indizes der Merksätze des Themas, die der Fokus-Modus direkt nach dieser Übung zeigt
 
 const yesNo = ['Ja', 'Nein'];
 
 export const EX = {
   ladung: [
     {
-      id: 'ladung-ballons', type: 'demo', demo: 'balloons', title: 'Experiment: Luftballons',
+      id: 'ladung-ballons', type: 'demo', after: [0, 1], demo: 'balloons', title: 'Experiment: Luftballons',
       questions: [
         { q: 'Du reibst beide Ballons am Wolltuch und lässt sie nebeneinander hängen. Was passiert?', opts: ['Sie ziehen sich an', 'Sie stoßen sich ab', 'Nichts'], a: 1,
           why: 'Beide Ballons haben Elektronen vom Tuch aufgenommen und sind negativ geladen. Gleichnamige Ladungen stoßen sich ab.' },
@@ -27,7 +28,7 @@ export const EX = {
       ],
     },
     {
-      id: 'ladung-bandgen', type: 'demo', demo: 'bandgen', title: 'Experiment: Bandgenerator',
+      id: 'ladung-bandgen', type: 'demo', after: [2, 3], demo: 'bandgen', title: 'Experiment: Bandgenerator',
       questions: [
         { q: 'Du stehst auf einem Kunststoffhocker und legst die Hand auf die geladene Kugel. Warum stehen deine Haare ab?', opts: ['Die Haare sind gleichnamig geladen und stoßen sich ab', 'Die Kugel zieht die Haare mit ihrer Ladung zu sich hin', 'Die Kugel wird warm, und warme Luft hebt die Haare an'], a: 0,
           why: 'Die Ladung verteilt sich über deinen Körper bis in die Haare. Gleichnamig geladene Haare stoßen sich ab und stehen möglichst weit auseinander.' },
@@ -40,7 +41,7 @@ export const EX = {
       ],
     },
     {
-      id: 'ladung-elektroskop', type: 'demo', demo: 'electroscope', title: 'Experiment: Elektroskop',
+      id: 'ladung-elektroskop', type: 'demo', after: [4], demo: 'electroscope', title: 'Experiment: Elektroskop',
       questions: [
         { q: 'Du näherst den negativ geladenen Stab dem Elektroskop, ohne es zu berühren. Was passiert?', opts: ['Der Zeiger schlägt aus', 'Nichts, solange der Stab nicht berührt'], a: 0,
           why: 'Die Elektronen im Metall werden vom Stab abgestoßen und wandern nach unten in Zeiger und Halterung. Beide sind dann negativ und stoßen sich ab (Influenz). Entfernst du den Stab, verteilen sich die Elektronen wieder und der Zeiger fällt zurück.' },
@@ -54,7 +55,7 @@ export const EX = {
 
   modell: [
     {
-      id: 'modell-elektronen', type: 'demo', demo: 'electrons', title: 'Animation: Elektronen im Metall',
+      id: 'modell-elektronen', type: 'demo', after: [0, 1, 3], demo: 'electrons', title: 'Animation: Elektronen im Metall',
       questions: [
         { q: 'Was bewegt sich in einem Metalldraht, wenn Strom fließt?', opts: ['Die Atomrümpfe', 'Die freien Elektronen', 'Beide gleich schnell'], a: 1,
           why: 'Die Atomrümpfe sitzen fest im Gitter und schwingen nur auf der Stelle. Die freien Elektronen bewegen sich zusätzlich in eine Richtung.' },
@@ -65,7 +66,7 @@ export const EX = {
       ],
     },
     {
-      id: 'modell-sortieren', type: 'sort', title: 'Leiter oder Isolator?',
+      id: 'modell-sortieren', type: 'sort', after: [2], title: 'Leiter oder Isolator?',
       prompt: 'Leitet das Material den elektrischen Strom?',
       bins: ['Leiter', 'Isolator'],
       items: [
@@ -91,7 +92,7 @@ export const EX = {
       pairs: [['bat', 'Batterie'], ['lamp', 'Lampe'], ['switch', 'Schalter'], ['res', 'Widerstand'], ['amp', 'Amperemeter'], ['volt', 'Voltmeter'], ['motor', 'Motor']],
     },
     {
-      id: 'kreis-leuchtet', type: 'quiz', title: 'Leuchtet die Lampe?',
+      id: 'kreis-leuchtet', type: 'quiz', after: [0, 1, 2], title: 'Leuchtet die Lampe?',
       questions: [
         { q: 'Leuchtet die Lampe?', fig: 'einfach', opts: yesNo, a: 0,
           why: 'Der Stromkreis ist geschlossen: vom Pluspol über die Lampe zurück zum Minuspol.' },
@@ -109,7 +110,7 @@ export const EX = {
 
   stromstaerke: [
     {
-      id: 'strom-vorhersage', type: 'quiz', title: 'Vorhersage: Strom vor und hinter der Lampe',
+      id: 'strom-vorhersage', type: 'quiz', after: [3, 0, 1], title: 'Vorhersage: Strom vor und hinter der Lampe',
       questions: [
         { q: 'A1 misst die Stromstärke vor der Lampe, A2 dahinter. Was zeigt A2 im Vergleich zu A1?', fig: 'amp_vor_nach', opts: ['Mehr', 'Gleich viel', 'Weniger', 'Null'], a: 1,
           why: 'Im unverzweigten Stromkreis ist die Stromstärke überall gleich. So viel Ladung, wie in die Lampe hineinfließt, fließt auch wieder heraus.' },
@@ -120,7 +121,7 @@ export const EX = {
       ],
     },
     {
-      id: 'strom-messen', type: 'quiz', title: 'Amperemeter richtig einbauen',
+      id: 'strom-messen', type: 'quiz', after: [2], title: 'Amperemeter richtig einbauen',
       questions: [
         { q: 'In welcher Schaltung misst das Amperemeter die Stromstärke durch die Lampe richtig?', opts: [{ fig: 'amp_reihe' }, { fig: 'amp_parallel' }], a: 0,
           why: 'Das Amperemeter wird in Reihe geschaltet, damit der ganze Strom hindurchfließt. Parallel zur Lampe schließt es die Lampe kurz, weil es fast keinen Widerstand hat. Der Strom wird dann sehr groß, und das Messgerät kann kaputtgehen.' },
@@ -132,7 +133,7 @@ export const EX = {
 
   spannung: [
     {
-      id: 'wasser-modell', type: 'demo', demo: 'water', title: 'Wassermodell: Spannung, Stromstärke, Widerstand',
+      id: 'wasser-modell', type: 'demo', after: [4, 0], demo: 'water', title: 'Wassermodell: Spannung, Stromstärke, Widerstand',
       questions: [
         { q: 'Was entspricht im Wassermodell der Spannung?', opts: ['Der Druckunterschied, den die Pumpe erzeugt', 'Die Wassermenge, die pro Sekunde fließt', 'Der Durchmesser der Rohre im Kreislauf'], a: 0,
           why: 'Die Pumpe erzeugt einen Druckunterschied und treibt so das Wasser an. Genauso treibt die Spannung der Batterie die Elektronen an.' },
@@ -161,7 +162,7 @@ export const EX = {
       ],
     },
     {
-      id: 'spannung-messen', type: 'quiz', title: 'Voltmeter richtig einbauen',
+      id: 'spannung-messen', type: 'quiz', after: [2, 3], title: 'Voltmeter richtig einbauen',
       questions: [
         { q: 'In welcher Schaltung misst das Voltmeter die Spannung an der Lampe richtig?', opts: [{ fig: 'volt_reihe' }, { fig: 'volt_parallel' }], a: 1,
           why: 'Das Voltmeter wird parallel geschaltet, denn es misst den Unterschied zwischen zwei Punkten. In Reihe bremst sein sehr großer Widerstand den Strom fast vollständig: Die Lampe bleibt dunkel, und das Voltmeter zeigt ungefähr die Batteriespannung.' },
@@ -172,7 +173,7 @@ export const EX = {
       ],
     },
     {
-      id: 'spannung-sortieren', type: 'sort', title: 'Typische Spannungen',
+      id: 'spannung-sortieren', type: 'sort', after: [1], title: 'Typische Spannungen',
       prompt: 'Welche Spannung gehört dazu?',
       bins: ['1,5 V', '3,7 V', '12 V', '230 V', 'viele Millionen V'],
       items: [
@@ -189,7 +190,7 @@ export const EX = {
 
   widerstand: [
     {
-      id: 'widerstand-kennlinie', type: 'demo', demo: 'kennlinie', title: 'Experiment: Kennlinien messen',
+      id: 'widerstand-kennlinie', type: 'demo', after: [0, 1, 2], demo: 'kennlinie', title: 'Experiment: Kennlinien messen',
       questions: [
         { q: 'Wie sieht die Kennlinie des Konstantandrahts aus?', opts: ['Eine Ursprungsgerade', 'Eine Kurve, die immer flacher wird', 'Eine waagerechte Linie'], a: 0,
           why: 'Doppelte Spannung, doppelte Stromstärke: Stromstärke und Spannung sind proportional zueinander.' },
@@ -203,7 +204,7 @@ export const EX = {
 
   schaltungen: [
     {
-      id: 'schalt-hell', type: 'quiz', title: 'Vorhersage: Welche Lampe leuchtet heller?',
+      id: 'schalt-hell', type: 'quiz', after: [0, 1], title: 'Vorhersage: Welche Lampe leuchtet heller?',
       questions: [
         { q: 'Zwei gleiche Lampen sind in Reihe geschaltet. Welche leuchtet heller?', fig: 'reihe2', opts: ['L1, weil sie den Strom zuerst bekommt', 'L2', 'Beide gleich hell'], a: 2,
           why: 'Durch beide Lampen fließt derselbe Strom. Er wird unterwegs nicht aufgebraucht, deshalb leuchten gleiche Lampen gleich hell.' },
@@ -233,17 +234,17 @@ export const EX = {
 
   logik: [
     {
-      id: 'logik-und', type: 'truth', title: 'UND-Schaltung: Schalter in Reihe', circuit: 'und', states: ['offen', 'zu'],
+      id: 'logik-und', type: 'truth', after: [3, 0], title: 'UND-Schaltung: Schalter in Reihe', circuit: 'und', states: ['offen', 'zu'],
       prompt: 'Zwei Schalter liegen in Reihe. Wann leuchtet die Lampe?',
       why: 'Der Strom muss durch beide Schalter. Nur wenn S1 UND S2 geschlossen sind, ist der Stromkreis geschlossen.',
     },
     {
-      id: 'logik-oder', type: 'truth', title: 'ODER-Schaltung: Schalter parallel', circuit: 'oder', states: ['offen', 'zu'],
+      id: 'logik-oder', type: 'truth', after: [1], title: 'ODER-Schaltung: Schalter parallel', circuit: 'oder', states: ['offen', 'zu'],
       prompt: 'Zwei Schalter liegen parallel. Wann leuchtet die Lampe?',
       why: 'Jeder Schalter öffnet einen eigenen Weg. Es reicht, wenn S1 ODER S2 geschlossen ist. Sind beide zu, leuchtet die Lampe auch.',
     },
     {
-      id: 'logik-wechsel', type: 'truth', title: 'Wechselschaltung: Licht im Treppenhaus', circuit: 'wechsel', states: ['oben', 'unten'],
+      id: 'logik-wechsel', type: 'truth', after: [2], title: 'Wechselschaltung: Licht im Treppenhaus', circuit: 'wechsel', states: ['oben', 'unten'],
       prompt: 'Zwei Wechselschalter sind über zwei Leitungen verbunden. Jeder Schalter verbindet seinen Mittelkontakt entweder mit der oberen oder mit der unteren Leitung. Wann leuchtet die Lampe?',
       why: 'Die Lampe leuchtet, wenn beide Schalter dieselbe Leitung wählen. Jedes Umlegen eines Schalters, egal welches, schaltet die Lampe um. So kannst du das Licht unten einschalten und oben wieder ausschalten.',
     },
@@ -277,7 +278,7 @@ export const EX = {
 
   sicherheit: [
     {
-      id: 'sicher-quiz', type: 'quiz', title: 'Gefahren erkennen',
+      id: 'sicher-quiz', type: 'quiz', after: [0, 1, 2, 3], title: 'Gefahren erkennen',
       questions: [
         { q: 'Was passiert bei einem Kurzschluss?', opts: ['Der Widerstand ist fast null, der Strom wird sehr groß', 'Der Widerstand wird sehr groß, der Strom wird null', 'Die Spannung steigt stark an, der Strom bleibt gleich'], a: 0,
           why: 'Ohne Verbraucher im Kreis begrenzt fast nichts den Strom. Die Leitungen werden heiß, die Sicherung löst aus.' },

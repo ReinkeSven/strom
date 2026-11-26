@@ -14,7 +14,7 @@ export const newTopic = () => ({ read: 0, visits: 0 });
 export function freshState(now = Date.now()) {
   const topics = {};
   for (const t of TOPICS) topics[t.id] = newTopic();
-  return { v: 1, topics, ex: {}, lastBackup: 0, created: now };
+  return { v: 1, topics, ex: {}, missions: {}, settings: { focus: false }, lastBackup: 0, created: now };
 }
 
 /** Ergänzt fehlende Felder, damit ältere oder importierte Stände weiter funktionieren. */
@@ -23,7 +23,7 @@ export function migrate(o) {
   if (!o || typeof o !== 'object' || !o.topics) return f;
   const topics = {};
   for (const t of TOPICS) topics[t.id] = { ...newTopic(), ...(o.topics[t.id] || {}) };
-  return { ...f, ...o, topics, ex: { ...(o.ex || {}) } };
+  return { ...f, ...o, topics, ex: { ...(o.ex || {}) }, missions: { ...(o.missions || {}) }, settings: { ...f.settings, ...(o.settings || {}) } };
 }
 
 export function encodeBackup(S) {
@@ -72,6 +72,70 @@ export const exerciseProgress = (S, topic) => ({
   done: topic.exercises.filter(e => S.ex[e.id]).length,
   total: topic.exercises.length,
 });
+
+/* ---------- Fokus-Modus: Missionen aus kleinen Schritten ---------- */
+export const setFocus = (S, on) => ({ ...S, settings: { ...S.settings, focus: !!on } });
+
+/**
+ * Zerlegt ein Thema in Missionsteile. Ein Schritt zeigt genau eine Sache:
+ *   demo     Experiment ausprobieren
+ *   question eine einzelne Frage (exId, qi; last = letzte Frage der Übung)
+ *   task     eine ganze Übung, die selbst schon schrittweise ist (Sortieren, Memory, Tabelle, Bauauftrag)
+ *   merk     ein Merksatz, direkt nach der Übung, zu der er gehört (ex.after)
+ * Teile haben etwa `max` Schritte. Nie getrennt wird zwischen Experiment und seinen Fragen
+ * und nie vor einem Merksatz, damit er direkt auf das Erlebte folgt.
+ */
+export function missionParts(topic, max = 6) {
+  const steps = [];
+  const shown = new Set();
+  for (const ex of topic.exercises) {
+    if (ex.type === 'demo') steps.push({ kind: 'demo', exId: ex.id });
+    if (ex.questions) ex.questions.forEach((_, qi) => steps.push({ kind: 'question', exId: ex.id, qi, last: qi === ex.questions.length - 1 }));
+    else if (ex.type !== 'demo') steps.push({ kind: 'task', exId: ex.id });
+    for (const i of ex.after || []) { steps.push({ kind: 'merk', i }); shown.add(i); }
+  }
+  topic.merk.forEach((_, i) => { if (!shown.has(i)) steps.push({ kind: 'merk', i }); });
+  const legal = k => k < steps.length - 1 && steps[k + 1].kind !== 'merk' && steps[k].kind !== 'demo';
+  const parts = [[]];
+  steps.forEach((st, k) => {
+    const cur = parts[parts.length - 1];
+    cur.push(st);
+    if (!legal(k) || cur.length < 3) return;
+    let j = k + 1;                      // Schritte bis zur nächsten erlaubten Trennstelle
+    while (j < steps.length - 1 && !legal(j)) j++;
+    if (cur.length >= max || cur.length + (j - k) > max + 2) parts.push([]);
+  });
+  // sehr kurzen Rest an den vorigen Teil hängen
+  if (parts.length > 1 && parts[parts.length - 1].length < 3) parts[parts.length - 2].push(...parts.pop());
+  return parts;
+}
+
+/** Neuer Zustand mit Teil `part` des Themas als erledigt */
+export function completePart(S, topicId, part) {
+  const done = new Set(S.missions[topicId] || []);
+  done.add(part);
+  return { ...S, missions: { ...S.missions, [topicId]: [...done].sort((a, b) => a - b) } };
+}
+
+export const missionProgress = (S, topic) => ({ done: (S.missions[topic.id] || []).length, total: missionParts(topic).length });
+
+/** Nächster offener Missionsteil über alle Themen, oder null wenn alles geschafft ist */
+export function nextMission(S) {
+  for (const t of TOPICS) {
+    const done = new Set(S.missions[t.id] || []);
+    const n = missionParts(t).length;
+    for (let p = 0; p < n; p++) if (!done.has(p)) return { topicId: t.id, part: p };
+  }
+  return null;
+}
+
+export const stars = S => Object.values(S.missions).reduce((n, d) => n + d.length, 0);
+
+/** Erster Satz eines Erklärtexts (für die Kurzfassung im Fokus-Modus) */
+export function firstSentence(text) {
+  const m = String(text).match(/^(.+?[.!?])\s+(?=[A-ZÄÖÜ])/);
+  return m ? m[1] : String(text);
+}
 
 /* ---------- Hilfsfunktionen ---------- */
 export function shuffle(arr, rand = Math.random) {

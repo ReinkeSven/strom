@@ -137,3 +137,52 @@ test('Wahrheitstabelle Wechselschaltung: vorhersagen, prüfen, dann Schalter aus
   await expect(page.locator('#ex .halo')).toHaveCount(1);
   expect((await readState(page)).ex['logik-wechsel'].best).toBe(1);
 });
+
+test('Fokus-Modus: Schalter, Mission Schritt für Schritt, Abschluss mit Stern', async ({ page }) => {
+  const { missionParts } = await import('../../app/js/model.js');
+  const t = TOPICS[0];
+  const steps = missionParts(t)[0];
+  await page.goto('/');
+  await expect(page.locator('.topic')).toHaveCount(TOPICS.length);
+  await page.click('.fswitch');
+  await expect(page.locator('.mrow')).toHaveCount(TOPICS.length);
+  await page.reload();
+  await expect(page.locator('.cta')).toContainText(`${t.title} · Teil 1`);
+  await page.click('.cta');
+  await expect(page.locator('#tabs')).toBeHidden();
+  for (const [k, st] of steps.entries()) {
+    await expect(page.locator('.mcount')).toHaveText(`${k + 1}/${steps.length}`);
+    const next = page.locator('[data-m=next]');
+    if (st.kind === 'question') {
+      await expect(next).toBeDisabled();
+      const q = t.exercises.find(e => e.id === st.exId).questions[st.qi];
+      await page.click(`.mbody [data-opt="${q.a}"]`);
+      await expect(page.locator('.mbody .why.ok')).toBeVisible();
+    }
+    if (st.kind === 'merk') await expect(page.locator('.merkcard .mtext')).toHaveText(t.merk[st.i]);
+    await next.click();
+  }
+  await expect(page.locator('.mdone h2')).toHaveText('Geschafft!');
+  await page.click('[data-m=exit]');
+  await expect(page.locator('.stars')).toHaveText('⭐ 1');
+  await expect(page.locator('.cta')).toContainText('Teil 2');
+  const S = await readState(page);
+  expect(S.missions[t.id]).toEqual([0]);
+  expect(S.ex['ladung-ballons'].best).toBe(1);
+  await page.click('.fswitch');
+  await expect(page.locator('.topic')).toHaveCount(TOPICS.length);
+});
+
+test('Fokus-Modus: Erklärung kurz, auf Wunsch ausführlich', async ({ page }) => {
+  await page.goto('/');
+  await page.click('.fswitch');
+  await page.click('[data-mission="ladung:0"]');
+  await page.click('[data-m=next]');
+  await page.click('.mbody [data-opt]:not([disabled])');
+  const more = page.locator('.mbody [data-more]');
+  if (await more.count()) {
+    const before = (await page.locator('.mbody .why').textContent()).length;
+    await more.click();
+    expect((await page.locator('.mbody .why').textContent()).length).toBeGreaterThan(before);
+  }
+});

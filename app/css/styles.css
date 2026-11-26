@@ -189,3 +189,55 @@ h3.sub { margin: 4px 0 0; color: var(--navy); font-size: 18px; }
 .demo-svg .ion { fill: #d9534f; }
 .demo-svg .ionp { fill: #fff; font-size: 12px; }
 .demo-svg .el { fill: #2a6fdb; }
+
+/* ---------- Fokus-Modus ---------- */
+.fswitch { display: flex; align-items: center; gap: 12px; background: var(--card); border-radius: var(--r); padding: 12px 14px; box-shadow: 0 2px 0 rgba(0, 0, 0, .08); cursor: pointer; }
+.fswitch input { position: absolute; opacity: 0; pointer-events: none; }
+.fswitch .track { flex: 0 0 48px; height: 28px; border-radius: 999px; background: #d8d3c6; position: relative; transition: background .2s; }
+.fswitch .knob { position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); transition: left .2s; }
+.fswitch input:checked + .track { background: var(--navy); }
+.fswitch input:checked + .track .knob { left: 23px; }
+.fswitch input:focus-visible + .track { outline: 3px solid var(--volt); }
+.fswitch small { display: block; color: var(--muted); }
+.btn.big { padding: 14px 22px; font-size: 18px; width: 100%; }
+.cta { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 18px; font-size: 20px; }
+.cta small { font-size: 13px; font-weight: 600; opacity: .8; }
+.stars { font-size: 18px; font-weight: 800; color: var(--navy) !important; }
+.missions { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.mrow { display: flex; align-items: center; gap: 12px; background: var(--card); border-radius: var(--r); padding: 12px 14px; box-shadow: 0 2px 0 rgba(0, 0, 0, .08); }
+.mrow .num { flex: 0 0 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--navy); color: #fff; font-weight: 800; }
+.mrow.done .num { background: var(--volt); color: var(--navy); }
+.mrow .txt { flex: 1; }
+.mrow .dots { display: flex; gap: 6px; }
+.mdot { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--navy); background: #fff; color: var(--navy); font-weight: 800; cursor: pointer; }
+.mdot.on { background: var(--volt); border-color: var(--volt); }
+
+body.in-mission #tabs { display: none; }
+body.in-mission #view { padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
+.mission { display: flex; flex-direction: column; gap: 14px; min-height: calc(100dvh - 40px); }
+.mtop { display: flex; align-items: center; gap: 10px; position: sticky; top: 0; background: var(--bg); padding: 6px 0; z-index: 2; }
+.mclose { border: 0; background: none; font-size: 22px; color: var(--muted); cursor: pointer; padding: 4px 8px; }
+.mbar { flex: 1; height: 12px; border-radius: 999px; background: #e2ddd0; overflow: hidden; }
+.mbar span { display: block; height: 100%; background: var(--volt); border-radius: 999px; transition: width .4s; }
+.mcount { font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; }
+.mbody { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.mfoot { position: sticky; bottom: 0; background: linear-gradient(transparent, var(--bg) 30%); padding: 18px 0 calc(8px + env(safe-area-inset-bottom)); }
+.mfoot.static { position: static; background: none; padding-top: 4px; }
+.mfoot .btn:disabled { opacity: .35; cursor: default; }
+.mh { font-family: 'Dela Gothic One', Figtree, sans-serif; font-weight: 400; color: var(--navy); font-size: 22px; margin: 0; }
+.mhint { margin: 0; font-size: 17px; }
+.q.big { font-size: 20px; font-weight: 800; line-height: 1.35; margin: 4px 0 6px; }
+.mission .opt { font-size: 17px; padding: 14px 16px; }
+.mission .why { font-size: 16px; }
+.linkbtn { border: 0; background: none; color: var(--navy); font-weight: 800; text-decoration: underline; padding: 0 0 0 4px; cursor: pointer; font-size: inherit; }
+.merkcard { background: #fff8dd; border-left: 8px solid var(--volt); border-radius: var(--r); padding: 22px 20px; margin-top: 8vh; }
+.merkcard .mk { margin: 0 0 10px; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--navy); }
+.merkcard .mtext { margin: 0; font-size: 22px; line-height: 1.4; font-weight: 600; }
+.mdone { align-items: center; text-align: center; justify-content: center; }
+.mdone h2 { font-family: 'Dela Gothic One', Figtree, sans-serif; font-weight: 400; font-size: 34px; color: var(--navy); margin: 0; }
+.mdone .msub { margin: 0; color: var(--muted); font-weight: 600; }
+.mdone .merk { text-align: left; width: 100%; }
+.mend { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.burst { font-size: 72px; animation: pop .6s ease-out; }
+@keyframes pop { 0% { transform: scale(.2) rotate(-30deg); opacity: 0; } 70% { transform: scale(1.2) rotate(8deg); opacity: 1; } 100% { transform: scale(1) rotate(0); } }
+@media (prefers-reduced-motion: reduce) { .burst { animation: none; } .mbar span, .fswitch .track, .fswitch .knob { transition: none; } }

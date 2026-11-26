@@ -1,7 +1,11 @@
 // Oberfläche: Ansichten, Navigation, Speichern.
 import { TOPICS, topicById } from './content.js';
-import { freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, dkey, recordExercise, exerciseProgress } from './model.js';
+import {
+  freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, dkey, recordExercise, exerciseProgress,
+  setFocus, missionParts, completePart, nextMission, stars,
+} from './model.js';
 import { mountExercise } from './exercises.js';
+import { mountMission } from './mission.js';
 
 const KEY = 'strom-labor-v1';
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -9,7 +13,7 @@ const $ = s => document.querySelector(s);
 
 /* ---------- Zustand ---------- */
 let S = null;
-let view = { tab: 'home', topic: null, ex: null };
+let view = { tab: 'home', topic: null, ex: null, mission: null };   // mission: { topic, part } im Fokus-Modus
 let unmount = null;   // Aufräumfunktion der offenen Übung
 let ui = { copyMsg: '', importMsg: '', importOk: false };
 let persisted = null;
@@ -44,7 +48,31 @@ function homeView() {
     </button></li>`;
   }).join('');
   return `<div class="hero"><h1>Papas Physik Punishment</h1><p>${p.done} von ${p.total} Themen erledigt</p></div>
-    <ol class="topics">${items}</ol>`;
+    ${focusSwitch()}<ol class="topics">${items}</ol>`;
+}
+
+function focusSwitch() {
+  const on = S.settings.focus;
+  return `<label class="fswitch"><input type="checkbox" data-focus ${on ? 'checked' : ''}>
+    <span class="track"><span class="knob"></span></span><span><b>Fokus-Modus</b><small>${on ? 'kleine Schritte, eins nach dem anderen' : 'aus'}</small></span></label>`;
+}
+
+/** Startseite im Fokus-Modus: ein großer „Weiter“-Knopf, darunter die Missionen mit Fortschrittspunkten */
+function focusHomeView() {
+  const nx = nextMission(S);
+  const nt = nx && topicById(nx.topicId);
+  const cta = nx
+    ? `<button class="btn primary big cta" data-mission="${nx.topicId}:${nx.part}"><small>Weiter mit</small>${esc(nt.title)} · Teil ${nx.part + 1}</button>`
+    : '<section class="card"><h3>Alles geschafft!</h3><p>Du kannst jede Mission wiederholen.</p></section>';
+  const items = TOPICS.map((t, i) => {
+    const parts = missionParts(t);
+    const done = new Set(S.missions[t.id] || []);
+    const dots = parts.map((_, k) => `<button class="mdot${done.has(k) ? ' on' : ''}" data-mission="${t.id}:${k}" aria-label="${esc(t.title)} Teil ${k + 1}${done.has(k) ? ', geschafft' : ''}">${k + 1}</button>`).join('');
+    return `<li class="mrow${done.size === parts.length ? ' done' : ''}"><span class="num">${done.size === parts.length ? '✓' : i + 1}</span>
+      <span class="txt"><b>${esc(t.title)}</b></span><span class="dots">${dots}</span></li>`;
+  }).join('');
+  return `<div class="hero"><h1>Papas Physik Punishment</h1><p class="stars">⭐ ${stars(S)}</p></div>
+    ${focusSwitch()}${cta}<ol class="missions">${items}</ol>`;
 }
 
 function topicView(id) {
@@ -88,15 +116,25 @@ function exerciseShell(t, e) {
 function render() {
   const main = $('#view');
   if (unmount) { unmount(); unmount = null; }
+  document.body.classList.toggle('in-mission', !!view.mission);
+  document.body.classList.toggle('focus', !!S.settings.focus);
   if (view.tab === 'more') main.innerHTML = backupView();
-  else if (view.ex) {
+  else if (view.mission) {
+    const t = topicById(view.mission.topic);
+    unmount = mountMission(main, t, view.mission.part, {
+      onExit: () => { view = { tab: 'home', topic: null, ex: null, mission: null }; render(); },
+      onRecord: (exId, score, total) => { S = recordExercise(S, exId, score, total); save(); },
+      onPartDone: part => { S = completePart(S, t.id, part); save(); },
+      onNextPart: part => { view = { ...view, mission: { topic: t.id, part } }; render(); },
+    });
+  } else if (view.ex) {
     const t = topicById(view.topic);
     const e = t.exercises.find(x => x.id === view.ex);
     main.innerHTML = exerciseShell(t, e);
     // Ergebnis speichern, ohne neu zu zeichnen: die Übung zeigt ihre Auswertung selbst
     unmount = mountExercise($('#ex'), e, (score, total) => { S = recordExercise(S, e.id, score, total); save(); });
   } else if (view.topic) main.innerHTML = topicView(view.topic);
-  else main.innerHTML = homeView();
+  else main.innerHTML = S.settings.focus ? focusHomeView() : homeView();
   document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === view.tab));
 }
 
@@ -104,7 +142,7 @@ function render() {
 function markBackup() { S = { ...S, lastBackup: Date.now() }; save(); }
 
 const ACTIONS = {
-  back: () => { view = { tab: 'home', topic: null, ex: null }; render(); },
+  back: () => { view = { tab: 'home', topic: null, ex: null, mission: null }; render(); },
   'back-topic': () => { view = { ...view, ex: null }; render(); window.scrollTo(0, 0); },
   'toggle-read': () => update(setRead(S, view.topic, !S.topics[view.topic].read)),
   copy: async () => {
@@ -126,17 +164,23 @@ const ACTIONS = {
 
 document.addEventListener('click', e => {
   const tab = e.target.closest('[data-tab]');
-  if (tab) { view = { tab: tab.dataset.tab, topic: null, ex: null }; ui = { copyMsg: '', importMsg: '', importOk: false }; render(); return; }
+  if (tab) { view = { tab: tab.dataset.tab, topic: null, ex: null, mission: null }; ui = { copyMsg: '', importMsg: '', importOk: false }; render(); return; }
+  const ms = e.target.closest('[data-mission]');
+  if (ms) { const [topicId, part] = ms.dataset.mission.split(':'); view = { tab: 'home', topic: null, ex: null, mission: { topic: topicId, part: Number(part) } }; render(); return; }
   const topic = e.target.closest('[data-topic]');
-  if (topic) { view = { tab: 'home', topic: topic.dataset.topic, ex: null }; update(visit(S, topic.dataset.topic)); window.scrollTo(0, 0); return; }
+  if (topic) { view = { tab: 'home', topic: topic.dataset.topic, ex: null, mission: null }; update(visit(S, topic.dataset.topic)); window.scrollTo(0, 0); return; }
   const ex = e.target.closest('[data-ex]');
   if (ex) { view = { ...view, ex: ex.dataset.ex }; render(); window.scrollTo(0, 0); return; }
   const act = e.target.closest('[data-act]');
   if (act && ACTIONS[act.dataset.act]) ACTIONS[act.dataset.act]();
 });
 
+document.addEventListener('change', e => {
+  if (e.target.matches('[data-focus]')) update(setFocus(S, e.target.checked));
+});
+
 /* ---------- Start ---------- */
 S = load();
 render();
-requestPersist().then(render);
+requestPersist().then(() => { if (view.tab === 'more') render(); });
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});

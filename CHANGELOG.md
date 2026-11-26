@@ -2,6 +2,15 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.6.0] - 2026-11-26
+
+### Hinzugefügt
+- Fokus-Modus (Schalter auf der Startseite): Jedes Thema wird zu Missionen aus kleinen Schritten mit genau einer Sache pro Bildschirm, Fortschrittsbalken und klarem Abschluss
+- Erst ausprobieren, dann der Merksatz: Merksätze erscheinen als „Das hast du gerade herausgefunden“ direkt nach der passenden Übung
+- Erklärungen im Fokus-Modus zunächst kurz (erster Satz), ausführlich auf Wunsch
+- Startseite im Fokus-Modus mit großem „Weiter“-Knopf, Fortschrittspunkten je Mission und Sternen
+- Ergebnisse aus Missionen zählen auch im normalen Modus
+
 ## [0.5.0] - 2026-11-26
 
 ### Entfernt

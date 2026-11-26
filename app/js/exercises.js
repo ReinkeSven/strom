@@ -1,7 +1,7 @@
 // Übungsansichten: jede Übung verwaltet ihren eigenen DOM-Bereich, damit Experimente beim Antworten weiterlaufen.
 import { CIRCUITS, symbolCircuit } from './circuits.js';
 import { circuitSvg } from './svg.js';
-import { shuffle, optionOrder, makeTasks, checkAnswer, checkBuild, truthTable, fmt } from './model.js';
+import { shuffle, optionOrder, makeTasks, checkAnswer, checkBuild, truthTable, fmt, firstSentence } from './model.js';
 import { mountDemo } from './demos.js';
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -59,6 +59,34 @@ function mountQuiz(el, ex, onFinish, intro = '') {
     opt: k => { if (picked !== null) return; picked = Number(k); if (picked === qs[i].a) score++; render(); },
     next: () => { i++; picked = null; if (i >= qs.length) onFinish(score, qs.length); render(); },
     'act-ex': () => { i = 0; picked = null; score = 0; orders = qs.map(q => optionOrder(q)); render(); },
+  });
+  render();
+  return off;
+}
+
+/* ---------- Einzelne Frage (Fokus-Modus): kurze Erklärung, mehr auf Wunsch ---------- */
+export function mountQuestion(el, q, onAnswer) {
+  const order = optionOrder(q);
+  let picked = null, more = false;
+  const short = firstSentence(q.why);
+  const render = () => {
+    const done = picked !== null;
+    const opts = order.map(k => {
+      const o = q.opts[k];
+      const state = !done ? '' : k === q.a ? ' right' : k === picked ? ' wrong' : ' faded';
+      const inner = typeof o === 'string' ? esc(o) : fig(o.fig, done);
+      return `<button class="opt${typeof o === 'string' ? '' : ' figopt'}${state}" data-opt="${k}" ${done ? 'disabled' : ''}>${inner}</button>`;
+    }).join('');
+    const ok = picked === q.a;
+    el.innerHTML = `<p class="q big">${esc(q.q)}</p>
+      ${q.fig ? `<div class="figwrap">${fig(q.fig, done)}</div>` : ''}
+      <div class="opts${q.opts.some(o => typeof o !== 'string') ? ' figs' : ''}">${opts}</div>
+      ${done ? `<div class="why ${ok ? 'ok' : 'err'}"><b>${ok ? 'Richtig!' : 'Nicht ganz.'}</b> ${esc(more ? q.why : short)}
+        ${!more && short !== q.why ? '<button class="linkbtn" data-more="1">Genauer erklären</button>' : ''}</div>` : ''}`;
+  };
+  const off = delegate(el, {
+    opt: k => { if (picked !== null) return; picked = Number(k); render(); onAnswer(picked === q.a); },
+    more: () => { more = true; render(); },
   });
   render();
   return off;

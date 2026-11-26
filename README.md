@@ -10,6 +10,10 @@ Lern-App zur Elektrizitätslehre für die 8. Klasse Gymnasium, als installierbar
 
 Neun Themen mit Merksätzen und 24 Übungen: interaktive Experimente, Quiz nach dem Muster Vorhersagen, Beobachten, Erklären mit berechneten Schaltplänen, Sortieren, Memory, Wahrheitstabellen und ein Bauauftrag. Gerechnet wird bewusst nicht.
 
+## Fokus-Modus
+
+Schalter auf der Startseite. Ist er an, wird jedes Thema in Missionen aus 5 bis 10 kleinen Schritten zerlegt: eine Frage, ein Experiment oder ein Merksatz pro Bildschirm, mit Fortschrittsbalken und Abschluss. Merksätze erscheinen erst nach der passenden Übung (Feld `after` in `exercises-data.js`). Die Inhalte sind dieselben wie im normalen Modus.
+
 ## Themen
 
 1. Elektrische Ladung (Reibung, Luftballons, Bandgenerator)
