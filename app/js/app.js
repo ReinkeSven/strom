@@ -10,6 +10,7 @@ import { mountHero } from './hero.js';
 import { citySvg, cityLabel } from './city.js';
 
 const KEY = 'strom-labor-v1';
+export const APP_VERSION = '0.8.3';   // muss VERSION in sw.js entsprechen (Test prüft das)
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const $ = s => document.querySelector(s);
 
@@ -124,7 +125,8 @@ function backupView() {
         : '<div class="btns"><button class="btn warn" data-act="reset">Zurücksetzen …</button></div>'}
       ${ui.resetDone ? '<p class="small ok">Der Spielstand wurde zurückgesetzt.</p>' : ''}
     </section>
-    <p class="small">Dauerhafter Speicher: ${persistText}</p>`;
+    <p class="small">Dauerhafter Speicher: ${persistText}</p>
+    <p class="small">Version ${APP_VERSION}</p>`;
 }
 
 function exerciseShell(t, e) {
@@ -216,4 +218,14 @@ document.addEventListener('change', e => {
 S = load();
 render();
 requestPersist().then(() => { if (view.tab === 'more') render(); });
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+if ('serviceWorker' in navigator) {
+  // Neue Version: sobald der neue Service Worker übernimmt, einmal neu laden (nicht mitten in einer Mission)
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadController || reloaded || view.mission || view.ex) return;
+    reloaded = true;
+    location.reload();
+  });
+  navigator.serviceWorker.register('sw.js').then(r => r.update()).catch(() => {});
+}

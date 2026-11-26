@@ -172,3 +172,12 @@ test('Stadt: Haus leuchtet ab 60 %, Stern bei fehlerfrei, Gebäude wenn das Them
   S = recordExercise(S, 'kreis-memory', 7, 20, T0);   // Memory zählt unabhängig von der Zahl der Versuche
   assert.equal(cityState(S).landmarks.find(l => l.topicId === 'stromkreis').built, true);
 });
+
+test('Versionsnummer in App und Service Worker stimmen überein', async () => {
+  const { readFileSync } = await import('node:fs');
+  const sw = readFileSync(new URL('../app/sw.js', import.meta.url), 'utf8').match(/VERSION = '([^']+)'/)[1];
+  const app = readFileSync(new URL('../app/js/app.js', import.meta.url), 'utf8').match(/APP_VERSION = '([^']+)'/)[1];
+  const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
+  assert.equal(app, sw);
+  assert.equal(pkg, sw);
+});

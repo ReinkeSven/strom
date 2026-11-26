@@ -2,6 +2,12 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.8.3] - 2026-11-26
+
+### Geändert
+- Updates kommen sofort an: Die App lädt sich einmal neu, sobald eine neue Version bereitsteht (nicht während einer Übung oder Mission)
+- Versionsnummer im Bereich Backup
+
 ## [0.8.2] - 2026-11-26
 
 ### Geändert
