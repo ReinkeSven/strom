@@ -1,10 +1,11 @@
 // Erzeugt Übungsblätter und Lösungsschlüssel (DIN A4, PDF) aus den Inhalten der App.
 // Aufruf: npm run worksheets  →  dist/Uebungsblaetter.pdf, dist/Loesungen.pdf
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { chromium } from '@playwright/test';
 import { TOPICS } from '../app/js/content.js';
 import { CIRCUITS, symbolCircuit } from '../app/js/circuits.js';
 import { circuitSvg } from '../app/js/svg.js';
+import { balloonsSvg, bandgenSvg, electroscopeSvg, waterSvg, waterAt, latticeSvg } from '../app/js/demos.js';
 import { makeTasks, truthTable, shuffle, optionOrder, lampCurrent, wireCurrent, fmt, fmtFixed } from '../app/js/model.js';
 
 const OUT = new URL('../dist/', import.meta.url);
@@ -35,6 +36,26 @@ const DEMO_INTRO = {
   kennlinie: 'An einen Konstantandraht und an eine Glühlampe werden nacheinander verschiedene Spannungen angelegt. Gemessen wird jeweils die Stromstärke.',
 };
 const KENN_U = [0, 2, 4, 6, 8, 10, 12];
+
+/* ---------- Skizzen (dieselben Zeichnungen wie in der App) ---------- */
+// Auf dem Blatt: Ausgangszustand, der die Antwort nicht verrät. In der Lösung: das Ergebnis.
+const DROPS = Array.from({ length: 22 }, (_, k) => waterAt(k / 22));
+const SKETCH = {
+  balloons: () => balloonsSvg({ a: 0, b: 0, near: false, wall: false }),
+  bandgen: () => bandgenSvg({ q: 8, hand: true }),
+  electroscope: () => electroscopeSvg({ q: 0, rod: 'weg' }),
+  electrons: () => latticeSvg(seeded(8)),
+  water: () => waterSvg({ level: 3, narrow: false, open: true, gauge: false }, DROPS),
+};
+const SKETCH_KEY = {
+  balloons: [['Beide Ballons gerieben: Sie stoßen sich ab.', balloonsSvg({ a: -4, b: -4 })],
+    ['Geladener Ballon an der Wand: Die Ladungen in der Wand verschieben sich.', balloonsSvg({ a: -4, b: 0, wall: true })]],
+  bandgen: [['Die Glimmlampe leuchtet an der Elektrode an der Kugel.', bandgenSvg({ q: 8, hand: true, glow: true })]],
+  electroscope: [['Stab nur angenähert: Influenz, der Zeiger schlägt aus.', electroscopeSvg({ q: 0, rod: 'nah' })],
+    ['Nach dem Berühren und Entfernen: Das Elektroskop bleibt geladen.', electroscopeSvg({ q: -3, rod: 'weg' })]],
+};
+const sketch = svg => `<div class="sketch">${svg}</div>`;
+const keySketches = id => (SKETCH_KEY[id] ? `<div class="sketches">${SKETCH_KEY[id].map(([cap, svg]) => `<figure>${svg}<figcaption>${esc(cap)}</figcaption></figure>`).join('')}</div>` : '');
 
 /* ---------- Bausteine ---------- */
 const box = '<span class="box"></span>';
@@ -99,8 +120,10 @@ function render(ex, rand) {
         extraKey = `<p><b>A.</b></p>${kennGrid(true)}<p><b>B.</b> R = U / I: bei 2 V ist R = 2 V / ${fmt(lampCurrent(2), 3)} A ≈ ${fmt(2 / lampCurrent(2), 0)} Ω, bei 12 V ist R = 12 V / 0,25 A = 48 Ω. Der Widerstand steigt, weil der Glühdraht heißer wird.</p>`;
       }
       return {
-        sheet: head + `<p class="intro">${esc(DEMO_INTRO[ex.demo])}</p>${extra}` + ex.questions.map((q, k) => mcQuestion(q, k + 1, orders[k])).join(''),
-        key: head + extraKey + `<ol class="key">${ex.questions.map((q, k) => mcAnswer(q, k + 1, orders[k])).join('')}</ol>`,
+        sheet: head + (SKETCH[ex.demo]
+          ? `<div class="two intro2"><p class="intro">${esc(DEMO_INTRO[ex.demo])}</p>${sketch(SKETCH[ex.demo]())}</div>`
+          : `<p class="intro">${esc(DEMO_INTRO[ex.demo])}</p>`) + extra + ex.questions.map((q, k) => mcQuestion(q, k + 1, orders[k])).join(''),
+        key: head + extraKey + keySketches(ex.demo) + `<ol class="key">${ex.questions.map((q, k) => mcAnswer(q, k + 1, orders[k])).join('')}</ol>`,
       };
     }
     case 'sort': {
@@ -179,8 +202,13 @@ function build() {
   };
 }
 
+// Zeichenstile der Experimente aus der App übernehmen, Schrift auf Inter setzen
+const APP_CSS = readFileSync(new URL('../app/css/styles.css', import.meta.url), 'utf8')
+  .split('\n').filter(l => l.startsWith('.demo-svg')).join('\n')
+  + '\n.demo-svg { width: 100%; height: auto; display: block; } .demo-svg text { font-family: Inter, sans-serif; }';
+
 function page(title, body) {
-  return `<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><title>${title}</title><style>${CSS}</style></head><body>${body}</body></html>`;
+  return `<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><title>${title}</title><style>${CSS}${APP_CSS}</style></head><body>${body}</body></html>`;
 }
 
 const CSS = `
@@ -228,6 +256,12 @@ h1, h2, h3, h4 { color: var(--navy); margin: 0; }
 .res { margin: 2mm 0 0 5mm; }
 .two { display: flex; gap: 6mm; align-items: flex-start; }
 .two .fig { flex: 0 0 56mm; }
+.intro2 { align-items: center; margin-bottom: 2mm; break-inside: avoid; }
+.intro2 .intro { flex: 1; }
+.sketch { flex: 0 0 68mm; border: 1px solid #e2ddd0; border-radius: 2mm; padding: 1mm; }
+.sketches { display: flex; gap: 6mm; margin: 1mm 0 3mm; break-inside: avoid; }
+.sketches figure { margin: 0; width: 70mm; border: 1px solid #e2ddd0; border-radius: 2mm; padding: 1mm; }
+.sketches figcaption { font-size: 9pt; color: var(--muted); padding: 1mm; }
 table { border-collapse: collapse; }
 .sort { width: 100%; font-size: 9.5pt; break-inside: avoid; }
 .sort th { font-size: 8.5pt; padding: 1.5mm 1mm; text-align: center; vertical-align: bottom; }

@@ -2,6 +2,14 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.4.4] - 2026-11-26
+
+### Hinzugefügt
+- Skizzen auf den PDF-Blättern zu Luftballons, Bandgenerator, Elektroskop, Metallgitter und Wassermodell; im Lösungsschlüssel Ergebnisskizzen (abstoßende Ballons, Ballon an der Wand, Glimmlampe, Influenz am Elektroskop)
+
+### Geändert
+- Zeichnungen der Experimente als reine Funktionen herausgelöst, damit App und PDF dieselbe Quelle nutzen
+
 ## [0.4.3] - 2026-11-26
 
 ### Geändert

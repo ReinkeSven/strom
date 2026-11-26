@@ -124,6 +124,8 @@ h3.sub { margin: 4px 0 0; color: var(--navy); font-size: 18px; }
 .demo-svg .pos { fill: #d9534f; }
 .demo-svg .sm { font-size: 13px; }
 .demo-svg .tag { fill: var(--navy); font-size: 12px; }
+.demo-svg .tl { text-anchor: start; }
+.demo-svg .tr { text-anchor: end; }
 .demo-svg .string { stroke: #888; stroke-width: 1.2; fill: none; }
 .demo-svg .balloon { fill: #ffd7a8; stroke: #e08a2e; stroke-width: 2; }
 .demo-svg .ceil { stroke: var(--ink); stroke-width: 3; }
@@ -181,3 +183,9 @@ h3.sub { margin: 4px 0 0; color: var(--navy); font-size: 18px; }
 .map th { text-align: left; color: var(--muted); font-size: 12px; padding: 4px 6px; }
 .map td { padding: 4px 6px; border-top: 1px solid #ece7da; }
 .map td:first-child { color: #2e6ca4; font-weight: 600; }
+
+/* Gitterskizze (PDF) */
+.demo-svg .metalbg { fill: #eef0f7; }
+.demo-svg .ion { fill: #d9534f; }
+.demo-svg .ionp { fill: #fff; font-size: 12px; }
+.demo-svg .el { fill: #2a6fdb; }
