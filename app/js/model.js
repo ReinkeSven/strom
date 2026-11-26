@@ -137,6 +137,23 @@ export function firstSentence(text) {
   return m ? m[1] : String(text);
 }
 
+/* ---------- Stadt: wächst mit dem Lernerfolg ---------- */
+export const LIT_MIN = 0.6;   // ab diesem Anteil richtiger Antworten bekommt das Haus Strom
+
+/**
+ * Jede Übung ist ein Haus, jedes Thema ein großes Gebäude.
+ * Ein Haus leuchtet ab LIT_MIN richtigen Antworten (Memory zählt immer), fehlerfrei gibt es einen Stern auf dem Dach.
+ * Das große Gebäude steht, sobald alle Häuser des Themas leuchten.
+ */
+export function cityState(S) {
+  const houses = TOPICS.flatMap(t => t.exercises.map(e => {
+    const r = S.ex[e.id];
+    return { exId: e.id, topicId: t.id, lit: !!r && (e.type === 'memory' || r.best >= LIT_MIN), perfect: !!r && r.best >= 1 };
+  }));
+  const landmarks = TOPICS.map(t => ({ topicId: t.id, built: houses.filter(h => h.topicId === t.id).every(h => h.lit) }));
+  return { houses, landmarks, lit: houses.filter(h => h.lit).length, built: landmarks.filter(l => l.built).length };
+}
+
 /* ---------- Hilfsfunktionen ---------- */
 export function shuffle(arr, rand = Math.random) {
   const a = [...arr];

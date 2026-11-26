@@ -213,12 +213,19 @@ function electroscope(el) {
   return off;
 }
 
-/* ---------- Elektronen im Metall ---------- */
+/* ---------- Elektronen im Metall (und im Vergleich: Holz) ---------- */
 function electrons(el) {
-  el.innerHTML = `<canvas class="demo-canvas" width="320" height="170" aria-label="Animation: Atomrümpfe und freie Elektronen"></canvas>
+  el.innerHTML = `<div class="seg"><button data-d="metal" class="on">Kupfer</button><button data-d="wood">Holz</button></div>
+    <canvas class="demo-canvas" width="320" height="170" aria-label="Animation: Atomrümpfe und freie Elektronen"></canvas>
     <p class="status" aria-live="polite"></p>
     <label class="slider">Spannung <input type="range" min="0" max="3" step="1" value="0" data-u> <span data-ulabel>aus</span></label>
-    <p class="small note">Rot: Atomrümpfe (positiv), fest im Gitter. Blau: freie Elektronen. Die Elektronen bewegen sich zum Pluspol, die technische Stromrichtung zeigt in die Gegenrichtung. Modellgrenze: Die Bewegung ist stark verlangsamt und vergrößert, die gerichtete Bewegung im echten Draht viel langsamer.</p>`;
+    <p class="small note"></p>`;
+  const NOTE = {
+    metal: 'Kupfer: Rot sind die Atomrümpfe (positiv), fest im Gitter. Blau sind die freien Elektronen. Sie bewegen sich zum Pluspol, die technische Stromrichtung zeigt in die Gegenrichtung. Modellgrenze: Im echten Draht ist die gerichtete Bewegung viel langsamer.',
+    wood: 'Holz: Jedes Elektron ist fest an sein Atom gebunden und kreist nur um seinen Platz. Mit Spannung verschieben sich die Elektronen ein winziges Stück zum Pluspol, wandern aber nicht weiter. Es gibt keine freien Ladungsträger, deshalb fließt kein Strom. (Nasses Holz leitet etwas, weil im Wasser gelöste Teilchen beweglich sind.)',
+  };
+  let mat = 'metal';
+  el.querySelector('.note').textContent = NOTE.metal;
   const cv = el.querySelector('canvas'), ctx = cv.getContext('2d');
   const W = 320, H = 170, dpr = window.devicePixelRatio || 1;
   cv.width = W * dpr; cv.height = H * dpr;
@@ -233,13 +240,16 @@ function electrons(el) {
     const a = rnd(0, 2 * Math.PI);
     return { x: rnd(0, W), y: rnd(26, H - 10), vx: 55 * Math.cos(a), vy: 55 * Math.sin(a) };
   });
+  // Holz: Elektronen gehören fest zu einem Atom (zwei je Atom) und kreisen um dessen Platz
+  const bound = ions.flatMap((p, k) => [0, 1].map(j => ({ p, a: k * 1.7 + j * Math.PI, w: 2.2 + (k % 3) * 0.4 })));
   const crossings = [];
   const mid = W / 2;
   const frame = now => {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now; t += dt;
     const vd = 22 * U;
-    for (const e of es) {
+    for (const b of bound) b.a += b.w * dt;
+    if (mat === 'metal') for (const e of es) {
       if (Math.random() < dt * 2.5) { const a = rnd(0, 2 * Math.PI); e.vx = 55 * Math.cos(a); e.vy = 55 * Math.sin(a); }
       const x0 = e.x;
       e.x += (e.vx + vd) * dt; e.y += e.vy * dt;
@@ -259,11 +269,19 @@ function electrons(el) {
     ctx.beginPath(); ctx.moveTo(mid, 20); ctx.lineTo(mid, H); ctx.stroke(); ctx.setLineDash([]);
     for (const p of ions) {
       const jx = Math.sin(t * 9 + p.x) * 1.2, jy = Math.cos(t * 11 + p.y) * 1.2;
-      ctx.fillStyle = '#d9534f'; ctx.beginPath(); ctx.arc(p.x + jx, p.y + jy, 8, 0, 2 * Math.PI); ctx.fill();
+      ctx.fillStyle = mat === 'metal' ? '#d9534f' : '#e7a19e';
+      ctx.beginPath(); ctx.arc(p.x + jx, p.y + jy, mat === 'metal' ? 8 : 6, 0, 2 * Math.PI); ctx.fill();
       ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.fillText('+', p.x + jx, p.y + jy + 4);
     }
     ctx.fillStyle = '#2a6fdb';
-    for (const e of es) { ctx.beginPath(); ctx.arc(e.x, e.y, 3.2, 0, 2 * Math.PI); ctx.fill(); }
+    if (mat === 'metal') for (const e of es) { ctx.beginPath(); ctx.arc(e.x, e.y, 3.2, 0, 2 * Math.PI); ctx.fill(); }
+    else {
+      ctx.strokeStyle = 'rgba(42,111,219,.25)';
+      for (const p of ions) { ctx.beginPath(); ctx.arc(p.x + 1.5 * U, p.y, 12, 0, 2 * Math.PI); ctx.stroke(); }
+      for (const b of bound) {
+        ctx.beginPath(); ctx.arc(b.p.x + 1.5 * U + 12 * Math.cos(b.a), b.p.y + 12 * Math.sin(b.a), 3.2, 0, 2 * Math.PI); ctx.fill();
+      }
+    }
     if (Math.round(t * 4) !== Math.round((t - dt) * 4)) {
       const net = crossings.reduce((s, c) => s + c[1], 0) / 3;
       status.textContent = `Durch die gestrichelte Linie nach rechts, abzüglich nach links: ${fmt(net, 1)} Elektronen pro Sekunde`;
@@ -273,8 +291,15 @@ function electrons(el) {
   const input = el.querySelector('[data-u]');
   const onInput = () => { U = Number(input.value); el.querySelector('[data-ulabel]').textContent = NAMES[U]; };
   input.addEventListener('input', onInput);
+  const off = onAct(el, d => {
+    if (d !== 'metal' && d !== 'wood') return;
+    mat = d;
+    crossings.length = 0;
+    el.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.d === d));
+    el.querySelector('.note').textContent = NOTE[d];
+  });
   raf = requestAnimationFrame(frame);
-  return () => { cancelAnimationFrame(raf); input.removeEventListener('input', onInput); };
+  return () => { cancelAnimationFrame(raf); input.removeEventListener('input', onInput); off(); };
 }
 
 /* ---------- Kennlinien ---------- */
@@ -418,6 +443,17 @@ export function latticeSvg(rand = Math.random) {
     // Elektronen zwischen die Rümpfe legen
     const x = 14 + Math.floor(rand() * 9) * 33 + rand() * 6, y = 12 + Math.floor(rand() * 5) * 32 + rand() * 6;
     g += `<circle class="el" cx="${r1(x)}" cy="${r1(y)}" r="3.5"/>`;
+  }
+  return `<svg viewBox="0 0 320 150" class="demo-svg">${g}</svg>`;
+}
+
+/** Holz als statische Skizze: Elektronen fest an ihren Atomen, keine freien Ladungsträger */
+export function woodSvg() {
+  let g = '<rect class="woodbg" x="0" y="0" width="320" height="150" rx="10"/>';
+  for (let i = 0; i < 9; i++) for (let j = 0; j < 4; j++) {
+    const x = 30 + i * 33, y = 28 + j * 32, a = (i * 4 + j) * 1.3;
+    g += `<circle class="orbit" cx="${x}" cy="${y}" r="12"/><circle class="ion sm2" cx="${x}" cy="${y}" r="6"/>`
+      + [0, Math.PI].map(d => `<circle class="el" cx="${r1(x + 12 * Math.cos(a + d))}" cy="${r1(y + 12 * Math.sin(a + d))}" r="3.2"/>`).join('');
   }
   return `<svg viewBox="0 0 320 150" class="demo-svg">${g}</svg>`;
 }

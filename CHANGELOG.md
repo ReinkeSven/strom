@@ -2,6 +2,13 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.8.0] - 2026-11-26
+
+### Hinzugefügt
+- Stadt auf der Startseite (beide Modi): Jede Übung mit mindestens 60 % richtig bringt Strom in ein Haus, fehlerfrei gibt es einen Stern, ein fertiges Thema baut ein Wahrzeichen. Nach jedem Missionsteil zeigt die Stadt die neu beleuchteten Häuser.
+- Gegen schnelles Durchklicken im ADHD-Mode: Merksätze als Lückentext (Weiter erst mit dem richtigen Wort), Experimente erst nach zwei eigenen Versuchen, nach falscher Antwort 3 Sekunden Lesezeit, falsch beantwortete Fragen kommen am Ende des Teils noch einmal (gewertet wird der erste Versuch)
+- Elektronen-Animation mit Umschalter Kupfer/Holz: Im Holz bleiben die Elektronen an ihren Atomen gebunden; neue Frage dazu, Holz-Skizze im PDF
+
 ## [0.7.0] - 2026-11-26
 
 ### Hinzugefügt

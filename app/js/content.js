@@ -22,6 +22,8 @@ export const TOPICS = [
       'Ein Körper mit Elektronenüberschuss ist negativ geladen, ein Körper mit Elektronenmangel positiv.',
       'Die Einheit der Ladung Q ist 1\u00a0Coulomb (1\u00a0C).',
     ],
+    // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
+    cloze: [['zwei', 'drei', 'vier'], ['stoßen', 'ziehen', 'drehen'], ['getrennt', 'erzeugt', 'vernichtet'], ['negativ', 'positiv', 'neutral'], ['Coulomb', 'Ampere', 'Volt']],
     exercises: EX.ladung,
   },
   {
@@ -34,6 +36,8 @@ export const TOPICS = [
       'Leiter enthalten frei bewegliche Ladungsträger, Isolatoren nicht.',
       'Elektrischer Strom ist die gerichtete Bewegung von Ladungsträgern.',
     ],
+    // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
+    cloze: [['neutral', 'positiv', 'negativ'], ['Atomrümpfe', 'Elektronen', 'Moleküle'], ['Isolatoren', 'Metalle', 'Drähte'], ['gerichtete', 'ungeordnete', 'schnelle']],
     exercises: EX.modell,
   },
   {
@@ -45,6 +49,8 @@ export const TOPICS = [
       'Die technische Stromrichtung verläuft außerhalb der Quelle von Plus nach Minus. Die Elektronen bewegen sich von Minus nach Plus.',
       'Im Verbraucher wird kein Strom verbraucht. Umgewandelt wird Energie.',
     ],
+    // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
+    cloze: [['geschlossenen', 'offenen', 'kurzen'], ['Minus nach Plus', 'Plus nach Minus', 'Kern zur Hülle'], ['Energie', 'Strom', 'Ladung']],
     exercises: EX.stromkreis,
   },
   {
@@ -57,6 +63,8 @@ export const TOPICS = [
       'Die Stromstärke wird mit einem Amperemeter gemessen. Es wird in Reihe zum Bauteil geschaltet.',
       'Im unverzweigten Stromkreis ist die Stromstärke an jeder Stelle gleich groß.',
     ],
+    // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
+    cloze: [['Sekunde', 'Stunde', 'Minute'], ['Ampere', 'Volt', 'Coulomb'], ['Reihe', 'Ruhe', 'Mitte'], ['gleich groß', 'kleiner', 'größer']],
     exercises: EX.stromstaerke,
   },
   {
@@ -70,6 +78,8 @@ export const TOPICS = [
       'Spannung liegt immer zwischen zwei Punkten an. An einer Batterie liegt sie auch dann an, wenn kein Strom fließt.',
       'Wassermodell: Die Spannung entspricht dem Druckunterschied, den eine Pumpe erzeugt, die Stromstärke der Wassermenge, die pro Sekunde durch das Rohr fließt. Wie jedes Modell hat es Grenzen.',
     ],
+    // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
+    cloze: [['Antrieb', 'Verbrauch', 'Speicher'], ['Volt', 'Ampere', 'Coulomb'], ['parallel', 'in Reihe', 'quer'], ['zwei', 'drei', 'vier'], ['Druckunterschied', 'Wassermenge', 'Rohrlänge']],
     exercises: EX.spannung,
   },
   {
@@ -81,6 +91,8 @@ export const TOPICS = [
       'Beim Konstantandraht ist die Kennlinie eine Ursprungsgerade: Doppelte Spannung bedeutet doppelte Stromstärke.',
       'Bei der Glühlampe wird die Kennlinie immer flacher, weil der heiße Glühdraht den Strom stärker bremst.',
     ],
+    // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
+    cloze: [['Spannung', 'Temperatur', 'Länge'], ['Ursprungsgerade', 'flache Kurve', 'Waagerechte'], ['heiße', 'kalte', 'dünne']],
     exercises: EX.widerstand,
   },
   {
@@ -91,6 +103,8 @@ export const TOPICS = [
       'Reihenschaltung: Die Stromstärke ist überall gleich. Die Teilspannungen addieren sich zur Gesamtspannung.',
       'Parallelschaltung: An allen Zweigen liegt dieselbe Spannung. Die Teilströme addieren sich zum Gesamtstrom.',
     ],
+    // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
+    cloze: [['gleich', 'verschieden', 'null'], ['dieselbe', 'keine', 'die halbe']],
     exercises: EX.schaltungen,
   },
   {
@@ -103,6 +117,8 @@ export const TOPICS = [
       'Mit einer Wechselschaltung lässt sich eine Lampe von zwei Stellen aus ein- und ausschalten, zum Beispiel im Treppenhaus. Jedes Umlegen eines Schalters ändert den Zustand der Lampe.',
       'Eine Wahrheitstabelle zeigt für jede Schalterstellung, ob die Lampe leuchtet.',
     ],
+    // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
+    cloze: [['UND', 'ODER', 'Wechsel'], ['ODER', 'UND', 'Wechsel'], ['zwei', 'drei', 'vier'], ['Schalterstellung', 'Stromstärke', 'Spannung']],
     exercises: EX.logik,
   },
   {
@@ -115,6 +131,8 @@ export const TOPICS = [
       'Der Schutzleiter leitet Strom bei einem Defekt am Gehäuse ab, sodass die Sicherung auslöst.',
       'Die Netzspannung von 230\u00a0V ist lebensgefährlich. Nie an Steckdosen oder Leitungen experimentieren.',
     ],
+    // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
+    cloze: [['sehr groß', 'null', 'sehr klein'], ['unterbricht', 'verstärkt', 'speichert'], ['Gehäuse', 'Stecker', 'Kabel'], ['lebensgefährlich', 'harmlos', 'ungefährlich']],
     exercises: EX.sicherheit,
   },
 ];

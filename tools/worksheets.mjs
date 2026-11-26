@@ -5,7 +5,7 @@ import { chromium } from '@playwright/test';
 import { TOPICS } from '../app/js/content.js';
 import { CIRCUITS, symbolCircuit } from '../app/js/circuits.js';
 import { circuitSvg } from '../app/js/svg.js';
-import { balloonsSvg, bandgenSvg, electroscopeSvg, waterSvg, waterAt, latticeSvg } from '../app/js/demos.js';
+import { balloonsSvg, bandgenSvg, electroscopeSvg, waterSvg, waterAt, latticeSvg, woodSvg } from '../app/js/demos.js';
 import { makeTasks, truthTable, shuffle, optionOrder, lampCurrent, wireCurrent, fmt, fmtFixed } from '../app/js/model.js';
 
 const OUT = new URL('../dist/', import.meta.url);
@@ -31,7 +31,7 @@ const DEMO_INTRO = {
   balloons: 'Zwei Luftballons hängen an Fäden nebeneinander. Du reibst sie an einem Wolltuch und beobachtest, was passiert.',
   bandgen: 'Ein Bandgenerator lädt eine Metallkugel auf. Eine Person steht auf einem isolierenden Hocker und legt die Hand auf die Kugel. Später hält man eine Glimmlampe und eine Erdungskugel an die Kugel.',
   electroscope: 'Ein Elektroskop besteht aus einem Metallstab mit einem Teller oben und einem drehbaren Zeiger. Ein Kunststoffstab wurde mit einem Tuch gerieben und ist negativ geladen.',
-  electrons: 'Stell dir einen Metalldraht im Atomrumpf-Elektronen-Modell vor: Die positiv geladenen Atomrümpfe sitzen fest im Gitter, dazwischen bewegen sich freie Elektronen.',
+  electrons: 'Stell dir einen Metalldraht im Atomrumpf-Elektronen-Modell vor: Die positiv geladenen Atomrümpfe sitzen fest im Gitter, dazwischen bewegen sich freie Elektronen. Darunter zum Vergleich Holz: Dort bleibt jedes Elektron bei seinem Atom.',
   water: 'Ein geschlossener Wasserkreislauf besteht aus einer Pumpe, Rohren, einem Wasserrad und einem Ventil. Er wird mit einem Stromkreis aus Batterie, Leitungen, Lampe und Schalter verglichen.',
   kennlinie: 'An einen Konstantandraht und an eine Glühlampe werden nacheinander verschiedene Spannungen angelegt. Gemessen wird jeweils die Stromstärke.',
 };
@@ -44,7 +44,7 @@ const SKETCH = {
   balloons: () => balloonsSvg({ a: 0, b: 0, near: false, wall: false }),
   bandgen: () => bandgenSvg({ q: 8, hand: true }),
   electroscope: () => electroscopeSvg({ q: 0, rod: 'weg' }),
-  electrons: () => latticeSvg(seeded(8)),
+  electrons: () => `<p class="cap">Kupfer</p>${latticeSvg(seeded(8))}<p class="cap">Holz</p>${woodSvg()}`,
   water: () => waterSvg({ level: 3, narrow: false, open: true, gauge: false }, DROPS),
 };
 const SKETCH_KEY = {
@@ -258,6 +258,7 @@ h1, h2, h3, h4 { color: var(--navy); margin: 0; }
 .two .fig { flex: 0 0 56mm; }
 .intro2 { align-items: center; margin-bottom: 2mm; break-inside: avoid; }
 .intro2 .intro { flex: 1; }
+.sketch .cap { margin: .5mm 1mm; font-size: 8.5pt; font-weight: 700; color: var(--navy); }
 .sketch { flex: 0 0 68mm; border: 1px solid #e2ddd0; border-radius: 2mm; padding: 1mm; }
 .sketches { display: flex; gap: 6mm; margin: 1mm 0 3mm; break-inside: avoid; }
 .sketches figure { margin: 0; width: 70mm; border: 1px solid #e2ddd0; border-radius: 2mm; padding: 1mm; }

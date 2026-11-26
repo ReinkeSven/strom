@@ -2,11 +2,12 @@
 import { TOPICS, topicById } from './content.js';
 import {
   freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, dkey, recordExercise, exerciseProgress,
-  setFocus, missionParts, completePart, nextMission, stars,
+  setFocus, missionParts, completePart, nextMission, stars, cityState,
 } from './model.js';
 import { mountExercise } from './exercises.js';
 import { mountMission } from './mission.js';
 import { mountHero } from './hero.js';
+import { citySvg, cityLabel } from './city.js';
 
 const KEY = 'strom-labor-v1';
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -49,7 +50,12 @@ function homeView() {
     </button></li>`;
   }).join('');
   return `<div class="hero"><h1 class="sr-only">Papas Physik Punishment</h1><div id="heroanim"></div><p>${p.done} von ${p.total} Themen erledigt</p></div>
-    ${focusSwitch()}<ol class="topics">${items}</ol>`;
+    ${focusSwitch()}${cityCard()}<ol class="topics">${items}</ol>`;
+}
+
+function cityCard() {
+  return `<section class="card city"><div class="cityhead"><b>Deine Stadt</b><small>${cityLabel(S)}</small></div>${citySvg(S)}
+    <p class="small">Jede Übung mit mindestens 60 % richtig bringt Strom in ein Haus. Fehlerfrei gibt es einen Stern. Ist ein Thema fertig, entsteht ein großes Gebäude.</p></section>`;
 }
 
 function focusSwitch() {
@@ -73,7 +79,7 @@ function focusHomeView() {
       <span class="txt"><b>${esc(t.title)}</b></span><span class="dots">${dots}</span></li>`;
   }).join('');
   return `<div class="hero"><h1 class="sr-only">Papas Physik Punishment</h1><div id="heroanim"></div><p class="stars">⭐ ${stars(S)}</p></div>
-    ${focusSwitch()}${cta}<ol class="missions">${items}</ol>`;
+    ${focusSwitch()}${cta}${cityCard()}<ol class="missions">${items}</ol>`;
 }
 
 function topicView(id) {
@@ -122,7 +128,12 @@ function render() {
   if (view.tab === 'more') main.innerHTML = backupView();
   else if (view.mission) {
     const t = topicById(view.mission.topic);
+    const litBefore = new Set(cityState(S).houses.filter(h => h.lit).map(h => h.exId));
     unmount = mountMission(main, t, view.mission.part, {
+      city: () => {
+        const fresh = cityState(S).houses.filter(h => h.lit && !litBefore.has(h.exId)).map(h => h.exId);
+        return { svg: citySvg(S, { fresh }), fresh: fresh.length };
+      },
       onExit: () => { view = { tab: 'home', topic: null, ex: null, mission: null }; render(); },
       onRecord: (exId, score, total) => { S = recordExercise(S, exId, score, total); save(); },
       onPartDone: part => { S = completePart(S, t.id, part); save(); },

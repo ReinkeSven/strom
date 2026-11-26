@@ -159,7 +159,19 @@ test('Fokus-Modus: Schalter, Mission Schritt für Schritt, Abschluss mit Stern',
       await page.click(`.mbody [data-opt="${q.a}"]`);
       await expect(page.locator('.mbody .why.ok')).toBeVisible();
     }
-    if (st.kind === 'merk') await expect(page.locator('.merkcard .mtext')).toHaveText(t.merk[st.i]);
+    if (st.kind === 'merk') {
+      await expect(next).toBeDisabled();
+      const [word, wrong] = t.cloze[st.i];
+      await page.click(`.chip[data-w="${wrong}"]`);
+      await expect(next).toBeDisabled();
+      await page.click(`.chip[data-w="${word}"]`);
+      await expect(page.locator('.merkcard .mtext')).toHaveText(t.merk[st.i]);
+    }
+    if (st.kind === 'demo') {
+      await expect(next).toBeDisabled();
+      await page.locator('.mbody [data-d]').first().click();
+      await page.locator('.mbody [data-d]').nth(1).click();
+    }
     await next.click();
   }
   await expect(page.locator('.mdone h2')).toHaveText('Geschafft!');
@@ -177,6 +189,8 @@ test('Fokus-Modus: Erklärung kurz, auf Wunsch ausführlich', async ({ page }) =
   await page.goto('/');
   await page.click('.fswitch');
   await page.click('[data-mission="ladung:0"]');
+  await page.locator('.mbody [data-d]').first().click();
+  await page.locator('.mbody [data-d]').nth(1).click();
   await page.click('[data-m=next]');
   await page.click('.mbody [data-opt]:not([disabled])');
   const more = page.locator('.mbody [data-more]');
@@ -196,4 +210,24 @@ test('Kopfanimation: Elektronen bewegen sich, Antippen gibt Turbo', async ({ pag
   await page.click('#heroanim svg');
   await expect(page.locator('#heroanim .shout')).not.toHaveText('');
   await expect(page.locator('#heroanim svg.turbo')).toHaveCount(1);
+});
+
+test('ADHD-Mode: falsche Antwort kommt am Ende noch einmal, Weiter erst nach Lesezeit', async ({ page }) => {
+  const { missionParts } = await import('../../app/js/model.js');
+  const t = TOPICS.find(x => x.id === 'stromkreis');
+  await page.goto('/');
+  await page.click('.fswitch');
+  // Teil 2 beginnt mit einer Frage
+  await page.click('[data-mission="stromkreis:1"]');
+  const st = missionParts(t)[1][0];
+  const q = t.exercises.find(e => e.id === st.exId).questions[st.qi];
+  const wrong = q.opts.findIndex((_, i) => i !== q.a);
+  await expect(page.locator('.mcount')).toHaveText(`1/${missionParts(t)[1].length}`);
+  await page.click(`.mbody [data-opt="${wrong}"]`);
+  const next = page.locator('[data-m=next]');
+  await expect(next).toBeDisabled();
+  await expect(next).toContainText('(');
+  await expect(next).toBeEnabled({ timeout: 5000 });
+  await next.click();
+  await expect(page.locator('.mcount')).toHaveText(`2/${missionParts(t)[1].length + 1}`);
 });

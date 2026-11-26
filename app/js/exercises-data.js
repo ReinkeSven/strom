@@ -63,6 +63,8 @@ export const EX = {
           why: 'Sie flitzen ungeordnet hin und her. Im Mittel fließt dabei keine Ladung in eine Richtung, also kein Strom.' },
         { q: 'Die Elektronen kommen im Draht nur Bruchteile eines Millimeters pro Sekunde voran. Warum leuchtet die Lampe trotzdem sofort?', opts: ['Alle Elektronen im Kreis setzen sich gleichzeitig in Bewegung', 'Die Elektronen rasen in Wirklichkeit fast lichtschnell durch den Draht', 'Die Lampe hat vom letzten Einschalten noch Strom gespeichert'], a: 0,
           why: 'Der Draht ist von Anfang an voller Elektronen. Beim Einschalten setzen sich alle gleichzeitig in Bewegung, wie Perlen auf einer Kette. Hier hat das Modell eine Grenze: In der Animation sind die Elektronen viel zu schnell dargestellt.' },
+        { q: 'Schalte in der Animation auf Holz. Warum leitet trockenes Holz keinen Strom?', opts: ['Die Elektronen sind fest an ihre Atome gebunden', 'Im Holz gibt es überhaupt keine Elektronen', 'Die Elektronen im Holz sind viel zu schwer'], a: 0,
+          why: 'Holz hat genauso Elektronen wie Kupfer, aber jedes bleibt bei seinem Atom. Es fehlen frei bewegliche Ladungsträger. Mit Spannung verschieben sich die Elektronen nur ein winziges Stück, eine Wanderung durch das ganze Holz gibt es nicht.' },
       ],
     },
     {
@@ -79,7 +81,7 @@ export const EX = {
         { t: 'Kunststoff', bin: 1, why: 'Keine frei beweglichen Ladungsträger.' },
         { t: 'Glas', bin: 1, why: 'Keine frei beweglichen Ladungsträger.' },
         { t: 'Gummi', bin: 1, why: 'Darum sind Kabel mit Gummi oder Kunststoff ummantelt.' },
-        { t: 'Trockenes Holz', bin: 1, why: 'Trocken leitet Holz praktisch nicht, nasses Holz dagegen schon ein wenig.' },
+        { t: 'Trockenes Holz', bin: 1, why: 'Im Holz sind die Elektronen fest an ihre Atome gebunden, freie Ladungsträger fehlen. Nasses Holz leitet etwas, weil im Wasser gelöste Teilchen beweglich sind.' },
         { t: 'Luft', bin: 1, why: 'Erst bei sehr hoher Spannung wird Luft leitend, zum Beispiel beim Blitz.' },
         { t: 'Porzellan', bin: 1, why: 'Deshalb hängen Hochspannungsleitungen an Isolatoren aus Porzellan oder Glas.' },
       ],

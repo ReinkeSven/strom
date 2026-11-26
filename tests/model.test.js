@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { TOPICS } from '../app/js/content.js';
 import { CIRCUITS } from '../app/js/circuits.js';
 import { DEMO_IDS } from '../app/js/demos.js';
-import { GENERATORS, optionOrder, missionParts, completePart, nextMission, stars, missionProgress, setFocus, firstSentence, freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, recordExercise, exerciseProgress } from '../app/js/model.js';
+import { GENERATORS, cityState, optionOrder, missionParts, completePart, nextMission, stars, missionProgress, setFocus, firstSentence, freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, recordExercise, exerciseProgress } from '../app/js/model.js';
 
 const T0 = new Date('2026-11-22T10:00:00').getTime();
 
@@ -145,4 +145,30 @@ test('Kurzfassung einer Erklärung: erster Satz', () => {
   assert.equal(firstSentence('Erster Satz. Zweiter Satz.'), 'Erster Satz.');
   assert.equal(firstSentence('Nur ein Satz.'), 'Nur ein Satz.');
   assert.equal(firstSentence('Es gilt 2 V + 4 V = 6 V. Fertig.'), 'Es gilt 2 V + 4 V = 6 V.');
+});
+
+test('Lückentexte: gesuchtes Wort steht genau einmal im Merksatz, Antworten verschieden', () => {
+  for (const t of TOPICS) {
+    assert.equal(t.cloze.length, t.merk.length, t.id);
+    t.cloze.forEach(([w, ...d], i) => {
+      assert.equal(t.merk[i].split(w).length - 1, 1, `${t.id} ${i}: „${w}“`);
+      assert.equal(new Set([w, ...d]).size, 3, `${t.id} ${i}`);
+    });
+  }
+});
+
+test('Stadt: Haus leuchtet ab 60 %, Stern bei fehlerfrei, Gebäude wenn das Thema komplett ist', () => {
+  let S = freshState(T0);
+  let c = cityState(S);
+  assert.equal(c.houses.length, TOPICS.reduce((n, t) => n + t.exercises.length, 0));
+  assert.equal(c.lit, 0);
+  S = recordExercise(S, 'kreis-leuchtet', 2, 5, T0);
+  assert.equal(cityState(S).lit, 0);
+  S = recordExercise(S, 'kreis-leuchtet', 5, 5, T0);
+  c = cityState(S);
+  assert.equal(c.lit, 1);
+  assert.ok(c.houses.find(h => h.exId === 'kreis-leuchtet').perfect);
+  assert.equal(c.built, 0);
+  S = recordExercise(S, 'kreis-memory', 7, 20, T0);   // Memory zählt unabhängig von der Zahl der Versuche
+  assert.equal(cityState(S).landmarks.find(l => l.topicId === 'stromkreis').built, true);
 });
