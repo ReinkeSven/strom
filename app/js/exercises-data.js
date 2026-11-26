@@ -23,7 +23,7 @@ export const EX = {
         { q: 'Ein geriebener Ballon und das Wolltuch …', opts: ['ziehen sich an', 'stoßen sich ab', 'beeinflussen sich nicht'], a: 0,
           why: 'Der Ballon hat Elektronenüberschuss (negativ), das Tuch Elektronenmangel (positiv). Ungleichnamige Ladungen ziehen sich an.' },
         { q: 'Warum bleibt ein geriebener Ballon an der ungeladenen Wand hängen?', opts: ['Die Wand ist von sich aus positiv geladen und zieht ihn an', 'In der Wand verschieben sich Ladungen, die positiven zum Ballon hin', 'Beim Reiben wird die Ballonhaut klebrig und haftet an der Wand'], a: 1,
-          why: 'Der negative Ballon drückt die Elektronen in den Atomen der Wand ein Stück weg. Die positive Seite liegt dann näher am Ballon und zieht stärker an, als die negative abstößt. In Isolatoren wie der Wand verschieben sich die Ladungen nur innerhalb der Atome (Polarisation).' },
+          why: 'Der negative Ballon schiebt die Elektronen in der Wand ein winziges Stück weg. Dadurch ist die Wand direkt am Ballon leicht positiv und zieht ihn an.' },
         { q: 'Wird beim Reiben Ladung erzeugt?', opts: ['Ja, die Reibung erzeugt neue Ladung auf dem Ballon', 'Nein, Elektronen wechseln nur vom Tuch auf den Ballon'], a: 1,
           why: 'Ladung wird nur getrennt. Ballon und Tuch zusammen sind weiterhin elektrisch neutral.' },
       ],
@@ -35,8 +35,8 @@ export const EX = {
           why: 'Die Ladung verteilt sich über deinen Körper bis in die Haare. Gleichnamig geladene Haare stoßen sich ab und stehen möglichst weit auseinander.' },
         { q: 'Warum stehst du dabei auf einem isolierenden Hocker?', opts: ['Damit die Ladung nicht über den Boden abfließt', 'Damit die Kugel schneller und stärker aufgeladen wird', 'Damit du größer bist und die Kugel besser erreichst'], a: 0,
           why: 'Dein Körper leitet. Ohne Isolierung würden die Elektronen sofort über die Füße in den Boden abfließen.' },
-        { q: 'Die Glimmlampe leuchtet an der Elektrode, die zur Kugel zeigt. Wie ist die Kugel geladen?', opts: ['Positiv', 'Negativ'], a: 1,
-          why: 'Eine Glimmlampe leuchtet an der Elektrode, die mit dem negativen Pol verbunden ist. Die Kugel ist also negativ geladen.' },
+        { q: 'Die Glimmlampe leuchtet an dem Metallstift, der die Kugel berührt. Wie ist die Kugel geladen?', opts: ['Positiv', 'Negativ'], a: 1,
+          why: 'Eine Glimmlampe leuchtet immer an dem Stift, der mit der negativen Seite verbunden ist. Die Kugel ist also negativ geladen.' },
         { q: 'Was ist der Funke zwischen Kugel und Erdungskugel?', opts: ['Ein kurzer Ladungsausgleich durch die Luft', 'Brennender Staub, der an der Kugel hängt', 'Licht, das aus dem Inneren der Kugel kommt'], a: 0,
           why: 'Bei großer Ladung springen Elektronen durch die Luft zur Erdungskugel, die Luft leuchtet dabei. Ein Blitz funktioniert nach demselben Prinzip, nur viel größer.' },
       ],
@@ -45,7 +45,7 @@ export const EX = {
       id: 'ladung-elektroskop', type: 'demo', devices: ['elektroskop'], after: [4], demo: 'electroscope', title: 'Experiment: Elektroskop',
       questions: [
         { q: 'Du näherst den negativ geladenen Stab dem Elektroskop, ohne es zu berühren. Was passiert?', opts: ['Der Zeiger schlägt aus', 'Nichts, solange der Stab nicht berührt'], a: 0,
-          why: 'Die Elektronen im Metall werden vom Stab abgestoßen und wandern nach unten in Zeiger und Halterung. Beide sind dann negativ und stoßen sich ab (Influenz). Entfernst du den Stab, verteilen sich die Elektronen wieder und der Zeiger fällt zurück.' },
+          why: 'Der Stab drückt die Elektronen im Metall nach unten in Zeiger und Halterung. Beide sind dann negativ und stoßen sich ab. Diese Ladungsverschiebung ohne Berührung heißt Influenz.' },
         { q: 'Nach dem Berühren entfernst du den Stab. Der Zeiger …', opts: ['bleibt ausgeschlagen', 'fällt sofort zurück'], a: 0,
           why: 'Beim Berühren sind Elektronen vom Stab auf das Elektroskop übergegangen. Es bleibt negativ geladen, bis du es erdest.' },
         { q: 'Was zeigt ein Elektroskop an?', opts: ['Ob ein Körper geladen ist', 'Wie groß die Stromstärke ist', 'Wie warm ein Körper gerade ist'], a: 0,
@@ -100,12 +100,14 @@ export const EX = {
 
   stromkreis: [
     {
-      id: 'kreis-kette', type: 'demo', after: [2], demo: 'chain', title: 'Erklärbild: Die Fahrradkette',
+      id: 'kreis-kette', type: 'demo', after: [2, 1], demo: 'chain', title: 'Erklärbild: Die Fahrradkette',
       questions: [
         { q: 'Du trittst in die Pedale. Wann bewegt sich das Kettenglied an der Lampe?', opts: ['Sofort, alle Glieder bewegen sich gleichzeitig', 'Erst wenn ein Glied vom Pedal bis dorthin kommt', 'Gar nicht, nur die Glieder am Pedal bewegen sich'], a: 0,
           why: 'Die Kette ist überall voll. Wer am Pedal schiebt, schiebt die ganze Kette. Genauso setzen sich im Stromkreis alle Elektronen gleichzeitig in Bewegung.' },
         { q: 'Werden in der Lampe Kettenglieder verbraucht?', opts: ['Nein, die Kette läuft vollständig weiter', 'Ja, ein paar Glieder bleiben in der Lampe', 'Ja, deshalb muss man Glieder nachfüllen'], a: 0,
           why: 'Die Lampe bekommt nur Schwung, also Energie. Genauso wird im Stromkreis kein Strom verbraucht, sondern Energie umgewandelt.' },
+        { q: 'Warum gibt es zwei Stromrichtungen, die technische und die der Elektronen?', opts: ['Die Richtung wurde festgelegt, bevor man Elektronen kannte', 'Die Elektronen drehen auf halbem Weg einfach wieder um', 'Im Draht fließen zwei Ströme gleichzeitig gegeneinander'], a: 0,
+          why: 'Die Stromrichtung von Plus nach Minus wurde vor etwa 200 Jahren festgelegt. Erst später entdeckte man, dass sich die Elektronen andersherum bewegen. Die alte Richtung benutzt man bis heute.' },
       ],
     },
     {
@@ -113,16 +115,16 @@ export const EX = {
       pairs: [['bat', 'Batterie'], ['lamp', 'Lampe'], ['switch', 'Schalter'], ['res', 'Widerstand'], ['amp', 'Amperemeter'], ['volt', 'Voltmeter'], ['motor', 'Motor']],
     },
     {
-      id: 'kreis-leuchtet', type: 'quiz', after: [0, 1], title: 'Leuchtet die Lampe?',
+      id: 'kreis-leuchtet', type: 'quiz', after: [0], title: 'Leuchtet die Lampe?',
       questions: [
         { q: 'Leuchtet die Lampe?', fig: 'einfach', opts: yesNo, a: 0,
           why: 'Der Stromkreis ist geschlossen: vom Pluspol über die Lampe zurück zum Minuspol.' },
         { q: 'Leuchtet die Lampe?', fig: 'schalter_offen', opts: yesNo, a: 1,
           why: 'Der offene Schalter unterbricht den Stromkreis.' },
         { q: 'Leuchtet die Lampe?', fig: 'zwei_schalter', opts: yesNo, a: 1,
-          why: 'Ein Schalter ist offen. In einem unverzweigten Stromkreis reicht eine einzige Unterbrechung, damit nirgends Strom fließt.' },
+          why: 'Ein Schalter ist offen. Gibt es nur einen Weg für den Strom, reicht eine einzige Unterbrechung, damit nirgends Strom fließt.' },
         { q: 'Leuchtet die Lampe?', fig: 'lampe_ueberbrueckt', opts: yesNo, a: 1,
-          why: 'Die Leitung neben der Lampe hat fast keinen Widerstand. Der Strom nimmt diesen Weg, durch die Lampe fließt so gut wie nichts: Sie ist kurzgeschlossen. Gleichzeitig ist auch die Batterie kurzgeschlossen, der Strom wird sehr groß.' },
+          why: 'Der Strom nimmt den bequemen Weg durch die Leitung neben der Lampe, durch die Lampe fließt fast nichts. Das nennt man Kurzschluss: Der Strom wird sehr groß und die Batterie wird heiß.' },
         { q: 'Leuchtet die Lampe?', fig: 'schalter_parallel', opts: yesNo, a: 0,
           why: 'Ein offener Schalter neben der Lampe wirkt wie gar keine Leitung. Der Strom fließt durch die Lampe. Würdest du ihn schließen, wäre die Lampe kurzgeschlossen.' },
       ],
@@ -141,11 +143,11 @@ export const EX = {
       id: 'strom-vorhersage', type: 'quiz', devices: ['amp'], after: [3, 1], title: 'Vorhersage: Strom vor und hinter der Lampe',
       questions: [
         { q: 'A1 misst die Stromstärke vor der Lampe, A2 dahinter. Was zeigt A2 im Vergleich zu A1?', fig: 'amp_vor_nach', opts: ['Mehr', 'Gleich viel', 'Weniger', 'Null'], a: 1,
-          why: 'Im unverzweigten Stromkreis ist die Stromstärke überall gleich. So viel Ladung, wie in die Lampe hineinfließt, fließt auch wieder heraus.' },
+          why: 'Gibt es keine Abzweigung, ist die Stromstärke überall gleich. So viel Ladung, wie in die Lampe hineinfließt, fließt auch wieder heraus.' },
         { q: 'Was „verbraucht“ die Lampe also?', opts: ['Strom', 'Energie', 'Elektronen'], a: 1,
           why: 'Umgewandelt wird Energie: elektrische Energie in Licht und Wärme. Der Strom fließt vollständig weiter.' },
         { q: 'Kommen die Elektronen, die durch die Lampe fließen, aus der Batterie?', opts: ['Ja, die Batterie gibt Elektronen ab, die die Lampe verbraucht', 'Nein, sie sind schon im Draht, die Batterie treibt sie nur an'], a: 1,
-          why: 'Die Leitungen sind von Anfang an voller freier Elektronen. Die Batterie wirkt wie eine Pumpe, die sie im Kreis antreibt. Leer wird eine Batterie, weil ihre Energie aufgebraucht ist, nicht ihre Elektronen.' },
+          why: 'Die Leitungen sind von Anfang an voller freier Elektronen. Die Batterie treibt sie nur an, wie das Pedal die Fahrradkette. Leer wird eine Batterie, weil ihre Energie aufgebraucht ist, nicht ihre Elektronen.' },
       ],
     },
     {
@@ -291,8 +293,8 @@ export const EX = {
     },
     {
       id: 'logik-wechsel', type: 'truth', devices: ['wechselschalter'], after: [2], title: 'Wechselschaltung: Licht im Treppenhaus', circuit: 'wechsel', states: ['oben', 'unten'],
-      prompt: 'Zwei Wechselschalter sind über zwei Leitungen verbunden. Jeder Schalter verbindet seinen Mittelkontakt entweder mit der oberen oder mit der unteren Leitung. Wann leuchtet die Lampe?',
-      why: 'Die Lampe leuchtet, wenn beide Schalter dieselbe Leitung wählen. Jedes Umlegen eines Schalters, egal welches, schaltet die Lampe um. So kannst du das Licht unten einschalten und oben wieder ausschalten.',
+      prompt: 'Zwei Wechselschalter sind über zwei Leitungen verbunden. Jeder Schalter steht entweder oben oder unten. Wann leuchtet die Lampe?',
+      why: 'Die Lampe leuchtet, wenn beide Schalter gleich stehen, also beide oben oder beide unten. Jedes Umlegen, egal an welchem Schalter, schaltet die Lampe um. So kannst du das Licht unten einschalten und oben wieder ausschalten.',
     },
     {
       id: 'logik-erkennen', type: 'quiz', title: 'Schaltungen erkennen',
@@ -327,7 +329,7 @@ export const EX = {
       id: 'sicher-quiz', type: 'quiz', devices: ['sicherung', 'schutzleiter'], after: [0, 1, 2, 3], title: 'Gefahren erkennen',
       questions: [
         { q: 'Was passiert bei einem Kurzschluss?', opts: ['Der Widerstand ist fast null, der Strom wird sehr groß', 'Der Widerstand wird sehr groß, der Strom wird null', 'Die Spannung steigt stark an, der Strom bleibt gleich'], a: 0,
-          why: 'Ohne Verbraucher im Kreis begrenzt fast nichts den Strom. Die Leitungen werden heiß, die Sicherung löst aus.' },
+          why: 'Plus und Minus sind direkt verbunden, ohne Gerät, das den Strom bremst. Die Leitungen werden heiß, die Sicherung löst aus.' },
         { q: 'Föhn, Wasserkocher und Heizlüfter laufen gleichzeitig an einer Mehrfachsteckdose. Was ist das Problem?', opts: ['Die Ströme addieren sich, Kabel und Steckdose können überhitzen', 'Die Spannung teilt sich auf, die Geräte laufen nur schwach', 'Kein Problem, weil an jedem Gerät dieselbe Spannung liegt'], a: 0,
           why: 'Die Geräte sind parallel geschaltet. Ihre Teilströme addieren sich in der Zuleitung, hier auf über 25 A. Mehrfachsteckdosen sind meist nur für 16 A gebaut.' },
         { q: 'Wozu dient eine Sicherung?', opts: ['Sie unterbricht den Stromkreis, wenn der Strom zu groß wird', 'Sie erhöht die Spannung, wenn ein Gerät mehr Strom braucht', 'Sie speichert Strom, damit bei Stromausfall Licht bleibt'], a: 0,

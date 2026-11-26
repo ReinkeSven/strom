@@ -285,7 +285,7 @@ function electrons(el) {
     }
     if (Math.round(t * 4) !== Math.round((t - dt) * 4)) {
       const net = crossings.reduce((s, c) => s + c[1], 0) / 3;
-      status.textContent = `Durch die gestrichelte Linie nach rechts, abzüglich nach links: ${fmt(net, 1)} Elektronen pro Sekunde`;
+      status.textContent = `Unterm Strich nach rechts durch die gestrichelte Linie: ${fmt(net, 1)} Elektronen pro Sekunde`;
     }
     raf = requestAnimationFrame(frame);
   };

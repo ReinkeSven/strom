@@ -1,7 +1,7 @@
 // Oberfläche: Ansichten, Navigation, Speichern.
 import { TOPICS, topicById } from './content.js';
 import {
-  freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, dkey, recordExercise, exerciseProgress,
+  freshState, migrate, encodeBackup, decodeBackup, visit, dkey, recordExercise, exerciseProgress,
   setFocus, missionParts, completePart, nextMission, stars, cityState,
 } from './model.js';
 import { mountExercise, devicesHtml } from './exercises.js';
@@ -10,7 +10,7 @@ import { mountHero } from './hero.js';
 import { citySvg, cityLabel } from './city.js';
 
 const KEY = 'strom-labor-v1';
-export const APP_VERSION = '0.10.1';   // muss VERSION in sw.js entsprechen (Test prüft das)
+export const APP_VERSION = '0.11.0';   // muss VERSION in sw.js entsprechen (Test prüft das)
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const $ = s => document.querySelector(s);
 
@@ -40,17 +40,18 @@ function update(next) { S = next; save(); render(); }
 
 /* ---------- Ansichten ---------- */
 function homeView() {
-  const p = progress(S);
+  const total = TOPICS.reduce((n, t) => n + t.exercises.length, 0);
+  const doneAll = TOPICS.reduce((n, t) => n + exerciseProgress(S, t).done, 0);
   const items = TOPICS.map((t, i) => {
-    const done = S.topics[t.id].read;
     const ep = exerciseProgress(S, t);
+    const done = ep.done === ep.total;   // Thema fertig, wenn alle Übungen gemacht sind
     return `<li><button class="topic${done ? ' done' : ''}" data-topic="${t.id}">
       <span class="num">${done ? '✓' : i + 1}</span>
       <span class="txt"><b>${esc(t.title)}</b><small>${esc(t.short)}</small></span>
       <span class="exn">${ep.done}/${ep.total}</span>
     </button></li>`;
   }).join('');
-  return `<div class="hero"><h1 class="sr-only">Papas Physik Punishment</h1><div id="heroanim"></div><p>${p.done} von ${p.total} Themen erledigt</p></div>
+  return `<div class="hero"><h1 class="sr-only">Papas Physik Punishment</h1><div id="heroanim"></div><p>${doneAll} von ${total} Übungen geschafft</p></div>
     ${focusSwitch()}${cityCard()}<ol class="topics">${items}</ol>`;
 }
 
@@ -90,7 +91,6 @@ function focusHomeView() {
 
 function topicView(id) {
   const t = topicById(id);
-  const done = S.topics[id].read;
   const merk = t.merk.map(m => `<li>${esc(m)}</li>`).join('');
   const exs = t.exercises.map(e => {
     const r = S.ex[e.id];
@@ -102,7 +102,7 @@ function topicView(id) {
     <div class="explain intro"><h3>Worum geht's?</h3>${t.intro.map(x => `<p>${esc(x)}</p>`).join('')}</div>
     <section class="card merk"><h3>Merksätze</h3><ul>${merk}</ul></section>
     <section class="card"><h3>Übungen und Experimente</h3><ul class="exlist">${exs}</ul></section>
-    <button class="btn primary" data-act="toggle-read">${done ? 'Als ungelesen markieren' : 'Gelesen ✓'}</button>`;
+    `;
 }
 
 function backupView() {
@@ -174,7 +174,6 @@ function markBackup() { S = { ...S, lastBackup: Date.now() }; save(); }
 const ACTIONS = {
   back: () => { view = { tab: 'home', topic: null, ex: null, mission: null }; render(); },
   'back-topic': () => { view = { ...view, ex: null }; render(); window.scrollTo(0, 0); },
-  'toggle-read': () => update(setRead(S, view.topic, !S.topics[view.topic].read)),
   copy: async () => {
     try { await navigator.clipboard.writeText(encodeBackup(S)); ui.copyMsg = 'Kopiert.'; markBackup(); } catch { ui.copyMsg = 'Kopieren nicht möglich. Bitte manuell markieren.'; }
     render();

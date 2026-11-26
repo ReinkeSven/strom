@@ -2,6 +2,17 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.11.0] - 2026-11-27
+
+### Geändert (Durchsicht auf Verständlichkeit)
+- Fachwörter erklärt oder ersetzt: Leiterquerschnitt, Verbraucher, unverzweigt, Ladungsträger, Elektrode, Elektronenüberschuss/-mangel, Mittelkontakt
+- Kurzschluss wird jetzt definiert (Plus- und Minuspol direkt verbunden, ohne Gerät dazwischen)
+- Merksatz „Im Verbraucher wird kein Strom verbraucht“ verständlicher formuliert; Merksatz zum Wassermodell gekürzt; Stromrichtung erklärt (Elektronen von Minus nach Plus, technische Richtung früher andersherum festgelegt)
+- Erklärungen kürzer und ohne Fachbegriffe wie Polarisation; einheitliches Bild „Batterie wie Pedal der Fahrradkette“
+- Neue Frage: Warum gibt es zwei Stromrichtungen?
+- Startseite zählt geschaffte Übungen statt „gelesener“ Themen; der Knopf „Gelesen ✓“ entfällt, ein Thema gilt als fertig, wenn alle Übungen gemacht sind
+- Bauauftrag: Beschriftung S3 am rechten Rand nicht mehr abgeschnitten
+
 ## [0.10.1] - 2026-11-26
 
 ### Geändert

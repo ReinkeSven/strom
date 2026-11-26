@@ -21,7 +21,7 @@ export const TOPICS = [
       'Es gibt zwei Arten elektrischer Ladung: positive und negative.',
       'Gleichnamige Ladungen stoßen sich ab, ungleichnamige Ladungen ziehen sich an.',
       'Beim Reiben gehen Elektronen von einem Körper auf den anderen über. Ladung wird dabei nicht erzeugt, sondern getrennt.',
-      'Ein Körper mit Elektronenüberschuss ist negativ geladen, ein Körper mit Elektronenmangel positiv.',
+      'Ein Körper mit zu vielen Elektronen (Elektronenüberschuss) ist negativ geladen, ein Körper mit zu wenigen Elektronen (Elektronenmangel) positiv.',
       'Die Einheit der Ladung Q ist 1\u00a0Coulomb (1\u00a0C).',
     ],
     // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
@@ -36,11 +36,11 @@ export const TOPICS = [
     merk: [
       'Ein Atom besteht aus einem positiv geladenen Kern und einer Hülle aus negativ geladenen Elektronen. Nach außen ist es elektrisch neutral.',
       'In einem Metall bilden die positiv geladenen Atomrümpfe ein festes Gitter. Dazwischen bewegen sich frei bewegliche Elektronen.',
-      'Leiter enthalten frei bewegliche Ladungsträger, Isolatoren nicht.',
+      'Leiter enthalten frei bewegliche Ladungsträger, zum Beispiel freie Elektronen. Isolatoren haben keine.',
       'Elektrischer Strom ist die gerichtete Bewegung von Ladungsträgern.',
     ],
     // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
-    cloze: [['neutral', 'positiv', 'negativ'], ['Atomrümpfe', 'Elektronen', 'Moleküle'], ['Isolatoren', 'Metalle', 'Drähte'], ['gerichtete', 'ungeordnete', 'schnelle']],
+    cloze: [['neutral', 'positiv', 'negativ'], ['Atomrümpfe', 'Elektronen', 'Moleküle'], ['freie Elektronen', 'feste Atomkerne', 'kleine Luftblasen'], ['gerichtete', 'ungeordnete', 'schnelle']],
     exercises: EX.modell,
   },
   {
@@ -49,12 +49,12 @@ export const TOPICS = [
     short: 'Quelle, Leiter, Verbraucher, Schalter',
     intro: ['Eine Taschenlampe leuchtet nur, wenn alles richtig verbunden ist.', 'Hier lernst du, was ein Stromkreis braucht und in welche Richtung der Strom fließt.', 'Und du erfährst, was in einer Lampe wirklich verbraucht wird.'],
     merk: [
-      'Strom fließt nur in einem geschlossenen Stromkreis aus Quelle, Leitungen und Verbraucher.',
-      'Die technische Stromrichtung verläuft außerhalb der Quelle von Plus nach Minus. Die Elektronen bewegen sich von Minus nach Plus.',
-      'Im Verbraucher wird kein Strom verbraucht. Umgewandelt wird Energie.',
+      'Strom fließt nur in einem geschlossenen Stromkreis aus Quelle (z. B. Batterie), Leitungen und Verbraucher (z. B. Lampe).',
+      'Die Elektronen bewegen sich außerhalb der Quelle von Minus nach Plus. Die technische Stromrichtung wurde früher andersherum festgelegt: von Plus nach Minus.',
+      'Eine Lampe verbraucht keinen Strom: Es fließt genauso viel hinein wie heraus. Umgewandelt wird Energie.',
     ],
     // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
-    cloze: [['geschlossenen', 'offenen', 'kurzen'], ['Minus nach Plus', 'Plus nach Minus', 'Kern zur Hülle'], ['Energie', 'Strom', 'Ladung']],
+    cloze: [['geschlossenen', 'offenen', 'kurzen'], ['Minus nach Plus', 'Kern zur Hülle', 'oben nach unten'], ['Energie', 'Elektronen', 'Ladung']],
     exercises: EX.stromkreis,
   },
   {
@@ -63,13 +63,13 @@ export const TOPICS = [
     short: 'Ladung pro Zeit, Amperemeter',
     intro: ['Manche Geräte brauchen viel Strom, andere nur wenig.', 'Aber wie misst man, wie viel Strom fließt?', 'Hier lernst du die Stromstärke kennen und das Messgerät dafür.'],
     merk: [
-      'Die Stromstärke I gibt an, wie viel Ladung in einer Sekunde durch einen Leiterquerschnitt fließt.',
+      'Die Stromstärke I gibt an, wie viel Ladung in einer Sekunde an einer Stelle des Leiters vorbeifließt.',
       'Die Einheit der Stromstärke ist 1\u00a0Ampere (1\u00a0A).',
       'Die Stromstärke wird mit einem Amperemeter gemessen. Es wird in Reihe zum Bauteil geschaltet.',
-      'Im unverzweigten Stromkreis ist die Stromstärke an jeder Stelle gleich groß.',
+      'In einem Stromkreis ohne Abzweigungen (unverzweigt) ist die Stromstärke an jeder Stelle gleich groß.',
     ],
     // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
-    cloze: [['Sekunde', 'Stunde', 'Minute'], ['Ampere', 'Volt', 'Coulomb'], ['Reihe', 'Ruhe', 'Mitte'], ['gleich groß', 'kleiner', 'größer']],
+    cloze: [['Sekunde', 'Stunde', 'Minute'], ['Ampere', 'Volt', 'Coulomb'], ['Reihe', 'Ruhe', 'Mitte'], ['gleich groß', 'immer kleiner', 'immer größer']],
     exercises: EX.stromstaerke,
   },
   {
@@ -78,14 +78,14 @@ export const TOPICS = [
     short: 'Antrieb des Stroms, Voltmeter',
     intro: ['Auf jeder Batterie steht eine Zahl mit V, zum Beispiel 1,5 V. Das ist die Spannung.', 'Hier erfährst du, was Spannung bedeutet und wie man sie misst.', 'Und warum die Steckdose viel gefährlicher ist als eine Batterie.'],
     merk: [
-      'Die Spannung U ist der Antrieb für den elektrischen Strom. Sie entsteht durch Ladungstrennung in der Quelle.',
+      'Die Spannung U ist der Antrieb für den elektrischen Strom. Sie entsteht, weil in der Batterie Plus- und Minusladung getrennt sind.',
       'Die Einheit der Spannung ist 1\u00a0Volt (1\u00a0V).',
       'Die Spannung wird mit einem Voltmeter gemessen. Es wird parallel zum Bauteil geschaltet.',
       'Spannung liegt immer zwischen zwei Punkten an. An einer Batterie liegt sie auch dann an, wenn kein Strom fließt.',
-      'Wassermodell: Die Spannung entspricht dem Druckunterschied, den eine Pumpe erzeugt, die Stromstärke der Wassermenge, die pro Sekunde durch das Rohr fließt. Wie jedes Modell hat es Grenzen.',
+      'Wassermodell: Die Spannung ist wie der Druckunterschied einer Pumpe, die Stromstärke wie die Wassermenge pro Sekunde.',
     ],
     // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
-    cloze: [['Antrieb', 'Verbrauch', 'Speicher'], ['Volt', 'Ampere', 'Coulomb'], ['parallel', 'in Reihe', 'quer'], ['zwei', 'drei', 'vier'], ['Druckunterschied', 'Wassermenge', 'Rohrlänge']],
+    cloze: [['Antrieb', 'Verbrauch', 'Speicher'], ['Volt', 'Ampere', 'Coulomb'], ['parallel', 'in Reihe', 'quer'], ['zwei', 'drei', 'vier'], ['Druckunterschied', 'Rohrlänge', 'Wasserrad']],
     exercises: EX.spannung,
   },
   {
@@ -136,13 +136,13 @@ export const TOPICS = [
     short: 'Kurzschluss, Sicherung, Schutzleiter',
     intro: ['Strom ist praktisch, kann aber gefährlich werden.', 'Hier lernst du, was bei einem Kurzschluss passiert und wie Sicherung und Schutzleiter dich schützen.', 'Und welche Regeln du im Alltag unbedingt beachten musst.'],
     merk: [
-      'Bei einem Kurzschluss ist der Widerstand sehr klein und die Stromstärke sehr groß. Leitungen können heiß werden und einen Brand auslösen.',
+      'Bei einem Kurzschluss sind Plus- und Minuspol direkt verbunden, ohne Gerät dazwischen. Die Stromstärke wird sehr groß, Leitungen werden heiß und können brennen.',
       'Eine Sicherung unterbricht den Stromkreis, wenn die Stromstärke zu groß wird.',
-      'Der Schutzleiter leitet Strom bei einem Defekt am Gehäuse ab, sodass die Sicherung auslöst.',
+      'Der grün-gelbe Schutzleiter leitet bei einem Defekt den Strom vom Gehäuse ab, sodass die Sicherung auslöst.',
       'Die Netzspannung von 230\u00a0V ist lebensgefährlich. Nie an Steckdosen oder Leitungen experimentieren.',
     ],
     // Lückentext je Merksatz für den ADHD-Mode: [gesuchtes Wort, zwei falsche Antworten]
-    cloze: [['sehr groß', 'null', 'sehr klein'], ['unterbricht', 'verstärkt', 'speichert'], ['Gehäuse', 'Stecker', 'Kabel'], ['lebensgefährlich', 'harmlos', 'ungefährlich']],
+    cloze: [['sehr groß', 'null', 'sehr klein'], ['unterbricht', 'verstärkt', 'speichert'], ['Gehäuse', 'Stecker', 'Schalter'], ['lebensgefährlich', 'harmlos', 'ungefährlich']],
     exercises: EX.sicherheit,
   },
 ];

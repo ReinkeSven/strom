@@ -15,25 +15,24 @@ test('Startseite listet alle Themen', async ({ page }) => {
   await expect(page.locator('#tabs button')).toHaveCount(2);
 });
 
-test('Thema öffnen, Merksätze lesen, als gelesen markieren, bleibt nach Neuladen erhalten', async ({ page }) => {
+test('Thema öffnen: Einleitung und Merksätze, Fortschritt zählt Übungen', async ({ page }) => {
   await page.goto('/');
+  const total = TOPICS.reduce((n, t) => n + t.exercises.length, 0);
+  await expect(page.locator('.hero p')).toHaveText(`0 von ${total} Übungen geschafft`);
   await page.click('[data-topic=ladung]');
   await expect(page.locator('.hero h1')).toHaveText('Elektrische Ladung');
   await expect(page.locator('.merk li')).toHaveCount(TOPICS[0].merk.length);
-  await page.click('[data-act=toggle-read]');
-  await page.click('[data-act=back]');
-  await expect(page.locator('.hero p')).toHaveText(`1 von ${TOPICS.length} Themen erledigt`);
-  await page.reload();
-  await expect(page.locator('.topic.done')).toHaveCount(1);
-  const S = await readState(page);
-  expect(S.topics.ladung.visits).toBe(1);
-  expect(S.topics.ladung.read).toBeGreaterThan(0);
+  expect((await readState(page)).topics.ladung.visits).toBe(1);
 });
 
 test('Backup: Code exportieren und auf frischem Gerät importieren', async ({ page, browser }) => {
   await page.goto('/');
-  await page.click('[data-topic=spannung]');
-  await page.click('[data-act=toggle-read]');
+  await page.evaluate(k => {
+    const S = JSON.parse(localStorage.getItem(k) || 'null') || { v: 1, topics: {} };
+    S.ex = { 'kreis-memory': { best: 1, done: 1, tries: 1 } };
+    localStorage.setItem(k, JSON.stringify(S));
+  }, 'strom-labor-v1');
+  await page.reload();
   await page.click('[data-tab=more]');
   const code = await page.locator('#exp').inputValue();
   expect(code.startsWith('STROM1:')).toBe(true);
@@ -45,7 +44,7 @@ test('Backup: Code exportieren und auf frischem Gerät importieren', async ({ pa
   await other.click('[data-act=import]');
   await expect(other.locator('.small.ok')).toHaveText('Backup geladen.');
   await other.click('[data-tab=home]');
-  await expect(other.locator('.topic.done')).toHaveCount(1);
+  await expect(other.locator('.hero p')).toContainText('1 von');
 });
 
 test('Quiz mit Schaltplan: Vorhersage, danach leuchtet die Schaltung, Ergebnis wird gespeichert', async ({ page }) => {
@@ -216,22 +215,27 @@ test('Kopfanimation: Elektronen bewegen sich, Antippen gibt Turbo', async ({ pag
 
 test('ADHD-Mode: falsche Antwort kommt am Ende noch einmal, Weiter erst nach Lesezeit', async ({ page }) => {
   const { missionParts } = await import('../../app/js/model.js');
-  const t = TOPICS.find(x => x.id === 'stromkreis');
+  // einen Missionsteil suchen, der mit einer Frage beginnt
+  let t, part;
+  for (const x of TOPICS) {
+    const k = missionParts(x).findIndex(p => p[0].kind === 'question');
+    if (k >= 0) { t = x; part = k; break; }
+  }
+  const steps = missionParts(t)[part];
   await page.goto('/');
   await page.click('.fswitch');
-  // Teil 2 beginnt mit einer Frage
-  await page.click('[data-mission="stromkreis:1"]');
-  const st = missionParts(t)[1][0];
+  await page.click(`[data-mission="${t.id}:${part}"]`);
+  const st = steps[0];
   const q = t.exercises.find(e => e.id === st.exId).questions[st.qi];
   const wrong = q.opts.findIndex((_, i) => i !== q.a);
-  await expect(page.locator('.mcount')).toHaveText(`1/${missionParts(t)[1].length}`);
+  await expect(page.locator('.mcount')).toHaveText(`1/${steps.length}`);
   await page.click(`.mbody [data-opt="${wrong}"]`);
   const next = page.locator('[data-m=next]');
   await expect(next).toBeDisabled();
   await expect(next).toContainText('(');
   await expect(next).toBeEnabled({ timeout: 5000 });
   await next.click();
-  await expect(page.locator('.mcount')).toHaveText(`2/${missionParts(t)[1].length + 1}`);
+  await expect(page.locator('.mcount')).toHaveText(`2/${steps.length + 1}`);
 });
 
 test('Spielstand zurücksetzen: mit Rückfrage, Einstellung ADHD-Mode bleibt', async ({ page }) => {
