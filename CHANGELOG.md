@@ -2,6 +2,11 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.8.1] - 2026-11-26
+
+### Hinzugefügt
+- Spielstand zurücksetzen (Bereich Backup) mit Rückfrage; die Einstellung des ADHD-Mode bleibt erhalten
+
 ## [0.8.0] - 2026-11-26
 
 ### Hinzugefügt

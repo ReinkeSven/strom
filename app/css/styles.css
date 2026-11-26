@@ -319,3 +319,7 @@ body.in-mission #view { padding-bottom: calc(24px + env(safe-area-inset-bottom))
 .city-svg .lamp { fill: #3a4070; }
 .city-svg .lamp.on { fill: #ffe68a; }
 @media (prefers-reduced-motion: reduce) { .city-svg .blink, .city-svg .house.fresh { animation: none; } }
+
+/* Zurücksetzen */
+.btn.warn { border-color: var(--err); color: var(--err); }
+.danger h3 { color: var(--err); }

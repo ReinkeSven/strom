@@ -17,7 +17,7 @@ const $ = s => document.querySelector(s);
 let S = null;
 let view = { tab: 'home', topic: null, ex: null, mission: null };   // mission: { topic, part } im Fokus-Modus
 let unmount = null;   // Aufräumfunktion der offenen Übung bzw. der Kopfanimation
-let ui = { copyMsg: '', importMsg: '', importOk: false };
+let ui = { copyMsg: '', importMsg: '', importOk: false, confirmReset: false, resetDone: false };
 let persisted = null;
 
 /* ---------- Speichern ---------- */
@@ -112,6 +112,13 @@ function backupView() {
       <div class="btns"><button class="btn" data-act="import">Laden</button></div>
       ${ui.importMsg ? `<p class="small ${ui.importOk ? 'ok' : 'err'}">${esc(ui.importMsg)}</p>` : ''}
     </section>
+    <section class="card stack danger"><h3>Spielstand zurücksetzen</h3>
+      <p class="small">Löscht allen Fortschritt: Übungen, Missionen, Sterne und die Stadt. Der ADHD-Mode bleibt so eingestellt, wie er ist. Tipp: vorher ein Backup speichern.</p>
+      ${ui.confirmReset
+        ? '<p><b>Wirklich alles löschen?</b></p><div class="btns"><button class="btn warn" data-act="reset-yes">Ja, alles löschen</button><button class="btn" data-act="reset-no">Abbrechen</button></div>'
+        : '<div class="btns"><button class="btn warn" data-act="reset">Zurücksetzen …</button></div>'}
+      ${ui.resetDone ? '<p class="small ok">Der Spielstand wurde zurückgesetzt.</p>' : ''}
+    </section>
     <p class="small">Dauerhafter Speicher: ${persistText}</p>`;
 }
 
@@ -171,6 +178,12 @@ const ACTIONS = {
     URL.revokeObjectURL(a.href);
     markBackup();
   },
+  reset: () => { ui.confirmReset = true; ui.resetDone = false; render(); },
+  'reset-no': () => { ui.confirmReset = false; render(); },
+  'reset-yes': () => {
+    ui.confirmReset = false; ui.resetDone = true;
+    update(setFocus(freshState(), S.settings.focus));
+  },
   import: () => {
     try { update(decodeBackup($('#imp').value)); ui.importMsg = 'Backup geladen.'; ui.importOk = true; } catch { ui.importMsg = 'Der Code ist ungültig.'; ui.importOk = false; }
     render();
@@ -179,7 +192,7 @@ const ACTIONS = {
 
 document.addEventListener('click', e => {
   const tab = e.target.closest('[data-tab]');
-  if (tab) { view = { tab: tab.dataset.tab, topic: null, ex: null, mission: null }; ui = { copyMsg: '', importMsg: '', importOk: false }; render(); return; }
+  if (tab) { view = { tab: tab.dataset.tab, topic: null, ex: null, mission: null }; ui = { copyMsg: '', importMsg: '', importOk: false, confirmReset: false, resetDone: false }; render(); return; }
   const ms = e.target.closest('[data-mission]');
   if (ms) { const [topicId, part] = ms.dataset.mission.split(':'); view = { tab: 'home', topic: null, ex: null, mission: { topic: topicId, part: Number(part) } }; render(); return; }
   const topic = e.target.closest('[data-topic]');

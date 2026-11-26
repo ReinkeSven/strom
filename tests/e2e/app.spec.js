@@ -231,3 +231,31 @@ test('ADHD-Mode: falsche Antwort kommt am Ende noch einmal, Weiter erst nach Les
   await next.click();
   await expect(page.locator('.mcount')).toHaveText(`2/${missionParts(t)[1].length + 1}`);
 });
+
+test('Spielstand zurücksetzen: mit Rückfrage, Einstellung ADHD-Mode bleibt', async ({ page }) => {
+  await page.goto('/');
+  await page.click('.fswitch');
+  await page.click('[data-mission="ladung:0"]');
+  await page.click('[data-m=exit]');
+  await page.evaluate(k => {
+    const S = JSON.parse(localStorage.getItem(k));
+    S.ex['kreis-leuchtet'] = { best: 1, done: 1, tries: 1 };
+    S.missions.ladung = [0];
+    localStorage.setItem(k, JSON.stringify(S));
+  }, 'strom-labor-v1');
+  await page.reload();
+  await expect(page.locator('.stars')).toHaveText('⭐ 1');
+  await page.click('[data-tab=more]');
+  await page.click('[data-act=reset]');
+  await page.click('[data-act=reset-no]');
+  expect((await readState(page)).missions.ladung).toEqual([0]);
+  await page.click('[data-act=reset]');
+  await page.click('[data-act=reset-yes]');
+  await expect(page.locator('.danger .ok')).toBeVisible();
+  const S = await readState(page);
+  expect(S.ex).toEqual({});
+  expect(S.missions).toEqual({});
+  expect(S.settings.focus).toBe(true);
+  await page.click('[data-tab=home]');
+  await expect(page.locator('.stars')).toHaveText('⭐ 0');
+});
