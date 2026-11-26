@@ -2,10 +2,15 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.6.2] - 2026-11-26
+
+### Geändert
+- Schreibweise korrigiert: „Skibidi ADHD Mode“
+
 ## [0.6.1] - 2026-11-26
 
 ### Geändert
-- Schalter heißt jetzt „Skibbidy ADHD Mode“
+- Schalter heißt jetzt „Skibidi ADHD Mode“
 
 ## [0.6.0] - 2026-11-26
 
