@@ -2,6 +2,12 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.10.1] - 2026-11-26
+
+### Geändert
+- Jedes Experiment beginnt mit einem kurzen Text, was man dort tut
+- Wassermodell entschlackt: Erklärtext zu Beginn, Wasserkreislauf und Stromkreis untereinander statt winzig nebeneinander, Zuordnungstabelle und Grenzen des Modells zum Aufklappen, sauberes Rohr ohne Lücke
+
 ## [0.10.0] - 2026-11-26
 
 ### Hinzugefügt

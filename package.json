@@ -1,6 +1,6 @@
 {
   "name": "strom-labor",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "private": true,
   "description": "Lern-App zur Elektrizitätslehre (8. Klasse) als installierbare Web-App",
   "type": "module",

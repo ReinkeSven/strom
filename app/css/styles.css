@@ -168,7 +168,9 @@ h3.sub { margin: 4px 0 0; color: var(--navy); font-size: 18px; }
 .truth .sol { font-size: 12px; color: var(--err); display: block; }
 
 /* ---------- Wassermodell ---------- */
-.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.pair { display: flex; flex-direction: column; gap: 4px; }
+.pair .plabel { margin: 4px 0 0; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.pair .escene { max-width: 78%; align-self: center; width: 78%; }
 .pair .circuit { background: #fff; border-radius: 12px; height: 100%; }
 .demo-svg .pipe-o { fill: none; stroke: #5b8db8; stroke-width: 15; stroke-linejoin: round; }
 .demo-svg .pipe-i { fill: none; stroke: #cfe8ff; stroke-width: 11; stroke-linejoin: round; }
@@ -377,3 +379,9 @@ body.in-mission #view { padding-bottom: calc(24px + env(safe-area-inset-bottom))
 .mission .device { flex-direction: column; align-items: stretch; }
 .mission .device p { font-size: 18px; }
 .mission .device .dsketch { flex: none; width: 70%; align-self: center; }
+
+/* aufklappbare Zusatzinfos */
+.more { background: #f6f3ea; border-radius: 10px; padding: 8px 12px; }
+.more summary { font-weight: 800; color: var(--navy); cursor: pointer; }
+.more .map, .more p { margin-top: 8px; }
+.dbody { display: flex; flex-direction: column; gap: 10px; }

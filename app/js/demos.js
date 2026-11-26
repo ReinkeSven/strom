@@ -361,7 +361,8 @@ export const waterAt = s => {
 /** Wasserkreislauf als SVG-Text; drops: Positionen der Wasserteilchen; S.gauge = false blendet die Druckanzeige aus */
 export function waterSvg(S, drops = []) {
   const nx0 = 85, nx1 = 135;
-  const pipe = `M${X0} ${Y1}V${Y0}H${X1}V${Y1}H${S.narrow ? nx1 : X0}${S.narrow ? `M${nx0} ${Y1}H${X0}` : ''}`;
+  // durchgehender Pfad, damit die Ecken sauber verbunden sind; mit Engstelle bleibt unten eine Lücke für das dünne Rohr
+  const pipe = S.narrow ? `M${nx0} ${Y1}H${X0}V${Y0}H${X1}V${Y1}H${nx1}` : `M${X0} ${Y1}V${Y0}H${X1}V${Y1}Z`;
   return `<svg viewBox="0 0 220 170" class="demo-svg">
     <path class="pipe-o" d="${pipe}"/><path class="pipe-i" d="${pipe}"/>
     ${S.narrow ? `<path class="pipe-o thin" d="M${nx1} ${Y1}H${nx0}"/><path class="pipe-i thin" d="M${nx1} ${Y1}H${nx0}"/>` : ''}
@@ -379,16 +380,15 @@ export function waterSvg(S, drops = []) {
 
 function water(el) {
   const S = { level: 3, narrow: false, open: true };
-  el.innerHTML = `<p class="small">Links der Wasserkreislauf, rechts der passende Stromkreis. Beide reagieren auf dieselben Regler.</p>
-    <div class="pair"><div class="wscene"></div><div class="escene"></div></div>
+  el.innerHTML = `<div class="pair"><p class="plabel">Wasserkreislauf</p><div class="wscene"></div><p class="plabel">Stromkreis</p><div class="escene"></div></div>
     <p class="meter" aria-live="polite"></p>
     <label class="slider">Pumpe / Spannung <input type="range" min="0" max="3" step="1" value="3" data-u></label>
     <div class="ctrl"><button class="btn" data-d="narrow">Engstelle / Widerstand einbauen</button><button class="btn" data-d="valve">Ventil / Schalter schließen</button></div>
-    <table class="map"><tr><th>Wasserkreislauf</th><th>Stromkreis</th></tr>
+    <details class="more"><summary>Was entspricht was?</summary><table class="map"><tr><th>Wasserkreislauf</th><th>Stromkreis</th></tr>
       <tr><td>Pumpe</td><td>Batterie</td></tr><tr><td>Rohr</td><td>Leitung</td></tr><tr><td>Wasserrad</td><td>Lampe</td></tr>
       <tr><td>Ventil</td><td>Schalter</td></tr><tr><td>Engstelle</td><td>Widerstand</td></tr>
-      <tr><td>Druckunterschied</td><td>Spannung</td></tr><tr><td>Wasser pro Sekunde</td><td>Stromstärke</td></tr></table>
-    <p class="small note"><b>Grenzen des Modells:</b> Öffnet man ein Rohr, läuft Wasser heraus. Aus einem offenen Stromkreis laufen keine Elektronen heraus, der Strom hört einfach auf. Außerdem ist das Rohr hier mit Wasser gefüllt wie der Draht mit Elektronen, aber Wasser wird durch die Schwerkraft beeinflusst, elektrischer Strom nicht.</p>`;
+      <tr><td>Druckunterschied</td><td>Spannung</td></tr><tr><td>Wasser pro Sekunde</td><td>Stromstärke</td></tr></table></details>
+    <details class="more"><summary>Wo hinkt der Vergleich?</summary><p class="small">Öffnet man ein Rohr, läuft Wasser heraus. Aus einem offenen Stromkreis laufen keine Elektronen heraus, der Strom hört einfach auf. Außerdem wird Wasser durch die Schwerkraft beeinflusst, elektrischer Strom nicht.</p></details>`;
   const wEl = el.querySelector('.wscene'), eEl = el.querySelector('.escene');
   const N = 22;
   const parts = Array.from({ length: N }, (_, k) => k / N);
@@ -461,7 +461,19 @@ export function woodSvg() {
 
 const DEMOS = { ...EXPLAINERS, water, balloons, bandgen, electroscope, electrons, kennlinie };
 
+/** Was man im Experiment tut, höchstens drei kurze Sätze (auch für die PDF-Blätter) */
+export const DEMO_TEXT = {
+  balloons: ['Reibe die Ballons am Wolltuch und beobachte, was passiert.', 'Probiere danach auch das Tuch und die Wand aus.'],
+  bandgen: ['Kurble, um die Metallkugel aufzuladen.', 'Probiere dann aus, was mit der Hand auf der Kugel, der Glimmlampe und der Erdungskugel passiert.'],
+  electroscope: ['Nähere den geladenen Stab an, ohne zu berühren, und beobachte den Zeiger.', 'Lass den Stab dann das Elektroskop berühren und entferne ihn wieder.'],
+  electrons: ['So sieht es im Inneren eines Kupferdrahts aus.', 'Schalte die Spannung ein und beobachte, was die Elektronen machen. Vergleiche danach mit Holz.'],
+  water: ['Strom kann man nicht sehen, Wasser schon. Deshalb vergleichen wir den Stromkreis mit einem Wasserkreislauf.', 'Die Pumpe treibt das Wasser an wie die Batterie die Elektronen.', 'Verändere die Pumpe, baue eine Engstelle ein oder schließe das Ventil und beobachte beide Bilder.'],
+  kennlinie: ['Stelle verschiedene Spannungen ein und trage jedes Mal den Messwert ein.', 'Mach das für den Draht und für die Glühlampe und vergleiche die beiden Kurven.'],
+};
+
 export function mountDemo(el, id) {
-  return DEMOS[id](el);
+  if (!DEMO_TEXT[id]) return DEMOS[id](el);
+  el.innerHTML = `<div class="explain">${DEMO_TEXT[id].map(t => `<p>${t}</p>`).join('')}</div><div class="dbody"></div>`;
+  return DEMOS[id](el.querySelector('.dbody'));
 }
 export const DEMO_IDS = Object.keys(DEMOS);

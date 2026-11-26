@@ -10,7 +10,7 @@ import { mountHero } from './hero.js';
 import { citySvg, cityLabel } from './city.js';
 
 const KEY = 'strom-labor-v1';
-export const APP_VERSION = '0.10.0';   // muss VERSION in sw.js entsprechen (Test prüft das)
+export const APP_VERSION = '0.10.1';   // muss VERSION in sw.js entsprechen (Test prüft das)
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const $ = s => document.querySelector(s);
 
