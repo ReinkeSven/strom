@@ -7,5 +7,6 @@
 - Bei Änderungen in `app/` die `VERSION` in `app/sw.js` erhöhen und `CHANGELOG.md` pflegen.
 - Speicherformat (`strom-labor-v1` im localStorage) abwärtskompatibel halten; neue Felder in `migrate()` ergänzen.
 - UI-Texte auf Deutsch, Zielgruppe 8. Klasse Gymnasium (ca. 13–14 Jahre).
+- Im Unterricht wird kaum gerechnet: keine Rechenaufgaben, keine Formeln in Merksätzen, Widerstand nur qualitativ (bremst den Strom). Ohmsches Gesetz und Energie/Leistung sind bewusst nicht enthalten. Der Übungstyp `calc` bleibt im Code für spätere Klassenstufen.
 - Physik fachlich korrekt halten; Modelle (Wasser-, Elektronenmodell) nur mit Hinweis auf ihre Grenzen.
 - Didaktischer Leitgedanke: typische Fehlvorstellungen gezielt aufgreifen (Strom wird verbraucht, Batterie als Konstantstromquelle, sequenzielles und lokales Denken), bevorzugt mit Vorhersagen-Beobachten-Erklären.

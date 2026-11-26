@@ -2,6 +2,17 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.5.0] - 2026-11-26
+
+### Entfernt
+- Thema „Energie und Leistung“ mit Rechentraining und Quiz
+- Aus „Widerstand und Ohmsches Gesetz“: Merksätze zu R = U / I und Ohm, Rechentraining, Fragen zu Drähten
+- Rechenfragen zu Gesamtwiderständen, Formeln in den Merksätzen (I = Q / t, 1 A = 1 C/s), Widerstandsanzeige im Kennlinien-Experiment
+
+### Geändert
+- Thema 6 heißt jetzt „U-I-Kennlinien“ und enthält nur das Kennlinien-Experiment mit qualitativen Fragen
+- Merksätze zu Reihen- und Parallelschaltung nur noch zu Stromstärke und Spannung
+
 ## [0.4.4] - 2026-11-26
 
 ### Hinzugefügt

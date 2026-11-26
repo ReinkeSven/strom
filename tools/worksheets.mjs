@@ -116,8 +116,8 @@ function render(ex, rand) {
         const rows = KENN_U.map(u => `<tr><td>${u}</td><td>${fmtFixed(wireCurrent(u), 3)}</td><td>${fmtFixed(lampCurrent(u), 3)}</td></tr>`).join('');
         extra = `<div class="task"><p class="q"><span class="n">A.</span> Zeichne beide Kennlinien in das Diagramm. Verbinde die Messpunkte jeweils mit einer glatten Linie.</p>
           <div class="two"><table class="data"><tr><th>U in V</th><th>I Draht in A</th><th>I Lampe in A</th></tr>${rows}</table>${kennGrid(false)}</div></div>
-          <div class="task"><p class="q"><span class="n">B.</span> Berechne den Widerstand der Glühlampe bei 2 V und bei 12 V.</p>${lines(2)}</div>`;
-        extraKey = `<p><b>A.</b></p>${kennGrid(true)}<p><b>B.</b> R = U / I: bei 2 V ist R = 2 V / ${fmt(lampCurrent(2), 3)} A ≈ ${fmt(2 / lampCurrent(2), 0)} Ω, bei 12 V ist R = 12 V / 0,25 A = 48 Ω. Der Widerstand steigt, weil der Glühdraht heißer wird.</p>`;
+`;
+        extraKey = `<p><b>A.</b> So sehen die beiden Kennlinien aus:</p>${kennGrid(true)}`;
       }
       return {
         sheet: head + (SKETCH[ex.demo]

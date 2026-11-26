@@ -189,26 +189,14 @@ export const EX = {
 
   widerstand: [
     {
-      id: 'widerstand-kennlinie', type: 'demo', demo: 'kennlinie', title: 'Experiment: U-I-Kennlinien',
+      id: 'widerstand-kennlinie', type: 'demo', demo: 'kennlinie', title: 'Experiment: Kennlinien messen',
       questions: [
         { q: 'Wie sieht die Kennlinie des Konstantandrahts aus?', opts: ['Eine Ursprungsgerade', 'Eine Kurve, die immer flacher wird', 'Eine waagerechte Linie'], a: 0,
-          why: 'Doppelte Spannung, doppelte Stromstärke: I ist proportional zu U. Das ist das Ohmsche Gesetz, der Widerstand bleibt gleich.' },
-        { q: 'Bei der Glühlampe wird die Kennlinie immer flacher. Was bedeutet das für ihren Widerstand?', opts: ['Er wird größer', 'Er wird kleiner', 'Er bleibt gleich'], a: 0,
-          why: 'Bei höherer Spannung wächst die Stromstärke immer weniger. Also wird R = U / I größer.' },
-        { q: 'Warum steigt der Widerstand der Glühlampe?', opts: ['Der Glühdraht wird heiß', 'Die Batterie wird leer', 'Das Glas wird dunkler'], a: 0,
-          why: 'In heißem Metall schwingen die Atomrümpfe stärker und behindern die Elektronen mehr. Das Ohmsche Gesetz gilt nur bei konstanter Temperatur.' },
-      ],
-    },
-    { id: 'widerstand-rechnen', type: 'calc', gen: 'ohm', count: 8, title: 'Rechentraining: R = U / I' },
-    {
-      id: 'widerstand-draht', type: 'quiz', title: 'Widerstand von Drähten',
-      questions: [
-        { q: 'Ein Draht wird doppelt so lang, Material und Dicke bleiben gleich. Sein Widerstand …', opts: ['verdoppelt sich', 'halbiert sich', 'bleibt gleich'], a: 0,
-          why: 'Die Elektronen müssen einen doppelt so langen Weg durch das Gitter zurücklegen.' },
-        { q: 'Ein dickerer Draht aus demselben Material und mit derselben Länge hat …', opts: ['einen kleineren Widerstand', 'einen größeren Widerstand', 'denselben Widerstand'], a: 0,
-          why: 'Im dickeren Draht können mehr Elektronen nebeneinander fließen.' },
-        { q: 'Kupfer- und Konstantandraht sind gleich lang und gleich dick. Welcher hat den kleineren Widerstand?', opts: ['Kupfer', 'Konstantan', 'Beide gleich'], a: 0,
-          why: 'Der Widerstand hängt auch vom Material ab. Kupfer leitet sehr gut und wird deshalb für Kabel verwendet. Konstantan nimmt man für Widerstände.' },
+          why: 'Doppelte Spannung, doppelte Stromstärke: Stromstärke und Spannung sind proportional zueinander.' },
+        { q: 'Bei der Glühlampe wird die Kennlinie immer flacher. Was bedeutet das?', opts: ['Bei mehr Spannung wächst die Stromstärke immer weniger', 'Bei mehr Spannung sinkt die Stromstärke wieder ab', 'Ab einer bestimmten Spannung fließt gar kein Strom'], a: 0,
+          why: 'Die Stromstärke steigt weiter, aber immer langsamer. Die Lampe bremst den Strom umso stärker, je höher die Spannung ist.' },
+        { q: 'Warum bremst die Glühlampe den Strom bei hoher Spannung stärker?', opts: ['Der Glühdraht wird heiß', 'Die Batterie wird leer', 'Das Glas wird dunkler'], a: 0,
+          why: 'In heißem Metall schwingen die Atomrümpfe stärker und behindern die freien Elektronen mehr. Beim Konstantandraht passiert das kaum, weil er sich bei diesen Strömen nur wenig erwärmt.' },
       ],
     },
   ],
@@ -239,10 +227,6 @@ export const EX = {
           why: 'In der Reihenschaltung addieren sich die Teilspannungen zur Gesamtspannung: 2 V + 4 V = 6 V.' },
         { q: 'Parallelschaltung: Durch die Zweige fließen 0,3 A und 0,2 A. Wie groß ist der Gesamtstrom?', opts: ['0,1 A', '0,25 A', '0,5 A'], a: 2,
           why: 'In der Parallelschaltung addieren sich die Teilströme zum Gesamtstrom.' },
-        { q: 'Widerstände von 20 Ω und 30 Ω in Reihe. Wie groß ist der Gesamtwiderstand?', opts: ['50 Ω', '12 Ω', '600 Ω'], a: 0,
-          why: 'In der Reihenschaltung addieren sich die Widerstände.' },
-        { q: 'Dieselben Widerstände parallel. Der Gesamtwiderstand ist …', opts: ['50 Ω', 'kleiner als 20 Ω', 'zwischen 20 Ω und 30 Ω'], a: 1,
-          why: 'Jeder zusätzliche Zweig ist ein weiterer Weg für den Strom, der Gesamtwiderstand sinkt. Genau: 1/R = 1/20 Ω + 1/30 Ω, also R = 12 Ω.' },
       ],
     },
   ],
@@ -287,21 +271,6 @@ export const EX = {
           why: 'Die Türkontakte liegen parallel. Jede offene Tür schließt ihren Kontakt und damit den Stromkreis.' },
         { q: 'Eine Waschmaschine startet nur, wenn die Tür geschlossen ist und die Starttaste gedrückt wird.', opts: ['UND', 'ODER', 'Wechsel'], a: 0,
           why: 'Türkontakt und Starttaste liegen in Reihe. Bei offener Tür läuft die Maschine nicht an.' },
-      ],
-    },
-  ],
-
-  energie: [
-    { id: 'energie-rechnen', type: 'calc', gen: 'power', count: 8, title: 'Rechentraining: Leistung und Kosten' },
-    {
-      id: 'energie-quiz', type: 'quiz', title: 'Energie im Haushalt',
-      questions: [
-        { q: 'Was misst der Stromzähler im Haus?', opts: ['Die mittlere Stromstärke in Ampere', 'Die anliegende Spannung in Volt', 'Die umgewandelte Energie in kWh'], a: 2,
-          why: 'Bezahlt wird die Energie. Der Name „Stromzähler“ ist eigentlich irreführend.' },
-        { q: 'Welches Gerät hat die größte Leistung?', opts: ['LED-Lampe', 'Laptop', 'Wasserkocher'], a: 2,
-          why: 'Geräte, die heizen, haben die größten Leistungen: Ein Wasserkocher hat etwa 2000 W, ein Laptop etwa 60 W, eine LED-Lampe etwa 8 W.' },
-        { q: 'Was braucht mehr Energie: eine LED-Lampe (8 W) einen ganzen Tag lang oder ein Wasserkocher (2000 W) 6 Minuten lang?', opts: ['Die LED-Lampe', 'Der Wasserkocher', 'Etwa gleich viel'], a: 2,
-          why: 'LED-Lampe: 0,008 kW · 24 h ≈ 0,19 kWh. Wasserkocher: 2 kW · 0,1 h = 0,2 kWh. Fast gleich viel.' },
       ],
     },
   ],

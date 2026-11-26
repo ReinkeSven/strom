@@ -291,7 +291,7 @@ function kennlinie(el) {
   const X = U => 34 + U * 21.5, Y = I => 170 - I * 450;
   const draw = () => {
     const I = current(S.comp, S.U);
-    el.querySelector('.meter').innerHTML = `U = ${fmtFixed(S.U, 1)} V &nbsp; I = ${fmtFixed(I, 3)} A &nbsp; R = ${I > 0 ? fmt(S.U / I, 1) + ' Ω' : '–'}`;
+    el.querySelector('.meter').innerHTML = `U = ${fmtFixed(S.U, 1)} V &nbsp; I = ${fmtFixed(I, 3)} A`;
     let axes = `<path class="axis" d="M${X(0)} ${Y(0)}H${X(12.6)}M${X(0)} ${Y(0)}V${Y(0.34)}"/>`;
     for (let u = 2; u <= 12; u += 2) axes += `<path class="tick" d="M${X(u)} ${Y(0)}v4"/><text class="ax" x="${X(u)}" y="${Y(0) + 15}">${u}</text>`;
     for (let i = 0.1; i <= 0.31; i += 0.1) axes += `<path class="tick" d="M${X(0)} ${r1(Y(i))}h-4"/><text class="ax" x="${X(0) - 16}" y="${r1(Y(i) + 4)}">${fmt(i, 1)}</text>`;

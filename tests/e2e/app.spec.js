@@ -83,15 +83,6 @@ test('Memory: Karten aufdecken', async ({ page }) => {
   await expect(page.locator('#ex .small')).toContainText('Versuche: 1');
 });
 
-test('Rechentraining: Eingabe mit Komma wird geprüft', async ({ page }) => {
-  await openEx(page, 'widerstand', 'widerstand-rechnen');
-  await page.fill('#ans', '0,0001');
-  await page.click('#ex button[type=submit]');
-  await expect(page.locator('#ex .why')).toBeVisible();
-  await page.click('#ex [data-next]');
-  await expect(page.locator('#ex .step')).toHaveText('Aufgabe 2 von 8');
-});
-
 test('Bauauftrag: Schalter im Zweig von L2 löst die Aufgabe', async ({ page }) => {
   await openEx(page, 'schaltungen', 'schalt-bau');
   await page.click('#ex [data-check]');
