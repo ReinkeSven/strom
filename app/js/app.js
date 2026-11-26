@@ -4,13 +4,13 @@ import {
   freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, dkey, recordExercise, exerciseProgress,
   setFocus, missionParts, completePart, nextMission, stars, cityState,
 } from './model.js';
-import { mountExercise } from './exercises.js';
+import { mountExercise, devicesHtml } from './exercises.js';
 import { mountMission } from './mission.js';
 import { mountHero } from './hero.js';
 import { citySvg, cityLabel } from './city.js';
 
 const KEY = 'strom-labor-v1';
-export const APP_VERSION = '0.9.0';   // muss VERSION in sw.js entsprechen (Test prüft das)
+export const APP_VERSION = '0.10.0';   // muss VERSION in sw.js entsprechen (Test prüft das)
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const $ = s => document.querySelector(s);
 
@@ -99,6 +99,7 @@ function topicView(id) {
   }).join('');
   return `<button class="back" data-act="back">‹ Themen</button>
     <div class="hero"><h1>${esc(t.title)}</h1><p>${esc(t.short)}</p></div>
+    <div class="explain intro"><h3>Worum geht's?</h3>${t.intro.map(x => `<p>${esc(x)}</p>`).join('')}</div>
     <section class="card merk"><h3>Merksätze</h3><ul>${merk}</ul></section>
     <section class="card"><h3>Übungen und Experimente</h3><ul class="exlist">${exs}</ul></section>
     <button class="btn primary" data-act="toggle-read">${done ? 'Als ungelesen markieren' : 'Gelesen ✓'}</button>`;
@@ -131,7 +132,7 @@ function backupView() {
 
 function exerciseShell(t, e) {
   return `<button class="back" data-act="back-topic">‹ ${esc(t.title)}</button>
-    <div class="hero"><h1>${esc(e.title)}</h1></div><div id="ex"></div>`;
+    <div class="hero"><h1>${esc(e.title)}</h1></div>${devicesHtml(e)}<div id="ex"></div>`;
 }
 
 function render() {

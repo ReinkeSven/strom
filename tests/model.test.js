@@ -184,3 +184,12 @@ test('Versionsnummer in App und Service Worker stimmen überein', async () => {
   assert.equal(app, sw);
   assert.equal(pkg, sw);
 });
+
+test('Einleitungen und Geräte: jedes Thema hat eine kurze Einleitung, Geräteverweise sind gültig', async () => {
+  const { DEVICES } = await import('../app/js/content.js');
+  for (const t of TOPICS) {
+    assert.ok(t.intro.length >= 2 && t.intro.length <= 3, t.id);
+    for (const e of t.exercises) for (const d of e.devices || []) assert.ok(DEVICES[d], `${e.id}: ${d}`);
+  }
+  for (const d of Object.values(DEVICES)) assert.ok(d.name && d.text.split(/[.!?]\s/).length <= 3, d.name);
+});

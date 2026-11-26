@@ -8,6 +8,7 @@
 //   calc   { gen, count }                                                 Aufgaben aus model.GENERATORS
 //   build  {}                                                             Bauauftrag mit Schaltern
 //   truth  { circuit, states: [Name für false, Name für true], prompt, why } Wahrheitstabelle vorhersagen, dann ausprobieren
+// devices: Geräte aus DEVICES (content.js), die vor der Übung kurz erklärt werden
 // after: Indizes der Merksätze des Themas, die der Fokus-Modus direkt nach dieser Übung zeigt
 
 const yesNo = ['Ja', 'Nein'];
@@ -28,7 +29,7 @@ export const EX = {
       ],
     },
     {
-      id: 'ladung-bandgen', type: 'demo', after: [2, 3], demo: 'bandgen', title: 'Experiment: Bandgenerator',
+      id: 'ladung-bandgen', type: 'demo', devices: ['bandgen', 'glimm', 'erdung'], after: [2, 3], demo: 'bandgen', title: 'Experiment: Bandgenerator',
       questions: [
         { q: 'Du stehst auf einem Kunststoffhocker und legst die Hand auf die geladene Kugel. Warum stehen deine Haare ab?', opts: ['Die Haare sind gleichnamig geladen und stoßen sich ab', 'Die Kugel zieht die Haare mit ihrer Ladung zu sich hin', 'Die Kugel wird warm, und warme Luft hebt die Haare an'], a: 0,
           why: 'Die Ladung verteilt sich über deinen Körper bis in die Haare. Gleichnamig geladene Haare stoßen sich ab und stehen möglichst weit auseinander.' },
@@ -41,7 +42,7 @@ export const EX = {
       ],
     },
     {
-      id: 'ladung-elektroskop', type: 'demo', after: [4], demo: 'electroscope', title: 'Experiment: Elektroskop',
+      id: 'ladung-elektroskop', type: 'demo', devices: ['elektroskop'], after: [4], demo: 'electroscope', title: 'Experiment: Elektroskop',
       questions: [
         { q: 'Du näherst den negativ geladenen Stab dem Elektroskop, ohne es zu berühren. Was passiert?', opts: ['Der Zeiger schlägt aus', 'Nichts, solange der Stab nicht berührt'], a: 0,
           why: 'Die Elektronen im Metall werden vom Stab abgestoßen und wandern nach unten in Zeiger und Halterung. Beide sind dann negativ und stoßen sich ab (Influenz). Entfernst du den Stab, verteilen sich die Elektronen wieder und der Zeiger fällt zurück.' },
@@ -137,7 +138,7 @@ export const EX = {
       ],
     },
     {
-      id: 'strom-vorhersage', type: 'quiz', after: [3, 1], title: 'Vorhersage: Strom vor und hinter der Lampe',
+      id: 'strom-vorhersage', type: 'quiz', devices: ['amp'], after: [3, 1], title: 'Vorhersage: Strom vor und hinter der Lampe',
       questions: [
         { q: 'A1 misst die Stromstärke vor der Lampe, A2 dahinter. Was zeigt A2 im Vergleich zu A1?', fig: 'amp_vor_nach', opts: ['Mehr', 'Gleich viel', 'Weniger', 'Null'], a: 1,
           why: 'Im unverzweigten Stromkreis ist die Stromstärke überall gleich. So viel Ladung, wie in die Lampe hineinfließt, fließt auch wieder heraus.' },
@@ -198,7 +199,7 @@ export const EX = {
       ],
     },
     {
-      id: 'spannung-messen', type: 'quiz', after: [2, 3], title: 'Voltmeter richtig einbauen',
+      id: 'spannung-messen', type: 'quiz', devices: ['volt'], after: [2, 3], title: 'Voltmeter richtig einbauen',
       questions: [
         { q: 'In welcher Schaltung misst das Voltmeter die Spannung an der Lampe richtig?', opts: [{ fig: 'volt_reihe' }, { fig: 'volt_parallel' }], a: 1,
           why: 'Das Voltmeter wird parallel geschaltet, denn es misst den Unterschied zwischen zwei Punkten. In Reihe bremst sein sehr großer Widerstand den Strom fast vollständig: Die Lampe bleibt dunkel, und das Voltmeter zeigt ungefähr die Batteriespannung.' },
@@ -226,7 +227,7 @@ export const EX = {
 
   widerstand: [
     {
-      id: 'widerstand-kennlinie', type: 'demo', after: [0, 1], demo: 'kennlinie', title: 'Experiment: Kennlinien messen',
+      id: 'widerstand-kennlinie', type: 'demo', devices: ['netzgeraet', 'konstantan', 'gluehlampe'], after: [0, 1], demo: 'kennlinie', title: 'Experiment: Kennlinien messen',
       questions: [
         { q: 'Wie sieht die Kennlinie des Konstantandrahts aus?', opts: ['Eine Ursprungsgerade', 'Eine Kurve, die immer flacher wird', 'Eine waagerechte Linie'], a: 0,
           why: 'Doppelte Spannung, doppelte Stromstärke: Stromstärke und Spannung sind proportional zueinander.' },
@@ -289,7 +290,7 @@ export const EX = {
       why: 'Jeder Schalter öffnet einen eigenen Weg. Es reicht, wenn S1 ODER S2 geschlossen ist. Sind beide zu, leuchtet die Lampe auch.',
     },
     {
-      id: 'logik-wechsel', type: 'truth', after: [2], title: 'Wechselschaltung: Licht im Treppenhaus', circuit: 'wechsel', states: ['oben', 'unten'],
+      id: 'logik-wechsel', type: 'truth', devices: ['wechselschalter'], after: [2], title: 'Wechselschaltung: Licht im Treppenhaus', circuit: 'wechsel', states: ['oben', 'unten'],
       prompt: 'Zwei Wechselschalter sind über zwei Leitungen verbunden. Jeder Schalter verbindet seinen Mittelkontakt entweder mit der oberen oder mit der unteren Leitung. Wann leuchtet die Lampe?',
       why: 'Die Lampe leuchtet, wenn beide Schalter dieselbe Leitung wählen. Jedes Umlegen eines Schalters, egal welches, schaltet die Lampe um. So kannst du das Licht unten einschalten und oben wieder ausschalten.',
     },
@@ -323,7 +324,7 @@ export const EX = {
 
   sicherheit: [
     {
-      id: 'sicher-quiz', type: 'quiz', after: [0, 1, 2, 3], title: 'Gefahren erkennen',
+      id: 'sicher-quiz', type: 'quiz', devices: ['sicherung', 'schutzleiter'], after: [0, 1, 2, 3], title: 'Gefahren erkennen',
       questions: [
         { q: 'Was passiert bei einem Kurzschluss?', opts: ['Der Widerstand ist fast null, der Strom wird sehr groß', 'Der Widerstand wird sehr groß, der Strom wird null', 'Die Spannung steigt stark an, der Strom bleibt gleich'], a: 0,
           why: 'Ohne Verbraucher im Kreis begrenzt fast nichts den Strom. Die Leitungen werden heiß, die Sicherung löst aus.' },

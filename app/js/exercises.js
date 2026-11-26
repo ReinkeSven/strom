@@ -2,10 +2,28 @@
 import { CIRCUITS, symbolCircuit } from './circuits.js';
 import { circuitSvg } from './svg.js';
 import { shuffle, optionOrder, makeTasks, checkAnswer, checkBuild, truthTable, fmt, firstSentence } from './model.js';
-import { mountDemo } from './demos.js';
+import { mountDemo, bandgenSvg, electroscopeSvg } from './demos.js';
+import { DEVICES } from './content.js';
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const fig = (id, sim) => circuitSvg(CIRCUITS[id], { sim });
+
+/** Skizzen zu einzelnen Geräten (dieselben Zeichnungen wie in den Experimenten) */
+const DEVICE_SKETCH = {
+  bandgen: () => bandgenSvg({ q: 0 }),
+  elektroskop: () => electroscopeSvg({ q: 0, rod: 'weg' }),
+};
+
+/** Kasten „Gerät kurz erklärt“ für die Geräte einer Übung (leer, wenn sie keine hat) */
+export function devicesHtml(ex, { sketches = true, only = null } = {}) {
+  const ids = only ? [only] : ex.devices || [];
+  if (!ids.length) return '';
+  const items = ids.map(id => {
+    const d = DEVICES[id];
+    return `<div class="device">${sketches && DEVICE_SKETCH[id] ? `<div class="dsketch">${DEVICE_SKETCH[id]()}</div>` : ''}<p><b>${esc(d.name)}:</b> ${esc(d.text)}</p></div>`;
+  }).join('');
+  return `<section class="card devices"><h3>${ids.length === 1 ? 'Gerät' : 'Geräte'} kurz erklärt</h3>${items}</section>`;
+}
 
 /** Hängt die Übung ex in el ein. onFinish(score, total) wird je Durchgang einmal aufgerufen. Liefert eine Aufräumfunktion. */
 export function mountExercise(el, ex, onFinish) {

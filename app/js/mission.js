@@ -1,6 +1,6 @@
 // Fokus-Modus: ein Missionsteil als Folge kleiner Schritte, auf jedem Bildschirm genau eine Sache.
 import { missionParts, shuffle } from './model.js';
-import { mountExercise, mountQuestion } from './exercises.js';
+import { mountExercise, mountQuestion, devicesHtml } from './exercises.js';
 import { mountDemo } from './demos.js';
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -75,7 +75,13 @@ export function mountMission(el, topic, part, hooks) {
       <div class="mfoot${st.kind === 'task' || st.kind === 'demo' ? ' static' : ''}"><button class="btn primary big" data-m="next" disabled>Weiter</button></div>
     </div>`;
     const body = el.querySelector('.mbody');
-    if (st.kind === 'merk') {
+    if (st.kind === 'intro') {
+      body.innerHTML = `<h2 class="mh">${esc(topic.title)}</h2><div class="explain intro big">${topic.intro.map(x => `<p>${esc(x)}</p>`).join('')}</div>`;
+      enableNext();
+    } else if (st.kind === 'device') {
+      body.innerHTML = devicesHtml(exById(st.exId), { only: st.dev });
+      enableNext();
+    } else if (st.kind === 'merk') {
       // Lückentext: Weiter erst, wenn das fehlende Wort gefunden ist
       const text = topic.merk[st.i];
       const [word, ...wrong] = topic.cloze[st.i];

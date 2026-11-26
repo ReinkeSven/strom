@@ -364,3 +364,16 @@ body.in-mission #view { padding-bottom: calc(24px + env(safe-area-inset-bottom))
 .demo-svg .fill { fill: #ffb703; }
 .meterline { font-weight: 700; margin: 6px 0 0; }
 @media (prefers-reduced-motion: reduce) { .demo-svg .spin, .demo-svg .drift, .zoomlv { animation: none; } }
+
+/* ---------- Einleitung und Geräte ---------- */
+.explain.intro h3 { margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: .06em; color: var(--navy); }
+.explain.intro.big p { font-size: 18px; }
+.devices { display: flex; flex-direction: column; gap: 10px; }
+.devices h3 { margin: 0; }
+.device { display: flex; gap: 10px; align-items: center; }
+.device p { margin: 0; flex: 1; }
+.device .dsketch { flex: 0 0 110px; }
+.device .dsketch svg { width: 100%; height: auto; display: block; background: #fff; border-radius: 8px; }
+.mission .device { flex-direction: column; align-items: stretch; }
+.mission .device p { font-size: 18px; }
+.mission .device .dsketch { flex: none; width: 70%; align-self: center; }

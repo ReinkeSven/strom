@@ -6,6 +6,7 @@ import { TOPICS } from '../app/js/content.js';
 import { CIRCUITS, symbolCircuit } from '../app/js/circuits.js';
 import { circuitSvg } from '../app/js/svg.js';
 import { TEXT as EXPLAIN } from '../app/js/explainers.js';
+import { devicesHtml } from '../app/js/exercises.js';
 import { balloonsSvg, bandgenSvg, electroscopeSvg, waterSvg, waterAt, latticeSvg, woodSvg } from '../app/js/demos.js';
 import { makeTasks, truthTable, shuffle, optionOrder, lampCurrent, wireCurrent, fmt, fmtFixed } from '../app/js/model.js';
 
@@ -180,10 +181,16 @@ function build() {
   const rand = seeded(2026);
   const sheets = [], keys = [];
   TOPICS.forEach((t, i) => {
-    const parts = t.exercises.map(ex => render(ex, rand));
+    // Geräteerklärung direkt unter die Überschrift der Übung
+    const parts = t.exercises.map(ex => {
+      const r = render(ex, rand);
+      const dev = devicesHtml(ex, { sketches: false }).replace('<section class="card devices">', '<section class="devices">');
+      return { ...r, sheet: r.sheet.replace('</h3>', `</h3>${dev}`) };
+    });
     sheets.push(`<section class="topic">
       <header class="top"><div><span class="kicker">Physik 8 · Elektrizitätslehre · Blatt ${i + 1}</span><h2>${esc(t.title)}</h2></div>
         <div class="who">Name: <span class="blank w"></span><br>Datum: <span class="blank w"></span></div></header>
+      <div class="intro-box"><h4>Worum geht's?</h4><p>${t.intro.map(esc).join(' ')}</p></div>
       <div class="merk"><h4>Das musst du wissen</h4><ul>${t.merk.map(m => `<li>${esc(m)}</li>`).join('')}</ul></div>
       ${parts.map(p => `<div class="ex">${p.sheet}</div>`).join('')}
     </section>`);
@@ -233,6 +240,14 @@ h1, h2, h3, h4 { color: var(--navy); margin: 0; }
 .who { font-size: 9.5pt; line-height: 2; text-align: right; }
 .blank { display: inline-block; border-bottom: 1px solid var(--ink); width: 28mm; height: 1em; }
 .blank.w { width: 42mm; }
+.intro-box { background: #eef3ff; border-radius: 2mm; padding: 2.5mm 5mm; margin-bottom: 3mm; break-inside: avoid; }
+.intro-box h4 { font-size: 10pt; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1mm; }
+.intro-box p { margin: 0; }
+.devices { border: 1.2px solid #c9cfe6; border-radius: 2mm; padding: 2mm 4mm; margin: 0 0 3mm; break-inside: avoid; }
+.ex .devices h3 { font-size: 10pt; border: 0; padding: 0; margin: 0 0 1mm; text-transform: uppercase; letter-spacing: .06em; }
+.device { display: flex; gap: 4mm; align-items: center; margin: 1.5mm 0; }
+.device p { margin: 0; flex: 1; font-size: 9.5pt; }
+.device .dsketch { flex: 0 0 32mm; }
 .merk { border-left: 4px solid var(--volt); background: #fff8dd; padding: 3mm 5mm; margin-bottom: 5mm; break-inside: avoid; }
 .merk h4 { font-size: 10pt; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1mm; }
 .merk ul { margin: 0; padding-left: 5mm; }

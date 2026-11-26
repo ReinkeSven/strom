@@ -78,6 +78,8 @@ export const setFocus = (S, on) => ({ ...S, settings: { ...S.settings, focus: !!
 
 /**
  * Zerlegt ein Thema in Missionsteile. Ein Schritt zeigt genau eine Sache:
+ *   intro    Einleitung des Themas (nur am Anfang)
+ *   device   ein Gerät der folgenden Übung kurz erklärt
  *   demo     Experiment ausprobieren
  *   question eine einzelne Frage (exId, qi; last = letzte Frage der Übung)
  *   task     eine ganze Übung, die selbst schon schrittweise ist (Sortieren, Memory, Tabelle, Bauauftrag)
@@ -86,17 +88,19 @@ export const setFocus = (S, on) => ({ ...S, settings: { ...S.settings, focus: !!
  * und nie vor einem Merksatz, damit er direkt auf das Erlebte folgt.
  */
 export function missionParts(topic, max = 6) {
-  const steps = [];
+  const steps = topic.intro ? [{ kind: 'intro' }] : [];
   const shown = new Set();
   for (const ex of topic.exercises) {
+    for (const dev of ex.devices || []) steps.push({ kind: 'device', exId: ex.id, dev });   // ein Gerät pro Bildschirm
     if (ex.type === 'demo') steps.push({ kind: 'demo', exId: ex.id });
     if (ex.questions) ex.questions.forEach((_, qi) => steps.push({ kind: 'question', exId: ex.id, qi, last: qi === ex.questions.length - 1, ofDemo: ex.type === 'demo' }));
     else if (ex.type !== 'demo') steps.push({ kind: 'task', exId: ex.id });
     for (const i of ex.after || []) { steps.push({ kind: 'merk', i }); shown.add(i); }
   }
   topic.merk.forEach((_, i) => { if (!shown.has(i)) steps.push({ kind: 'merk', i }); });
-  // Trennen erlaubt, außer vor einem Merksatz und innerhalb eines Experiments samt seiner Fragen
-  const legal = k => k < steps.length - 1 && steps[k + 1].kind !== 'merk' && steps[k].kind !== 'demo'
+  // Trennen erlaubt, außer vor einem Merksatz, direkt nach Einleitung oder Geräteerklärung
+  // und innerhalb eines Experiments samt seiner Fragen
+  const legal = k => k < steps.length - 1 && steps[k + 1].kind !== 'merk' && !['demo', 'intro', 'device'].includes(steps[k].kind)
     && !(steps[k].kind === 'question' && steps[k].ofDemo && !steps[k].last);
   const parts = [[]];
   steps.forEach((st, k) => {

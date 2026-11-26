@@ -153,6 +153,7 @@ test('Fokus-Modus: Schalter, Mission Schritt für Schritt, Abschluss mit Stern',
   for (const [k, st] of steps.entries()) {
     await expect(page.locator('.mcount')).toHaveText(`${k + 1}/${steps.length}`);
     const next = page.locator('[data-m=next]');
+    if (st.kind === 'intro') await expect(page.locator('.mbody .explain.intro')).toContainText(t.intro[0]);
     if (st.kind === 'question') {
       await expect(next).toBeDisabled();
       const q = t.exercises.find(e => e.id === st.exId).questions[st.qi];
@@ -189,6 +190,7 @@ test('Fokus-Modus: Erklärung kurz, auf Wunsch ausführlich', async ({ page }) =
   await page.goto('/');
   await page.click('.fswitch');
   await page.click('[data-mission="ladung:0"]');
+  await page.click('[data-m=next]');   // Einleitung
   await page.locator('.mbody [data-d]').first().click();
   await page.locator('.mbody [data-d]').nth(1).click();
   await page.click('[data-m=next]');
@@ -293,4 +295,13 @@ test('Erklärbild Zählstelle: mehr Stromstärke, mehr Elektronen pro Sekunde', 
   await page.waitForTimeout(6000);   // Messfenster 3 s, dazu der Weg bis zur Zählstelle
   const high = parseFloat((await page.locator('#ex .signt').textContent()).replace(',', '.'));
   expect(high).toBeGreaterThan(low * 1.5);
+});
+
+test('Einleitung im Thema und Geräteerklärung in der Übung', async ({ page }) => {
+  await page.goto('/');
+  await page.click('[data-topic=ladung]');
+  await expect(page.locator('.explain.intro')).toContainText('Türklinke');
+  await page.click('[data-ex=ladung-bandgen]');
+  await expect(page.locator('.devices')).toContainText('Bandgenerator');
+  await expect(page.locator('.devices')).toContainText('Glimmlampe');
 });

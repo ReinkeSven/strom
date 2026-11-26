@@ -2,6 +2,12 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.10.0] - 2026-11-26
+
+### Hinzugefügt
+- Einleitung „Worum geht's?“ für jedes Thema: drei kurze Sätze mit Alltagsbezug (Themenseite, erster Schritt im ADHD-Mode, PDF)
+- „Gerät kurz erklärt“: Bandgenerator, Glimmlampe, Erdungskugel, Elektroskop, Amperemeter, Voltmeter, Netzgerät, Konstantandraht, Glühlampe, Wechselschalter, Sicherung, Schutzleiter – vor der jeweiligen Übung, im ADHD-Mode ein Gerät pro Bildschirm, auch im PDF
+
 ## [0.9.0] - 2026-11-26
 
 ### Hinzugefügt
