@@ -6,6 +6,7 @@ import {
 } from './model.js';
 import { mountExercise } from './exercises.js';
 import { mountMission } from './mission.js';
+import { mountHero } from './hero.js';
 
 const KEY = 'strom-labor-v1';
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -14,7 +15,7 @@ const $ = s => document.querySelector(s);
 /* ---------- Zustand ---------- */
 let S = null;
 let view = { tab: 'home', topic: null, ex: null, mission: null };   // mission: { topic, part } im Fokus-Modus
-let unmount = null;   // Aufräumfunktion der offenen Übung
+let unmount = null;   // Aufräumfunktion der offenen Übung bzw. der Kopfanimation
 let ui = { copyMsg: '', importMsg: '', importOk: false };
 let persisted = null;
 
@@ -47,7 +48,7 @@ function homeView() {
       <span class="exn">${ep.done}/${ep.total}</span>
     </button></li>`;
   }).join('');
-  return `<div class="hero"><h1>Papas Physik Punishment</h1><p>${p.done} von ${p.total} Themen erledigt</p></div>
+  return `<div class="hero"><h1 class="sr-only">Papas Physik Punishment</h1><div id="heroanim"></div><p>${p.done} von ${p.total} Themen erledigt</p></div>
     ${focusSwitch()}<ol class="topics">${items}</ol>`;
 }
 
@@ -71,7 +72,7 @@ function focusHomeView() {
     return `<li class="mrow${done.size === parts.length ? ' done' : ''}"><span class="num">${done.size === parts.length ? '✓' : i + 1}</span>
       <span class="txt"><b>${esc(t.title)}</b></span><span class="dots">${dots}</span></li>`;
   }).join('');
-  return `<div class="hero"><h1>Papas Physik Punishment</h1><p class="stars">⭐ ${stars(S)}</p></div>
+  return `<div class="hero"><h1 class="sr-only">Papas Physik Punishment</h1><div id="heroanim"></div><p class="stars">⭐ ${stars(S)}</p></div>
     ${focusSwitch()}${cta}<ol class="missions">${items}</ol>`;
 }
 
@@ -134,7 +135,10 @@ function render() {
     // Ergebnis speichern, ohne neu zu zeichnen: die Übung zeigt ihre Auswertung selbst
     unmount = mountExercise($('#ex'), e, (score, total) => { S = recordExercise(S, e.id, score, total); save(); });
   } else if (view.topic) main.innerHTML = topicView(view.topic);
-  else main.innerHTML = S.settings.focus ? focusHomeView() : homeView();
+  else {
+    main.innerHTML = S.settings.focus ? focusHomeView() : homeView();
+    unmount = mountHero($('#heroanim'));
+  }
   document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === view.tab));
 }
 

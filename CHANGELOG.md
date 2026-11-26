@@ -2,6 +2,11 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.7.0] - 2026-11-26
+
+### Hinzugefügt
+- Kopfanimation auf der Startseite statt Überschrift: Elektronen mit Gesichtern flitzen vom Minus- zum Pluspol durch einen Stromkreis; Antippen gibt Turbo, die Lampe leuchtet heller. Ruhig bei „Bewegung reduzieren“.
+
 ## [0.6.2] - 2026-11-26
 
 ### Geändert

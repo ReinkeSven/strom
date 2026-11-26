@@ -186,3 +186,14 @@ test('Fokus-Modus: Erklärung kurz, auf Wunsch ausführlich', async ({ page }) =
     expect((await page.locator('.mbody .why').textContent()).length).toBeGreaterThan(before);
   }
 });
+
+test('Kopfanimation: Elektronen bewegen sich, Antippen gibt Turbo', async ({ page }) => {
+  await page.goto('/');
+  const e = page.locator('#heroanim .e').first();
+  const t0 = await e.getAttribute('transform');
+  await page.waitForTimeout(400);
+  expect(await e.getAttribute('transform')).not.toBe(t0);
+  await page.click('#heroanim svg');
+  await expect(page.locator('#heroanim .shout')).not.toHaveText('');
+  await expect(page.locator('#heroanim svg.turbo')).toHaveCount(1);
+});
