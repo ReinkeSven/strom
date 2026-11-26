@@ -3,6 +3,7 @@
 import { lampCurrent, wireCurrent, fmtFixed, fmt, solve } from './model.js';
 import { CIRCUITS } from './circuits.js';
 import { circuitSvg } from './svg.js';
+import { EXPLAINERS } from './explainers.js';
 
 const r1 = x => Math.round(x * 10) / 10;
 const rad = d => d * Math.PI / 180;
@@ -458,7 +459,7 @@ export function woodSvg() {
   return `<svg viewBox="0 0 320 150" class="demo-svg">${g}</svg>`;
 }
 
-const DEMOS = { water, balloons, bandgen, electroscope, electrons, kennlinie };
+const DEMOS = { ...EXPLAINERS, water, balloons, bandgen, electroscope, electrons, kennlinie };
 
 export function mountDemo(el, id) {
   return DEMOS[id](el);

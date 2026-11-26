@@ -5,6 +5,7 @@ import { chromium } from '@playwright/test';
 import { TOPICS } from '../app/js/content.js';
 import { CIRCUITS, symbolCircuit } from '../app/js/circuits.js';
 import { circuitSvg } from '../app/js/svg.js';
+import { TEXT as EXPLAIN } from '../app/js/explainers.js';
 import { balloonsSvg, bandgenSvg, electroscopeSvg, waterSvg, waterAt, latticeSvg, woodSvg } from '../app/js/demos.js';
 import { makeTasks, truthTable, shuffle, optionOrder, lampCurrent, wireCurrent, fmt, fmtFixed } from '../app/js/model.js';
 
@@ -35,6 +36,8 @@ const DEMO_INTRO = {
   water: 'Ein geschlossener Wasserkreislauf besteht aus einer Pumpe, Rohren, einem Wasserrad und einem Ventil. Er wird mit einem Stromkreis aus Batterie, Leitungen, Lampe und Schalter verglichen.',
   kennlinie: 'An einen Konstantandraht und an eine Glühlampe werden nacheinander verschiedene Spannungen angelegt. Gemessen wird jeweils die Stromstärke.',
 };
+// Erklärbilder: auf Papier der Erklärtext aus der App
+for (const [k, v] of Object.entries(EXPLAIN)) DEMO_INTRO[k] = v.join(' ');
 const KENN_U = [0, 2, 4, 6, 8, 10, 12];
 
 /* ---------- Skizzen (dieselben Zeichnungen wie in der App) ---------- */
@@ -100,7 +103,7 @@ function kennGrid(withCurves) {
 
 /* ---------- Übungen in Blatt- und Lösungsform ---------- */
 function render(ex, rand) {
-  const head = `<h3>${esc(ex.title.replace(/^(Experiment|Animation|Vorhersage): /, ''))}</h3>`;
+  const head = `<h3>${esc(ex.title.replace(/^(Experiment|Animation|Vorhersage|Erklärbild): /, ''))}</h3>`;
   switch (ex.type) {
     case 'quiz': {
       const orders = ex.questions.map(q => optionOrder(q, rand));

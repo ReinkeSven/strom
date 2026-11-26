@@ -2,6 +2,20 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.9.0] - 2026-11-26
+
+### Hinzugefügt
+- Fünf Erklärbilder mit höchstens drei Sätzen, jeweils am Anfang des Themas, mit Kontrollfragen:
+  - Zoom-Reise vom Kupferkabel über das Metallgitter zum Atom (Atome und Leiter)
+  - Fahrradkette: Der Stromkreis ist überall voll, alles bewegt sich gleichzeitig, nichts wird verbraucht (Stromkreis)
+  - Zählstelle wie an der Autobahn: Stromstärke = Elektronen pro Sekunde (Stromstärke)
+  - Rucksackmodell: Spannung = wie viel Energie jedes Elektron mitbekommt (Spannung)
+  - Schulflur: Widerstand bremst, heiße Atomrümpfe zappeln stärker (U-I-Kennlinien)
+- Erklärtexte auch auf den PDF-Blättern
+
+### Geändert
+- Missionen trennen ein Experiment nie mehr von seinen Fragen
+
 ## [0.8.3] - 2026-11-26
 
 ### Geändert

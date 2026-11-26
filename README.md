@@ -8,7 +8,7 @@ Lern-App zur Elektrizitätslehre für die 8. Klasse Gymnasium, als installierbar
 
 ## Stand
 
-Neun Themen mit Merksätzen und 23 Übungen: interaktive Experimente, Quiz nach dem Muster Vorhersagen, Beobachten, Erklären mit berechneten Schaltplänen, Sortieren, Memory, Wahrheitstabellen und ein Bauauftrag. Gerechnet wird bewusst nicht.
+Neun Themen mit Merksätzen und 28 Übungen, darunter fünf Erklärbilder: interaktive Experimente, Quiz nach dem Muster Vorhersagen, Beobachten, Erklären mit berechneten Schaltplänen, Sortieren, Memory, Wahrheitstabellen und ein Bauauftrag. Gerechnet wird bewusst nicht.
 
 ## Fokus-Modus
 

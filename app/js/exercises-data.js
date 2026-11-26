@@ -55,7 +55,16 @@ export const EX = {
 
   modell: [
     {
-      id: 'modell-elektronen', type: 'demo', after: [0, 1, 3], demo: 'electrons', title: 'Animation: Elektronen im Metall',
+      id: 'modell-zoom', type: 'demo', after: [0], demo: 'zoom', title: 'Erklärbild: Vom Kabel zum Atom',
+      questions: [
+        { q: 'Woraus besteht ein Atom?', opts: ['Aus einem positiven Kern und negativen Elektronen', 'Aus einem negativen Kern und positiven Elektronen', 'Nur aus vielen gleich geladenen kleinen Teilchen'], a: 0,
+          why: 'Der Kern in der Mitte ist positiv, die Elektronen außen herum sind negativ. Zusammen ist das Atom neutral.' },
+        { q: 'Was ist im Metall zwischen den Atomrümpfen unterwegs?', opts: ['Freie Elektronen', 'Freie Atomkerne', 'Kleine Luftbläschen'], a: 0,
+          why: 'In Metallen sind einige Elektronen nicht fest an ein Atom gebunden. Sie können durch das ganze Metall wandern.' },
+      ],
+    },
+    {
+      id: 'modell-elektronen', type: 'demo', after: [1, 3], demo: 'electrons', title: 'Animation: Elektronen im Metall',
       questions: [
         { q: 'Was bewegt sich in einem Metalldraht, wenn Strom fließt?', opts: ['Die Atomrümpfe', 'Die freien Elektronen', 'Beide gleich schnell'], a: 1,
           why: 'Die Atomrümpfe sitzen fest im Gitter und schwingen nur auf der Stelle. Die freien Elektronen bewegen sich zusätzlich in eine Richtung.' },
@@ -90,11 +99,20 @@ export const EX = {
 
   stromkreis: [
     {
+      id: 'kreis-kette', type: 'demo', after: [2], demo: 'chain', title: 'Erklärbild: Die Fahrradkette',
+      questions: [
+        { q: 'Du trittst in die Pedale. Wann bewegt sich das Kettenglied an der Lampe?', opts: ['Sofort, alle Glieder bewegen sich gleichzeitig', 'Erst wenn ein Glied vom Pedal bis dorthin kommt', 'Gar nicht, nur die Glieder am Pedal bewegen sich'], a: 0,
+          why: 'Die Kette ist überall voll. Wer am Pedal schiebt, schiebt die ganze Kette. Genauso setzen sich im Stromkreis alle Elektronen gleichzeitig in Bewegung.' },
+        { q: 'Werden in der Lampe Kettenglieder verbraucht?', opts: ['Nein, die Kette läuft vollständig weiter', 'Ja, ein paar Glieder bleiben in der Lampe', 'Ja, deshalb muss man Glieder nachfüllen'], a: 0,
+          why: 'Die Lampe bekommt nur Schwung, also Energie. Genauso wird im Stromkreis kein Strom verbraucht, sondern Energie umgewandelt.' },
+      ],
+    },
+    {
       id: 'kreis-memory', type: 'memory', title: 'Schaltzeichen-Memory',
       pairs: [['bat', 'Batterie'], ['lamp', 'Lampe'], ['switch', 'Schalter'], ['res', 'Widerstand'], ['amp', 'Amperemeter'], ['volt', 'Voltmeter'], ['motor', 'Motor']],
     },
     {
-      id: 'kreis-leuchtet', type: 'quiz', after: [0, 1, 2], title: 'Leuchtet die Lampe?',
+      id: 'kreis-leuchtet', type: 'quiz', after: [0, 1], title: 'Leuchtet die Lampe?',
       questions: [
         { q: 'Leuchtet die Lampe?', fig: 'einfach', opts: yesNo, a: 0,
           why: 'Der Stromkreis ist geschlossen: vom Pluspol über die Lampe zurück zum Minuspol.' },
@@ -112,7 +130,14 @@ export const EX = {
 
   stromstaerke: [
     {
-      id: 'strom-vorhersage', type: 'quiz', after: [3, 0, 1], title: 'Vorhersage: Strom vor und hinter der Lampe',
+      id: 'strom-zaehlstelle', type: 'demo', after: [0], demo: 'counter', title: 'Erklärbild: Die Zählstelle',
+      questions: [
+        { q: 'Was gibt die Stromstärke an?', opts: ['Wie viele Elektronen pro Sekunde vorbeikommen', 'Wie schnell ein einzelnes Elektron fliegt', 'Wie viele Elektronen im ganzen Draht sind'], a: 0,
+          why: 'Gezählt wird an einer Stelle: Wie viel Ladung kommt dort in einer Sekunde vorbei? Je mehr, desto größer die Stromstärke.' },
+      ],
+    },
+    {
+      id: 'strom-vorhersage', type: 'quiz', after: [3, 1], title: 'Vorhersage: Strom vor und hinter der Lampe',
       questions: [
         { q: 'A1 misst die Stromstärke vor der Lampe, A2 dahinter. Was zeigt A2 im Vergleich zu A1?', fig: 'amp_vor_nach', opts: ['Mehr', 'Gleich viel', 'Weniger', 'Null'], a: 1,
           why: 'Im unverzweigten Stromkreis ist die Stromstärke überall gleich. So viel Ladung, wie in die Lampe hineinfließt, fließt auch wieder heraus.' },
@@ -135,7 +160,16 @@ export const EX = {
 
   spannung: [
     {
-      id: 'wasser-modell', type: 'demo', after: [4, 0], demo: 'water', title: 'Wassermodell: Spannung, Stromstärke, Widerstand',
+      id: 'spannung-rucksack', type: 'demo', after: [0], demo: 'backpack', title: 'Erklärbild: Das Rucksackmodell',
+      questions: [
+        { q: 'Was passiert im Rucksackmodell an der Lampe?', opts: ['Die Elektronen geben Energie aus dem Rucksack ab', 'Die Elektronen werden in der Lampe verbraucht', 'Die Rucksäcke werden in der Lampe neu gefüllt'], a: 0,
+          why: 'Die Lampe wandelt die Energie in Licht und Wärme um. Die Elektronen laufen mit leerem Rucksack weiter zur Batterie.' },
+        { q: 'Was bedeutet eine höhere Spannung im Rucksackmodell?', opts: ['Jeder Rucksack wird mit mehr Energie gefüllt', 'Es gibt mehr Elektronen im ganzen Stromkreis', 'Die Elektronen laufen mit leeren Rucksäcken'], a: 0,
+          why: 'Die Spannung sagt, wie viel Energie die Batterie jedem Elektron mitgibt. Mehr Energie pro Elektron lässt die Lampe heller leuchten.' },
+      ],
+    },
+    {
+      id: 'wasser-modell', type: 'demo', after: [4], demo: 'water', title: 'Wassermodell: Spannung, Stromstärke, Widerstand',
       questions: [
         { q: 'Was entspricht im Wassermodell der Spannung?', opts: ['Der Druckunterschied, den die Pumpe erzeugt', 'Die Wassermenge, die pro Sekunde fließt', 'Der Durchmesser der Rohre im Kreislauf'], a: 0,
           why: 'Die Pumpe erzeugt einen Druckunterschied und treibt so das Wasser an. Genauso treibt die Spannung der Batterie die Elektronen an.' },
@@ -192,7 +226,7 @@ export const EX = {
 
   widerstand: [
     {
-      id: 'widerstand-kennlinie', type: 'demo', after: [0, 1, 2], demo: 'kennlinie', title: 'Experiment: Kennlinien messen',
+      id: 'widerstand-kennlinie', type: 'demo', after: [0, 1], demo: 'kennlinie', title: 'Experiment: Kennlinien messen',
       questions: [
         { q: 'Wie sieht die Kennlinie des Konstantandrahts aus?', opts: ['Eine Ursprungsgerade', 'Eine Kurve, die immer flacher wird', 'Eine waagerechte Linie'], a: 0,
           why: 'Doppelte Spannung, doppelte Stromstärke: Stromstärke und Spannung sind proportional zueinander.' },
@@ -200,6 +234,15 @@ export const EX = {
           why: 'Die Stromstärke steigt weiter, aber immer langsamer. Die Lampe bremst den Strom umso stärker, je höher die Spannung ist.' },
         { q: 'Warum bremst die Glühlampe den Strom bei hoher Spannung stärker?', opts: ['Der Glühdraht wird heiß', 'Die Batterie wird leer', 'Das Glas wird dunkler'], a: 0,
           why: 'In heißem Metall schwingen die Atomrümpfe stärker und behindern die freien Elektronen mehr. Beim Konstantandraht passiert das kaum, weil er sich bei diesen Strömen nur wenig erwärmt.' },
+      ],
+    },
+    {
+      id: 'widerstand-flur', type: 'demo', after: [2], demo: 'corridor', title: 'Erklärbild: Der Schulflur',
+      questions: [
+        { q: 'Warum kommen bei heißem Draht weniger Elektronen pro Sekunde durch?', opts: ['Die Atomrümpfe zappeln stärker und sind öfter im Weg', 'Die Elektronen werden durch die Hitze langsam müde', 'Durch die Hitze verschwinden einige der Elektronen'], a: 0,
+          why: 'Die Elektronen stoßen öfter mit den zappelnden Atomrümpfen zusammen. Der Strom wird stärker gebremst, der Widerstand ist größer.' },
+        { q: 'Was bedeutet ein großer Widerstand?', opts: ['Der Strom wird stark gebremst', 'Der Strom wird stark beschleunigt', 'Die Spannung wird stark erhöht'], a: 0,
+          why: 'Ein großer Widerstand hemmt den Strom: Bei gleicher Spannung fließen weniger Elektronen pro Sekunde.' },
       ],
     },
   ],

@@ -120,6 +120,7 @@ test('Missionen: jeder Merksatz und jede Frage genau einmal, Merksatz direkt nac
       assert.ok(p.length >= 3 && p.length <= 10, `${t.id}: Teil mit ${p.length} Schritten`);
       assert.notEqual(p[0].kind, 'merk', `${t.id}: Teil beginnt mit Merksatz`);
       assert.notEqual(p[p.length - 1].kind, 'demo', `${t.id}: Experiment am Teilende`);
+      assert.ok(!(p[0].kind === 'question' && p[0].ofDemo && p[0].qi > 0), `${t.id}: Experiment von seinen Fragen getrennt`);
     }
   }
 });
@@ -170,6 +171,8 @@ test('Stadt: Haus leuchtet ab 60 %, Stern bei fehlerfrei, Gebäude wenn das Them
   assert.ok(c.houses.find(h => h.exId === 'kreis-leuchtet').perfect);
   assert.equal(c.built, 0);
   S = recordExercise(S, 'kreis-memory', 7, 20, T0);   // Memory zählt unabhängig von der Zahl der Versuche
+  assert.equal(cityState(S).landmarks.find(l => l.topicId === 'stromkreis').built, false);
+  S = recordExercise(S, 'kreis-kette', 2, 2, T0);
   assert.equal(cityState(S).landmarks.find(l => l.topicId === 'stromkreis').built, true);
 });
 

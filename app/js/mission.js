@@ -103,7 +103,7 @@ export function mountMission(el, topic, part, hooks) {
     } else if (st.kind === 'demo') {
       // Weiter erst nach ein paar eigenen Versuchen
       const ex = exById(st.exId);
-      body.innerHTML = `<h2 class="mh">${esc(ex.title.replace(/^(Experiment|Animation): /, ''))}</h2>
+      body.innerHTML = `<h2 class="mh">${esc(ex.title.replace(/^(Experiment|Animation|Erklärbild): /, ''))}</h2>
         <p class="mhint">Probier mindestens ${DEMO_MIN} Sachen aus. <span class="tries">(0 von ${DEMO_MIN})</span></p><section class="card demo"></section>`;
       const stop = mountDemo(body.querySelector('.demo'), ex.demo);
       let tries = 0;

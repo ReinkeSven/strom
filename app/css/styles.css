@@ -329,3 +329,38 @@ body.in-mission #view { padding-bottom: calc(24px + env(safe-area-inset-bottom))
 .mpick { flex: 1; display: flex; align-items: center; gap: 12px; border: 0; background: none; padding: 0; text-align: left; cursor: pointer; min-width: 0; }
 .mpick .txt { display: flex; flex-direction: column; }
 .mpick small { color: var(--muted); }
+
+/* ---------- Erklärbilder ---------- */
+.explain { background: #eef3ff; border-radius: 12px; padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+.explain p { margin: 0; font-size: 16px; line-height: 1.4; }
+.demo .scene .cap { margin: 6px 0 0; text-align: center; font-weight: 700; color: var(--navy); }
+.demo-svg .pm { fill: #fff; font-size: 14px; }
+.demo-svg .pm.big { font-size: 22px; }
+.demo-svg .orbit { fill: none; stroke: rgba(42, 111, 219, .35); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.demo-svg .spin { transform-origin: 160px 90px; animation: spin 4s linear infinite; }
+.demo-svg .spin.s2 { animation-duration: 7s; animation-direction: reverse; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.demo-svg .drift { animation: drift 3s linear infinite; }
+@keyframes drift { 0% { transform: translate(0, 0); } 25% { transform: translate(9px, -6px); } 50% { transform: translate(-4px, 7px); } 75% { transform: translate(-8px, -3px); } 100% { transform: translate(0, 0); } }
+.zoomlv { animation: zoomin .35s ease-out; }
+@keyframes zoomin { from { transform: scale(.85); opacity: .3; } to { transform: scale(1); opacity: 1; } }
+.demo-svg .track { fill: none; stroke: #c7cbe0; stroke-width: 10; }
+.demo-svg .link { fill: #6f7891; }
+.demo-svg .mark { fill: #ff8c1a; }
+.demo-svg .gear { fill: #fff; stroke: var(--navy); stroke-width: 3; }
+.demo-svg .ped { fill: var(--navy); }
+.demo-svg .glow { fill: var(--volt); filter: blur(6px); }
+.demo-svg .bulb { fill: #fff3b0; stroke: var(--navy); stroke-width: 2.5; }
+.demo-svg .lbl2 { font: 700 11px Figtree, sans-serif; fill: var(--navy); text-anchor: middle; }
+.demo-svg .wireband { fill: #f3dcc7; stroke: #d98b4a; stroke-width: 2; }
+.demo-svg .gate { stroke: var(--navy); stroke-width: 3; stroke-dasharray: 5 4; }
+.demo-svg .sign { fill: var(--navy); }
+.demo-svg .signt { fill: #fff; font: 800 13px Figtree, sans-serif; text-anchor: middle; }
+.demo-svg .els circle { fill: #2a6fdb; }
+.demo-svg .batt { fill: var(--navy); }
+.demo-svg .bt { fill: #fff; font: 800 13px Figtree, sans-serif; text-anchor: middle; }
+.demo-svg .eb { fill: #2a6fdb; }
+.demo-svg .bag { fill: #fff; stroke: #8a5a2b; stroke-width: 1.5; }
+.demo-svg .fill { fill: #ffb703; }
+.meterline { font-weight: 700; margin: 6px 0 0; }
+@media (prefers-reduced-motion: reduce) { .demo-svg .spin, .demo-svg .drift, .zoomlv { animation: none; } }

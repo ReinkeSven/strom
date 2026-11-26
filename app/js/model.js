@@ -90,12 +90,14 @@ export function missionParts(topic, max = 6) {
   const shown = new Set();
   for (const ex of topic.exercises) {
     if (ex.type === 'demo') steps.push({ kind: 'demo', exId: ex.id });
-    if (ex.questions) ex.questions.forEach((_, qi) => steps.push({ kind: 'question', exId: ex.id, qi, last: qi === ex.questions.length - 1 }));
+    if (ex.questions) ex.questions.forEach((_, qi) => steps.push({ kind: 'question', exId: ex.id, qi, last: qi === ex.questions.length - 1, ofDemo: ex.type === 'demo' }));
     else if (ex.type !== 'demo') steps.push({ kind: 'task', exId: ex.id });
     for (const i of ex.after || []) { steps.push({ kind: 'merk', i }); shown.add(i); }
   }
   topic.merk.forEach((_, i) => { if (!shown.has(i)) steps.push({ kind: 'merk', i }); });
-  const legal = k => k < steps.length - 1 && steps[k + 1].kind !== 'merk' && steps[k].kind !== 'demo';
+  // Trennen erlaubt, außer vor einem Merksatz und innerhalb eines Experiments samt seiner Fragen
+  const legal = k => k < steps.length - 1 && steps[k + 1].kind !== 'merk' && steps[k].kind !== 'demo'
+    && !(steps[k].kind === 'question' && steps[k].ofDemo && !steps[k].last);
   const parts = [[]];
   steps.forEach((st, k) => {
     const cur = parts[parts.length - 1];

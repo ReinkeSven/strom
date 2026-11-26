@@ -269,3 +269,28 @@ test('ADHD-Mode: Themen in beliebiger Reihenfolge wählbar', async ({ page }) =>
   await page.click('[data-mission="sicherheit:1"]');
   await expect(page.locator('.mcount')).toContainText('1/');
 });
+
+for (const [topic, ex, act] of [
+  ['modell', 'modell-zoom', 'in'], ['stromkreis', 'kreis-kette', 'pedal'], ['stromstaerke', 'strom-zaehlstelle', null],
+  ['spannung', 'spannung-rucksack', null], ['widerstand', 'widerstand-flur', null],
+]) {
+  test(`Erklärbild ${ex} läuft und hat Fragen`, async ({ page }) => {
+    await openEx(page, topic, ex);
+    await expect(page.locator('#ex .explain p')).toHaveCount(3);
+    if (act) await page.click(`#ex [data-d=${act}]`);
+    else await page.locator('#ex [data-u]').fill('2');
+    await page.waitForTimeout(600);
+    await page.click('#ex .demo-quiz [data-opt="0"]');
+    await expect(page.locator('#ex .demo-quiz .why.ok')).toBeVisible();
+  });
+}
+
+test('Erklärbild Zählstelle: mehr Stromstärke, mehr Elektronen pro Sekunde', async ({ page }) => {
+  await openEx(page, 'stromstaerke', 'strom-zaehlstelle');
+  await page.waitForTimeout(3200);
+  const low = parseFloat((await page.locator('#ex .signt').textContent()).replace(',', '.'));
+  await page.locator('#ex [data-u]').fill('3');
+  await page.waitForTimeout(6000);   // Messfenster 3 s, dazu der Weg bis zur Zählstelle
+  const high = parseFloat((await page.locator('#ex .signt').textContent()).replace(',', '.'));
+  expect(high).toBeGreaterThan(low * 1.5);
+});
