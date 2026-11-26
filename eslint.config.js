@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import globals from 'globals';
 
 export default [
-  { ignores: ['node_modules/', 'test-results/', 'playwright-report/'] },
+  { ignores: ['node_modules/', 'test-results/', 'playwright-report/', 'dist/'] },
   js.configs.recommended,
   {
     files: ['app/js/**/*.js'],
@@ -13,7 +13,7 @@ export default [
     languageOptions: { ecmaVersion: 2022, sourceType: 'script', globals: globals.serviceworker },
   },
   {
-    files: ['tests/**/*.js', 'tests/**/*.mjs', 'eslint.config.js', 'playwright.config.js'],
+    files: ['tests/**/*.js', 'tests/**/*.mjs', 'tools/**/*.mjs', 'eslint.config.js', 'playwright.config.js'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals: globals.node },
   },
   {

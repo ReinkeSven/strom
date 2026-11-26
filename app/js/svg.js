@@ -89,6 +89,7 @@ export function circuitSvg(c, { sim = false, st = {}, mode = null, labels = true
     if (type === 'switch' && o.label && mode === 'test') top += `<circle class="tapzone" cx="${r1(mx)}" cy="${r1(my)}" r="18" data-sw="${o.label}"/>`;
     if (type === 'slot') {
       if (mode === 'build') {
+        if (labels) top += `<text class="lbl" x="${r1(horiz ? mx : mx + 22)}" y="${r1(horiz ? my - 22 : my + 4)}" text-anchor="${anchor}">${o.label}</text>`;
         top += `<g class="slot${eff.kind === 'switch' ? ' filled' : ''}" data-slot="${o.label}"><circle cx="${r1(mx)}" cy="${r1(my)}" r="16"/>`
           + (eff.kind === 'switch' ? '' : `<text x="${r1(mx)}" y="${r1(my + 5)}">+</text>`) + '</g>';
       } else if (mode === 'test' && eff.kind === 'switch') {

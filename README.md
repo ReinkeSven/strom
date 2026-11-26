@@ -44,6 +44,14 @@ npm run test:e2e   # Browser-Tests (einmalig vorher: npx playwright install chro
 npm start          # lokaler Server auf http://localhost:8080
 ```
 
+### Übungsblätter (PDF)
+
+```bash
+npm run worksheets   # dist/Uebungsblaetter.pdf und dist/Loesungen.pdf (DIN A4)
+```
+
+Erzeugt aus denselben Inhalten Übungsblätter zum Ausdrucken, ein Blatt je Thema, und einen getrennten Lösungsschlüssel. Experimente werden auf Papier beschrieben statt ausprobiert, Rechenaufgaben sind fest vorgegeben (fester Zufallsstartwert), damit Blätter und Lösungen zusammenpassen.
+
 ### Aufbau
 
 ```
@@ -61,6 +69,7 @@ app/               ausgelieferte Web-App (wird so auf GitHub Pages veröffentlic
   sw.js            Service Worker (Offline-Cache)
   manifest.webmanifest
   icons/
+tools/worksheets.mjs  Generator für die PDF-Übungsblätter
 tests/             Unit-Tests (node:test)
 tests/e2e/         Browser-Tests im Handy-Format (Playwright)
 .github/workflows  CI (Lint, Unit- und Browser-Tests) und Deployment auf GitHub Pages

@@ -1,6 +1,6 @@
 {
   "name": "strom-labor",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "private": true,
   "description": "Lern-App zur Elektrizitätslehre (8. Klasse) als installierbare Web-App",
   "type": "module",
@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "test:e2e": "playwright test",
     "check": "npm run lint && npm test",
-    "start": "npx --yes http-server app -c-1 -p 8080"
+    "start": "npx --yes http-server app -c-1 -p 8080",
+    "worksheets": "node tools/worksheets.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

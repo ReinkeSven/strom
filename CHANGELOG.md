@@ -2,6 +2,12 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.4.2] - 2026-11-26
+
+### Hinzugefügt
+- Generator für Übungsblätter und Lösungsschlüssel als PDF (DIN A4): `npm run worksheets`
+- Bauplätze im Bauauftrag sind beschriftet (S1 bis S3)
+
 ## [0.4.1] - 2026-11-22
 
 ### Geändert
