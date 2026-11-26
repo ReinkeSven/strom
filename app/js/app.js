@@ -69,17 +69,22 @@ function focusHomeView() {
   const nx = nextMission(S);
   const nt = nx && topicById(nx.topicId);
   const cta = nx
-    ? `<button class="btn primary big cta" data-mission="${nx.topicId}:${nx.part}"><small>Weiter mit</small>${esc(nt.title)} · Teil ${nx.part + 1}</button>`
+    ? `<button class="btn primary big cta" data-mission="${nx.topicId}:${nx.part}"><small>Vorschlag</small>${esc(nt.title)} · Teil ${nx.part + 1}</button>
+       <p class="small free">Oder such dir unten selbst ein Thema aus. Die Reihenfolge ist egal.</p>`
     : '<section class="card"><h3>Alles geschafft!</h3><p>Du kannst jede Mission wiederholen.</p></section>';
   const items = TOPICS.map((t, i) => {
     const parts = missionParts(t);
     const done = new Set(S.missions[t.id] || []);
     const dots = parts.map((_, k) => `<button class="mdot${done.has(k) ? ' on' : ''}" data-mission="${t.id}:${k}" aria-label="${esc(t.title)} Teil ${k + 1}${done.has(k) ? ', geschafft' : ''}">${k + 1}</button>`).join('');
-    return `<li class="mrow${done.size === parts.length ? ' done' : ''}"><span class="num">${done.size === parts.length ? '✓' : i + 1}</span>
-      <span class="txt"><b>${esc(t.title)}</b></span><span class="dots">${dots}</span></li>`;
+    // Antippen der Zeile startet den nächsten offenen Teil dieses Themas, die Punkte einen bestimmten Teil
+    const open = parts.findIndex((_, k) => !done.has(k));
+    return `<li class="mrow${done.size === parts.length ? ' done' : ''}">
+      <button class="mpick" data-mission="${t.id}:${open < 0 ? 0 : open}"><span class="num">${done.size === parts.length ? '✓' : i + 1}</span>
+      <span class="txt"><b>${esc(t.title)}</b><small>${parts.length === 1 ? '1 Teil' : `${parts.length} Teile`} · ${done.size === parts.length ? 'geschafft' : open < 0 ? '' : `weiter mit Teil ${open + 1}`}</small></span></button>
+      <span class="dots">${dots}</span></li>`;
   }).join('');
   return `<div class="hero"><h1 class="sr-only">Papas Physik Punishment</h1><div id="heroanim"></div><p class="stars">⭐ ${stars(S)}</p></div>
-    ${focusSwitch()}${cta}${cityCard()}<ol class="missions">${items}</ol>`;
+    ${focusSwitch()}${cta}<ol class="missions">${items}</ol>${cityCard()}`;
 }
 
 function topicView(id) {

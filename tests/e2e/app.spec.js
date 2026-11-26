@@ -259,3 +259,13 @@ test('Spielstand zurücksetzen: mit Rückfrage, Einstellung ADHD-Mode bleibt', a
   await page.click('[data-tab=home]');
   await expect(page.locator('.stars')).toHaveText('⭐ 0');
 });
+
+test('ADHD-Mode: Themen in beliebiger Reihenfolge wählbar', async ({ page }) => {
+  await page.goto('/');
+  await page.click('.fswitch');
+  await page.click('.mrow:nth-child(7) .mpick');
+  await expect(page.locator('.mission')).toBeVisible();
+  await page.click('[data-m=exit]');
+  await page.click('[data-mission="sicherheit:1"]');
+  await expect(page.locator('.mcount')).toContainText('1/');
+});

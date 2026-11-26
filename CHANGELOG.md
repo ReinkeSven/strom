@@ -2,6 +2,11 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.8.2] - 2026-11-26
+
+### Geändert
+- ADHD-Mode: Themen frei wählbar – ganze Zeile antippen startet den nächsten offenen Teil, Hinweis „Die Reihenfolge ist egal“, großer Knopf heißt jetzt „Vorschlag“
+
 ## [0.8.1] - 2026-11-26
 
 ### Hinzugefügt

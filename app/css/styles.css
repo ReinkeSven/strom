@@ -323,3 +323,9 @@ body.in-mission #view { padding-bottom: calc(24px + env(safe-area-inset-bottom))
 /* Zurücksetzen */
 .btn.warn { border-color: var(--err); color: var(--err); }
 .danger h3 { color: var(--err); }
+
+/* freie Wahl der Missionen */
+.free { margin: -4px 0 0; text-align: center; }
+.mpick { flex: 1; display: flex; align-items: center; gap: 12px; border: 0; background: none; padding: 0; text-align: left; cursor: pointer; min-width: 0; }
+.mpick .txt { display: flex; flex-direction: column; }
+.mpick small { color: var(--muted); }
