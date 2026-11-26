@@ -54,7 +54,7 @@ function homeView() {
 function focusSwitch() {
   const on = S.settings.focus;
   return `<label class="fswitch"><input type="checkbox" data-focus ${on ? 'checked' : ''}>
-    <span class="track"><span class="knob"></span></span><span><b>Fokus-Modus</b><small>${on ? 'kleine Schritte, eins nach dem anderen' : 'aus'}</small></span></label>`;
+    <span class="track"><span class="knob"></span></span><span><b>Skibbidy ADHD Mode</b><small>${on ? 'kleine Schritte, eins nach dem anderen' : 'aus'}</small></span></label>`;
 }
 
 /** Startseite im Fokus-Modus: ein großer „Weiter“-Knopf, darunter die Missionen mit Fortschrittspunkten */

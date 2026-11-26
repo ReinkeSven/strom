@@ -12,7 +12,7 @@ Neun Themen mit Merksätzen und 24 Übungen: interaktive Experimente, Quiz nach 
 
 ## Fokus-Modus
 
-Schalter auf der Startseite. Ist er an, wird jedes Thema in Missionen aus 5 bis 10 kleinen Schritten zerlegt: eine Frage, ein Experiment oder ein Merksatz pro Bildschirm, mit Fortschrittsbalken und Abschluss. Merksätze erscheinen erst nach der passenden Übung (Feld `after` in `exercises-data.js`). Die Inhalte sind dieselben wie im normalen Modus.
+Schalter auf der Startseite, beschriftet mit „Skibbidy ADHD Mode“. Ist er an, wird jedes Thema in Missionen aus 5 bis 10 kleinen Schritten zerlegt: eine Frage, ein Experiment oder ein Merksatz pro Bildschirm, mit Fortschrittsbalken und Abschluss. Merksätze erscheinen erst nach der passenden Übung (Feld `after` in `exercises-data.js`). Die Inhalte sind dieselben wie im normalen Modus.
 
 ## Themen
 
