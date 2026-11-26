@@ -84,6 +84,16 @@ export function shuffle(arr, rand = Math.random) {
 }
 const pick = (arr, rand) => arr[Math.floor(rand() * arr.length)];
 
+/**
+ * Anzeigereihenfolge der Antworten einer Frage (Indizes in q.opts).
+ * Kurze Antworten mit natürlicher Reihenfolge (Ja/Nein, heller/gleich/dunkler, Zahlenwerte) bleiben stehen.
+ */
+export function optionOrder(q, rand = Math.random) {
+  const idx = q.opts.map((_, k) => k);
+  const ordered = q.opts.every(o => typeof o === 'string' && o.length <= 12);
+  return ordered ? idx : shuffle(idx, rand);
+}
+
 /** Zahl deutsch formatiert, höchstens `dec` Nachkommastellen, ohne überflüssige Nullen */
 export function fmt(x, dec = 3) {
   const f = 10 ** dec;

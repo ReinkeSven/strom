@@ -1,7 +1,7 @@
 // Übungsansichten: jede Übung verwaltet ihren eigenen DOM-Bereich, damit Experimente beim Antworten weiterlaufen.
 import { CIRCUITS, symbolCircuit } from './circuits.js';
 import { circuitSvg } from './svg.js';
-import { shuffle, makeTasks, checkAnswer, checkBuild, truthTable, fmt } from './model.js';
+import { shuffle, optionOrder, makeTasks, checkAnswer, checkBuild, truthTable, fmt } from './model.js';
 import { mountDemo } from './demos.js';
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -35,11 +35,13 @@ function resultView(score, total, text = `${score} von ${total} richtig`) {
 function mountQuiz(el, ex, onFinish, intro = '') {
   let i = 0, picked = null, score = 0;
   const qs = ex.questions;
+  let orders = qs.map(q => optionOrder(q));
   const render = () => {
     if (i >= qs.length) { el.innerHTML = intro + resultView(score, qs.length); return; }
     const q = qs[i];
     const done = picked !== null;
-    const opts = q.opts.map((o, k) => {
+    const opts = orders[i].map(k => {
+      const o = q.opts[k];
       const state = !done ? '' : k === q.a ? ' right' : k === picked ? ' wrong' : ' faded';
       const inner = typeof o === 'string' ? esc(o) : fig(o.fig, done);
       return `<button class="opt${typeof o === 'string' ? '' : ' figopt'}${state}" data-opt="${k}" ${done ? 'disabled' : ''}>${inner}</button>`;
@@ -56,7 +58,7 @@ function mountQuiz(el, ex, onFinish, intro = '') {
   const off = delegate(el, {
     opt: k => { if (picked !== null) return; picked = Number(k); if (picked === qs[i].a) score++; render(); },
     next: () => { i++; picked = null; if (i >= qs.length) onFinish(score, qs.length); render(); },
-    'act-ex': () => { i = 0; picked = null; score = 0; render(); },
+    'act-ex': () => { i = 0; picked = null; score = 0; orders = qs.map(q => optionOrder(q)); render(); },
   });
   render();
   return off;

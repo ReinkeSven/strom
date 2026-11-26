@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { TOPICS } from '../app/js/content.js';
 import { CIRCUITS } from '../app/js/circuits.js';
 import { DEMO_IDS } from '../app/js/demos.js';
-import { GENERATORS, freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, recordExercise, exerciseProgress } from '../app/js/model.js';
+import { GENERATORS, optionOrder, freshState, migrate, encodeBackup, decodeBackup, visit, setRead, progress, recordExercise, exerciseProgress } from '../app/js/model.js';
 
 const T0 = new Date('2026-11-22T10:00:00').getTime();
 
@@ -83,4 +83,27 @@ test('Backup: Hin- und Rückweg mit Umlauten, ungültige Codes werden abgelehnt'
   assert.equal(back.note, 'Ω und Größe');
   assert.throws(() => decodeBackup('ABC'), /format/);
   assert.throws(() => decodeBackup('STROM1:' + btoa('{}')), /inhalt/);
+});
+
+test('Ankreuzfragen: richtige Antwort ist nicht auffällig länger als die falschen', () => {
+  for (const t of TOPICS) for (const e of t.exercises) for (const q of e.questions || []) {
+    if (typeof q.opts[0] !== 'string') continue;
+    const L = q.opts.map(o => o.length);
+    const longestWrong = Math.max(...L.filter((_, k) => k !== q.a));
+    assert.ok(L[q.a] <= longestWrong * 1.12 || L[q.a] - longestWrong <= 5, `${e.id}: ${q.q}`);
+  }
+});
+
+test('Antwortreihenfolge: Permutation, kurze geordnete Antworten bleiben stehen', () => {
+  let seed = 7;
+  const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const long = { opts: ['eine längere Antwort A', 'eine längere Antwort B', 'eine längere Antwort C'] };
+  const seen = new Set();
+  for (let k = 0; k < 30; k++) {
+    const o = optionOrder(long, rand);
+    assert.deepEqual([...o].sort(), [0, 1, 2]);
+    seen.add(o.join(''));
+  }
+  assert.ok(seen.size > 1);
+  assert.deepEqual(optionOrder({ opts: ['heller', 'gleich hell', 'dunkler'] }, rand), [0, 1, 2]);
 });

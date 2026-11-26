@@ -2,6 +2,12 @@
 
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [0.4.3] - 2026-11-26
+
+### Geändert
+- Ankreuzfragen überarbeitet: Die richtige Antwort ist nicht mehr an ihrer Länge zu erkennen (22 Fragen mit neuen, gleich langen Antwortmöglichkeiten); ein Test wacht darüber
+- Antwortreihenfolge wird gemischt: in der App bei jedem Durchgang neu, auf den PDF-Blättern fest; kurze Antworten mit natürlicher Reihenfolge bleiben stehen
+
 ## [0.4.2] - 2026-11-26
 
 ### Hinzugefügt

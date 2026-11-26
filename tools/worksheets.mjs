@@ -5,7 +5,7 @@ import { chromium } from '@playwright/test';
 import { TOPICS } from '../app/js/content.js';
 import { CIRCUITS, symbolCircuit } from '../app/js/circuits.js';
 import { circuitSvg } from '../app/js/svg.js';
-import { makeTasks, truthTable, shuffle, lampCurrent, wireCurrent, fmt, fmtFixed } from '../app/js/model.js';
+import { makeTasks, truthTable, shuffle, optionOrder, lampCurrent, wireCurrent, fmt, fmtFixed } from '../app/js/model.js';
 
 const OUT = new URL('../dist/', import.meta.url);
 const APP_URL = 'reinkesven.github.io/strom';
@@ -41,17 +41,20 @@ const box = '<span class="box"></span>';
 const lines = n => `<div class="lines">${'<div class="line"></div>'.repeat(n)}</div>`;
 const fig = (id, opts = {}) => `<div class="fig">${circuitSvg(CIRCUITS[id], opts)}</div>`;
 
-function mcQuestion(q, n) {
+// order: Anzeigereihenfolge (Indizes in q.opts), auf Blatt und Lösung identisch
+function mcQuestion(q, n, order) {
   const figOpts = q.opts.some(o => typeof o !== 'string');
+  const shown = order.map(k => q.opts[k]);
   const opts = figOpts
-    ? `<div class="figopts">${q.opts.map((o, k) => `<div class="figopt">${circuitSvg(CIRCUITS[o.fig])}<div>${box} ${FIG_LETTERS[k]}</div></div>`).join('')}</div>`
-    : `<ul class="mc">${q.opts.map((o, k) => `<li>${box}<span class="ltr">${LETTERS[k]})</span> ${esc(o)}</li>`).join('')}</ul>`;
+    ? `<div class="figopts">${shown.map((o, k) => `<div class="figopt">${circuitSvg(CIRCUITS[o.fig])}<div>${box} ${FIG_LETTERS[k]}</div></div>`).join('')}</div>`
+    : `<ul class="mc">${shown.map((o, k) => `<li>${box}<span class="ltr">${LETTERS[k]})</span> ${esc(o)}</li>`).join('')}</ul>`;
   const body = q.fig ? `<div class="two">${fig(q.fig)}${opts}</div>` : opts;
   return `<div class="task"><p class="q"><span class="n">${n}.</span> ${esc(q.q)}</p>${body}</div>`;
 }
-const mcAnswer = (q, n) => {
+const mcAnswer = (q, n, order) => {
   const o = q.opts[q.a];
-  const label = typeof o === 'string' ? `${LETTERS[q.a]}) ${esc(o)}` : `Schaltung ${FIG_LETTERS[q.a]}`;
+  const pos = order.indexOf(q.a);
+  const label = typeof o === 'string' ? `${LETTERS[pos]}) ${esc(o)}` : `Schaltung ${FIG_LETTERS[pos]}`;
   return `<li><b>${n}. ${label}</b><br>${esc(q.why)}</li>`;
 };
 
@@ -78,12 +81,15 @@ function kennGrid(withCurves) {
 function render(ex, rand) {
   const head = `<h3>${esc(ex.title.replace(/^(Experiment|Animation|Vorhersage): /, ''))}</h3>`;
   switch (ex.type) {
-    case 'quiz':
+    case 'quiz': {
+      const orders = ex.questions.map(q => optionOrder(q, rand));
       return {
-        sheet: head + ex.questions.map((q, k) => mcQuestion(q, k + 1)).join(''),
-        key: head + `<ol class="key">${ex.questions.map((q, k) => mcAnswer(q, k + 1)).join('')}</ol>`,
+        sheet: head + ex.questions.map((q, k) => mcQuestion(q, k + 1, orders[k])).join(''),
+        key: head + `<ol class="key">${ex.questions.map((q, k) => mcAnswer(q, k + 1, orders[k])).join('')}</ol>`,
       };
+    }
     case 'demo': {
+      const orders = ex.questions.map(q => optionOrder(q, rand));
       let extra = '', extraKey = '';
       if (ex.demo === 'kennlinie') {
         const rows = KENN_U.map(u => `<tr><td>${u}</td><td>${fmtFixed(wireCurrent(u), 3)}</td><td>${fmtFixed(lampCurrent(u), 3)}</td></tr>`).join('');
@@ -93,8 +99,8 @@ function render(ex, rand) {
         extraKey = `<p><b>A.</b></p>${kennGrid(true)}<p><b>B.</b> R = U / I: bei 2 V ist R = 2 V / ${fmt(lampCurrent(2), 3)} A ≈ ${fmt(2 / lampCurrent(2), 0)} Ω, bei 12 V ist R = 12 V / 0,25 A = 48 Ω. Der Widerstand steigt, weil der Glühdraht heißer wird.</p>`;
       }
       return {
-        sheet: head + `<p class="intro">${esc(DEMO_INTRO[ex.demo])}</p>${extra}` + ex.questions.map((q, k) => mcQuestion(q, k + 1)).join(''),
-        key: head + extraKey + `<ol class="key">${ex.questions.map((q, k) => mcAnswer(q, k + 1)).join('')}</ol>`,
+        sheet: head + `<p class="intro">${esc(DEMO_INTRO[ex.demo])}</p>${extra}` + ex.questions.map((q, k) => mcQuestion(q, k + 1, orders[k])).join(''),
+        key: head + extraKey + `<ol class="key">${ex.questions.map((q, k) => mcAnswer(q, k + 1, orders[k])).join('')}</ol>`,
       };
     }
     case 'sort': {
